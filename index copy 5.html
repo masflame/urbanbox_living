@@ -150,11 +150,11 @@
       box-shadow: none;
     }
     .nav-logo img {
-      height: 132px;
+      height: 104px;
       width: auto;
       filter: none;
       display: block;
-      margin: -24px 0;
+      margin: -18px 0;
     }
     .nav-links {
       display: flex; gap: 44px; list-style: none;
@@ -698,22 +698,6 @@
       background: linear-gradient(to top, rgba(8,8,8,0.92), rgba(8,8,8,0));
     }
 
-    /* ── VISUALISATIONS ── */
-    #visualisations { background: var(--dark); padding-bottom: 0; }
-    .concept-note {
-      font-size: 0.55rem;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: var(--gold);
-      opacity: 0.7;
-      position: absolute;
-      top: 10px;
-      right: 12px;
-      background: rgba(0,0,0,0.6);
-      padding: 3px 7px;
-      pointer-events: none;
-    }
-
     /* ── PROCESS ── */
     #process { background: var(--dark); }
     .process-steps {
@@ -984,7 +968,7 @@
     @media (max-width: 1100px) {
       nav { padding: 12px 36px; }
       nav.scrolled { padding: 8px 36px; }
-      .nav-logo img { height: 102px; margin: -18px 0; }
+      .nav-logo img { height: 76px; margin: -10px 0; }
       section { padding: 90px 36px; }
       .about-grid { grid-template-columns: 1fr; gap: 60px; }
       .about-img-wrap img { height: 400px; }
@@ -1001,7 +985,7 @@
     @media (max-width: 768px) {
       nav { padding: 8px 16px; }
       nav.scrolled { padding: 6px 16px; }
-      .nav-logo img { height: 78px; margin: -12px 0; }
+      .nav-logo img { height: 58px; margin: -6px 0; }
       .nav-links, .nav-cta { display: none; }
       .hamburger { display: flex; }
       .mobile-menu a { font-size: clamp(1.7rem, 8vw, 2.4rem); }
@@ -1122,7 +1106,7 @@
 <!-- HERO -->
 <section id="hero">
   <div class="hero-bg">
-    <img src="images/show.jpg" alt="Urban Box Living — Homes, Offices and Recreational Spaces"
+    <img src="images/catalog-1.jpeg" alt="Urban Box Living — Homes, Offices and Recreational Spaces"
          onerror="this.style.opacity='0'"/>
   </div>
   <div class="hero-content">
@@ -1174,7 +1158,7 @@
 <section id="about">
   <div class="about-grid">
     <div class="about-img-wrap reveal">
-      <img src="images/about.jpeg" alt="Urban Box Living Workshop"
+      <img src="images/about.jpg" alt="Urban Box Living Workshop"
            onerror="this.src=''; this.style.background='#1a1a1a'; this.style.minHeight='480px'"/>
       <div class="about-stat">
         <span class="about-stat-num">500+</span>
@@ -1402,23 +1386,23 @@
       </div>
       <div class="gallery-grid">
         <div class="gallery-img reveal">
-          <img src="gallery/show4.jpg" alt="Contemporary single-family container residence exterior" onerror="this.style.background='#1a1a1a'"/>
+          <img src="gallery/shipping-container-house-500x300.jpg" alt="Contemporary single-family container residence exterior" onerror="this.style.background='#1a1a1a'"/>
           <div class="gallery-caption">Contemporary Residential Unit</div>
         </div>
         <div class="gallery-img reveal reveal-delay-1">
-          <img src="gallery/Brits-600x600.png" alt="Double-wide modular home with expanded interior footprint" onerror="this.style.background='#222'"/>
+          <img src="gallery/12m-double-wide-e-house-500x300.jpg" alt="Double-wide modular home with expanded interior footprint" onerror="this.style.background='#222'"/>
           <div class="gallery-caption">Double-Wide Family Home</div>
         </div>
         <div class="gallery-img reveal reveal-delay-2">
-          <img src="gallery2/offgrid-container-home-with-minimalist-interior-solar-power_1242877-1723.jpg" alt="Premium residential unit with full-height glass entry" onerror="this.style.background='#1d1d1d'"/>
+          <img src="gallery/glass-door-500x300.jpg" alt="Premium residential unit with full-height glass entry" onerror="this.style.background='#1d1d1d'"/>
           <div class="gallery-caption">Premium Glass-Front Unit</div>
         </div>
         <div class="gallery-img reveal reveal-delay-3">
-          <img src="gallery2/large-luxury-modern-bright-interiors-living-room-mockup-illustration-3d-rendering-computer-digitally-generated-image_653967-22200.jpg" alt="Residential module with stacking patio door system" onerror="this.style.background='#111'"/>
+          <img src="gallery/stacking-doors-500x300.jpg" alt="Residential module with stacking patio door system" onerror="this.style.background='#111'"/>
           <div class="gallery-caption">Indoor-Outdoor Living Unit</div>
         </div>
         <div class="gallery-img reveal reveal-delay-2">
-          <img src="images/catalog-11.jpeg" alt="Fitted kitchen and interior finish inside a residential unit" onerror="this.style.background='#1a1a1a'"/>
+          <img src="gallery/kitchen-500x300.jpg" alt="Fitted kitchen and interior finish inside a residential unit" onerror="this.style.background='#1a1a1a'"/>
           <div class="gallery-caption">Fitted Kitchen Interior</div>
         </div>
       </div>
@@ -1456,7 +1440,7 @@
           <div class="gallery-caption">Brits Lifestyle Site</div>
         </div>
         <div class="gallery-img reveal reveal-delay-1">
-          <img src="gallery2/modern-container-home-with-outdoor-seating-balcony_555015-39.jpg" alt="Scenic recreational container installation in Cederberg" onerror="this.style.background='#222'"/>
+          <img src="gallery/Cederberg-600x600.png" alt="Scenic recreational container installation in Cederberg" onerror="this.style.background='#222'"/>
           <div class="gallery-caption">Cederberg Leisure Build</div>
         </div>
         <div class="gallery-img reveal reveal-delay-2">
@@ -1481,7 +1465,7 @@
       </div>
       <div class="gallery-grid">
         <div class="gallery-img reveal">
-          <img src="gallery/Grootbraak-Mossel-Bay-600x600.png" alt="On-site crane installation of modular container unit" onerror="this.style.background='#1a1a1a'"/>
+          <img src="gallery/crane-500x300.jpg" alt="On-site crane installation of modular container unit" onerror="this.style.background='#1a1a1a'"/>
           <div class="gallery-caption">On-Site Crane Installation</div>
         </div>
         <div class="gallery-img reveal reveal-delay-1">
@@ -1526,159 +1510,6 @@
         </div>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- VISUALISATIONS -->
-<section id="visualisations">
-  <div class="gallery-intro">
-    <div class="section-label reveal">Design Vision</div>
-    <h2 class="section-title reveal reveal-delay-1">Renders & <em>Concept Art</em></h2>
-    <p class="section-body reveal reveal-delay-2" style="max-width:760px;">3D renders, architectural illustrations, and AI-assisted design concepts — visualising possibilities across residential living, premium interiors, and commercial container spaces.</p>
-  </div>
-  <div class="gallery-categories">
-
-    <!-- RESIDENTIAL RENDERS -->
-    <div class="gallery-category reveal">
-      <div class="gallery-category-head">
-        <div class="gallery-category-title">Residential Concept Renders</div>
-        <div class="gallery-category-note">3D Renders & Illustrations</div>
-      </div>
-      <div class="gallery-grid">
-
-        <div class="gallery-img reveal">
-          <img src="gallery2/3d-render-house-model_933329-4523.jpg" alt="3D render of a contemporary container residence" onerror="this.style.background='#1a1a1a'"/>
-          <div class="gallery-caption">Container Residence – Concept Render</div>
-          <span class="concept-note">Render</span>
-        </div>
-
-        <div class="gallery-img reveal reveal-delay-1">
-          <img src="gallery2/3d-render-house-model_933329-4529.jpg" alt="Dual-level container home 3D design model" onerror="this.style.background='#222'"/>
-          <div class="gallery-caption">Dual-Level Container Home – Design Model</div>
-          <span class="concept-note">Render</span>
-        </div>
-
-        <div class="gallery-img reveal reveal-delay-2">
-          <img src="gallery2/3d-render-house-model_933329-4532.jpg" alt="Modern residential container unit 3D model" onerror="this.style.background='#1d1d1d'"/>
-          <div class="gallery-caption">Modern Residential Unit – 3D Model</div>
-          <span class="concept-note">Render</span>
-        </div>
-
-        <div class="gallery-img reveal reveal-delay-3">
-          <img src="gallery2/container-house-isolated-background_258219-611.jpg" alt="Contemporary container home design study on isolated background" onerror="this.style.background='#111'"/>
-          <div class="gallery-caption">Contemporary Container Home – Design Study</div>
-          <span class="concept-note">Render</span>
-        </div>
-
-        <div class="gallery-img reveal">
-          <img src="gallery2/house-black-cargo-container_174639-825.jpg" alt="Single-storey black cargo container home concept" onerror="this.style.background='#1a1a1a'"/>
-          <div class="gallery-caption">Single-Storey Container Home – Concept</div>
-          <span class="concept-note">Illustration</span>
-        </div>
-
-        <div class="gallery-img reveal reveal-delay-1">
-          <img src="gallery2/house-black-cargo-container-large-house-out-container-ship-isolated_174639-1540.jpg" alt="Large container residence design render on isolated background" onerror="this.style.background='#222'"/>
-          <div class="gallery-caption">Large Container Residence – Design Render</div>
-          <span class="concept-note">Illustration</span>
-        </div>
-
-        <div class="gallery-img reveal reveal-delay-2">
-          <img src="gallery2/modern-black-shipping-container-building-with-windows_1043913-5620.jpg" alt="Modern black shipping container building with large windows" onerror="this.style.background='#1d1d1d'"/>
-          <div class="gallery-caption">Black Container Building – Architectural Render</div>
-          <span class="concept-note">Render</span>
-        </div>
-
-        <div class="gallery-img reveal reveal-delay-3">
-          <img src="gallery2/house-is-designed-by-architect-has-large-deck-with-view-surrounding-trees_1227606-35301.jpg" alt="Architect-designed container home with large deck surrounded by trees" onerror="this.style.background='#111'"/>
-          <div class="gallery-caption">Architect-Designed Deck Home – Wooded Setting</div>
-          <span class="concept-note">Render</span>
-        </div>
-
-        <div class="gallery-img reveal">
-          <img src="gallery2/modern-container-home-with-outdoor-seating-balcony_555015-39.jpg" alt="Modern container home with outdoor seating and balcony" onerror="this.style.background='#1a1a1a'"/>
-          <div class="gallery-caption">Container Home with Outdoor Balcony</div>
-          <span class="concept-note">Illustration</span>
-        </div>
-
-        <div class="gallery-img reveal reveal-delay-1">
-          <img src="gallery2/modern-prefabricated-shipping-container-home_555015-205.jpg" alt="Modern prefabricated shipping container home front elevation" onerror="this.style.background='#222'"/>
-          <div class="gallery-caption">Prefabricated Container Home – Front Elevation</div>
-          <span class="concept-note">Illustration</span>
-        </div>
-
-        <div class="gallery-img reveal reveal-delay-2">
-          <img src="gallery2/modern-shipping-container-home-with-balcony-terrace_555015-42.jpg" alt="Modern shipping container home with balcony and terrace" onerror="this.style.background='#1d1d1d'"/>
-          <div class="gallery-caption">Container Home with Terrace – Design Concept</div>
-          <span class="concept-note">Illustration</span>
-        </div>
-
-        <div class="gallery-img reveal reveal-delay-3">
-          <img src="gallery2/offgrid-container-home-with-minimalist-interior-solar-power_1242877-1723.jpg" alt="Off-grid container home with solar power and minimalist interior" onerror="this.style.background='#111'"/>
-          <div class="gallery-caption">Off-Grid Solar Container – Minimalist Design</div>
-          <span class="concept-note">Render</span>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- INTERIOR CONCEPTS -->
-    <div class="gallery-category reveal reveal-delay-1">
-      <div class="gallery-category-head">
-        <div class="gallery-category-title">Interior Design Concepts</div>
-        <div class="gallery-category-note">3D Illustration · Mockup</div>
-      </div>
-      <div class="gallery-grid" style="grid-template-columns: repeat(2,1fr);">
-
-        <div class="gallery-img reveal">
-          <img src="gallery2/large-luxury-modern-bright-interiors-living-room-mockup-illustration-3d-rendering-computer-digitally-generated-image_653967-22139.jpg" alt="Luxury modern bright living room interior – 3D illustration and rendering" onerror="this.style.background='#1a1a1a'"/>
-          <div class="gallery-caption">Luxury Living Room – 3D Interior Illustration</div>
-          <span class="concept-note">3D Render</span>
-        </div>
-
-        <div class="gallery-img reveal reveal-delay-1">
-          <img src="gallery2/large-luxury-modern-bright-interiors-living-room-mockup-illustration-3d-rendering-computer-digitally-generated-image_653967-22200.jpg" alt="Bright modern luxury interior living room – design mockup render" onerror="this.style.background='#222'"/>
-          <div class="gallery-caption">Bright Modern Interior – Design Mockup</div>
-          <span class="concept-note">3D Render</span>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- COMMERCIAL & LIFESTYLE CONCEPTS -->
-    <div class="gallery-category reveal reveal-delay-2">
-      <div class="gallery-category-head">
-        <div class="gallery-category-title">Commercial & Lifestyle Concepts</div>
-        <div class="gallery-category-note">Café · Office · Hospitality</div>
-      </div>
-      <div class="gallery-grid">
-
-        <div class="gallery-img reveal">
-          <img src="gallery2/2-storey-container-cafe-restaurant-3d-illustration_555015-7.jpg" alt="Two-storey container café and restaurant – 3D illustration" onerror="this.style.background='#1a1a1a'"/>
-          <div class="gallery-caption">Two-Storey Container Café & Restaurant</div>
-          <span class="concept-note">3D Illustration</span>
-        </div>
-
-        <div class="gallery-img reveal reveal-delay-1">
-          <img src="gallery2/house-cafe-black-cargo-container-single-storey-building-with-veranda-out-container_579837-203.jpg" alt="Single-storey black cargo container café with veranda" onerror="this.style.background='#222'"/>
-          <div class="gallery-caption">Container Café with Veranda – Single Storey</div>
-          <span class="concept-note">Illustration</span>
-        </div>
-
-        <div class="gallery-img reveal reveal-delay-2">
-          <img src="gallery2/modern-container-cafe-with-outdoor-seating_555015-41.jpg" alt="Modern container café with outdoor seating area" onerror="this.style.background='#1d1d1d'"/>
-          <div class="gallery-caption">Modern Container Café – Outdoor Seating Concept</div>
-          <span class="concept-note">Illustration</span>
-        </div>
-
-        <div class="gallery-img reveal reveal-delay-3">
-          <img src="gallery2/shipping-container-office-png_937392-4811.jpg" alt="Shipping container office building design render" onerror="this.style.background='#111'"/>
-          <div class="gallery-caption">Container Office Building – Design Render</div>
-          <span class="concept-note">Render</span>
-        </div>
-
-      </div>
-    </div>
-
   </div>
 </section>
 
@@ -1826,7 +1657,7 @@
 <footer>
   <div class="footer-top">
     <div class="footer-logo">
-      <img src="assets/logo.jpeg" alt="Urban Box Living"
+      <img src="assets/logo2.jpeg" alt="Urban Box Living"
            onerror="this.onerror=null; this.src='assets/logo.png'"/>
       <div style="display:none; font-family:'Playfair Display',serif; font-size:1.3rem; color:var(--gold); letter-spacing:0.1em;">URBAN BOX LIVING</div>
       <p>Supplying ready-made container units and custom builds on request across South Africa for residential, office, and recreational use.</p>
