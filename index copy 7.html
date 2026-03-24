@@ -150,11 +150,11 @@
       box-shadow: none;
     }
     .nav-logo img {
-      height: 104px;
+      height: 132px;
       width: auto;
       filter: none;
       display: block;
-      margin: -18px 0;
+      margin: -24px 0;
     }
     .nav-links {
       display: flex; gap: 44px; list-style: none;
@@ -698,6 +698,186 @@
       background: linear-gradient(to top, rgba(8,8,8,0.92), rgba(8,8,8,0));
     }
 
+    .folder-groups {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+    }
+    .folder-card {
+      border: 1px solid rgba(201,168,76,0.18);
+      background: rgba(255,255,255,0.02);
+      padding: 18px;
+    }
+    .folder-card-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 10px;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .folder-card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      color: var(--white);
+    }
+    .folder-card-meta {
+      font-size: 0.58rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      opacity: 0.9;
+      white-space: nowrap;
+    }
+    .folder-thumb-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 4px;
+    }
+    .folder-thumb {
+      border: 0;
+      padding: 0;
+      background: none;
+      width: 100%;
+      cursor: none;
+      text-align: left;
+    }
+    .folder-thumb img {
+      min-height: 170px;
+    }
+    .folder-more {
+      border: 1px dashed rgba(201,168,76,0.35);
+      background: linear-gradient(135deg, rgba(201,168,76,0.08), rgba(255,255,255,0.03));
+      min-height: 170px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.68rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold-light);
+    }
+    .folder-open {
+      margin-top: 12px;
+      border: 1px solid rgba(201,168,76,0.45);
+      background: transparent;
+      color: var(--gold);
+      width: 100%;
+      padding: 11px 12px;
+      font-size: 0.62rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      cursor: none;
+      transition: background 0.3s, color 0.3s;
+    }
+    .folder-open:hover {
+      background: var(--gold);
+      color: var(--black);
+    }
+
+    .folder-lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 1200;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(4,4,4,0.9);
+      backdrop-filter: blur(8px);
+      padding: 30px 16px;
+    }
+    .folder-lightbox.open { display: flex; }
+    .folder-lightbox-dialog {
+      width: min(1120px, 100%);
+      max-height: 100%;
+      border: 1px solid rgba(201,168,76,0.28);
+      background: rgba(12,12,12,0.96);
+      padding: 14px;
+      display: grid;
+      gap: 10px;
+    }
+    .folder-lightbox-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+    .folder-lightbox-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      color: var(--white);
+    }
+    .folder-lightbox-count {
+      font-size: 0.58rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-left: 8px;
+    }
+    .folder-lightbox-close {
+      border: 1px solid rgba(255,255,255,0.2);
+      width: 36px;
+      height: 36px;
+      background: rgba(255,255,255,0.02);
+      color: var(--white);
+      font-size: 1.1rem;
+      line-height: 1;
+      cursor: none;
+    }
+    .folder-lightbox-stage {
+      position: relative;
+      background: #090909;
+      min-height: 300px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .folder-lightbox-img {
+      max-width: 100%;
+      max-height: min(72vh, 800px);
+      object-fit: contain;
+      display: block;
+    }
+    .folder-lightbox-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 40px;
+      height: 40px;
+      border: 1px solid rgba(201,168,76,0.45);
+      background: rgba(8,8,8,0.7);
+      color: var(--gold);
+      font-size: 1.2rem;
+      cursor: none;
+    }
+    .folder-lightbox-prev { left: 10px; }
+    .folder-lightbox-next { right: 10px; }
+    .folder-lightbox-caption {
+      font-size: 0.66rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--white-dim);
+      text-align: center;
+      padding: 4px 8px 6px;
+    }
+
+    /* ── VISUALISATIONS ── */
+    #visualisations { background: var(--dark); padding-bottom: 0; }
+    .concept-note {
+      font-size: 0.55rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      opacity: 0.7;
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      background: rgba(0,0,0,0.6);
+      padding: 3px 7px;
+      pointer-events: none;
+    }
+
     /* ── PROCESS ── */
     #process { background: var(--dark); }
     .process-steps {
@@ -968,7 +1148,7 @@
     @media (max-width: 1100px) {
       nav { padding: 12px 36px; }
       nav.scrolled { padding: 8px 36px; }
-      .nav-logo img { height: 76px; margin: -10px 0; }
+      .nav-logo img { height: 102px; margin: -18px 0; }
       section { padding: 90px 36px; }
       .about-grid { grid-template-columns: 1fr; gap: 60px; }
       .about-img-wrap img { height: 400px; }
@@ -980,12 +1160,13 @@
       .process-steps::before { display: none; }
       .contact-inner { grid-template-columns: 1fr; gap: 60px; }
       .gallery-grid { grid-template-columns: repeat(2,1fr); }
+      .folder-groups { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 768px) {
       nav { padding: 8px 16px; }
       nav.scrolled { padding: 6px 16px; }
-      .nav-logo img { height: 58px; margin: -6px 0; }
+      .nav-logo img { height: 78px; margin: -12px 0; }
       .nav-links, .nav-cta { display: none; }
       .hamburger { display: flex; }
       .mobile-menu a { font-size: clamp(1.7rem, 8vw, 2.4rem); }
@@ -1027,6 +1208,13 @@
       .gallery-grid { grid-template-columns: 1fr 1fr; }
       .gallery-category { padding: 20px; }
       .gallery-caption { font-size: 0.58rem; letter-spacing: 0.12em; }
+      .folder-thumb img, .folder-more { min-height: 145px; }
+      .folder-lightbox-dialog { padding: 10px; }
+      .folder-lightbox-title { font-size: 0.95rem; }
+      .folder-lightbox-nav {
+        width: 34px;
+        height: 34px;
+      }
       .form-row { grid-template-columns: 1fr; }
       .form-group input, .form-group textarea, .form-group select { padding: 13px 14px; }
       .submit-btn { letter-spacing: 0.2em; }
@@ -1043,6 +1231,7 @@
 
     @media (max-width: 520px) {
       .gallery-grid { grid-template-columns: 1fr; }
+      .folder-thumb-grid { grid-template-columns: 1fr; }
       .section-label { letter-spacing: 0.3em; }
       .section-title { font-size: clamp(1.7rem, 9vw, 2.2rem); }
       .about-img-wrap img { height: 320px; }
@@ -1106,7 +1295,7 @@
 <!-- HERO -->
 <section id="hero">
   <div class="hero-bg">
-    <img src="images/catalog-1.jpeg" alt="Urban Box Living — Homes, Offices and Recreational Spaces"
+    <img src="images/show7.jpg" alt="Urban Box Living — Homes, Offices and Recreational Spaces"
          onerror="this.style.opacity='0'"/>
   </div>
   <div class="hero-content">
@@ -1158,7 +1347,7 @@
 <section id="about">
   <div class="about-grid">
     <div class="about-img-wrap reveal">
-      <img src="images/about.jpg" alt="Urban Box Living Workshop"
+      <img src="images/show4.jpg" alt="Urban Box Living Workshop"
            onerror="this.src=''; this.style.background='#1a1a1a'; this.style.minHeight='480px'"/>
       <div class="about-stat">
         <span class="about-stat-num">500+</span>
@@ -1188,8 +1377,8 @@
 
   <div class="catalog-grid">
     <!-- Featured -->
-    <div class="catalog-item featured reveal">
-      <img src="images/catalog-1.jpeg" alt="1-Bedroom Container Home"
+    <!-- <div class="catalog-item featured reveal">
+      <img src="unit3/customized-40ft-shipping-container-made-into-luxurious-1-bedroom3-768x560.jpg" alt="1-Bedroom Container Home"
            onerror="this.style.background='#1a1a1a'"/>
       <div class="catalog-overlay">
         <span class="catalog-tag">Signature</span>
@@ -1197,7 +1386,7 @@
         <div class="catalog-desc">A complete, fully furnished single-bedroom home with open-plan living, modern kitchen, and private bathroom. Delivered & installed.</div>
         <a href="https://wa.me/27608306956?text=Hello%2C%20I%27m%20interested%20in%20the%201-Bedroom%20Container%20Home" target="_blank" class="catalog-link">Enquire <span class="arrow"></span></a>
       </div>
-    </div>
+    </div> -->
 
     <div class="catalog-item reveal reveal-delay-1">
       <img src="images/catalog-2.jpeg" alt="20ft Compact Home"
@@ -1222,11 +1411,11 @@
     </div>
 
     <div class="catalog-item reveal reveal-delay-1">
-      <img src="images/catalog-4.jpeg" alt="Beautiful Container Home"
+      <img src="images/catalog-4.jpeg" alt="Beautiful Container Kitchen"
            onerror="this.style.background='#1a1a1a'"/>
       <div class="catalog-overlay">
         <span class="catalog-tag">Premium</span>
-        <div class="catalog-name">Beautiful<br>Container Home</div>
+        <div class="catalog-name">Beautiful<br>Container Kitchen</div>
         <div class="catalog-desc">A statement build. Architecturally designed with custom finishes, large windows and elegant interiors.</div>
         <a href="https://wa.me/27608306956?text=Hello%2C%20I%27m%20interested%20in%20the%20Premium%20Container%20Home" target="_blank" class="catalog-link">Enquire <span class="arrow"></span></a>
       </div>
@@ -1244,7 +1433,7 @@
     </div>
 
     <div class="catalog-item reveal reveal-delay-3">
-      <img src="images/catalog-6.jpeg" alt="Luxury Container Home"
+      <img src="unit4/Luxury-40ft-expandable-container-barndominium-prefabricated-with-easy-folding-sandwich-panels-14-768x950.jpg" alt="Luxury Container Home"
            onerror="this.style.background='#1a1a1a'"/>
       <div class="catalog-overlay">
         <span class="catalog-tag">Luxury</span>
@@ -1255,7 +1444,7 @@
     </div>
 
     <div class="catalog-item reveal reveal-delay-4">
-      <img src="images/catalog-7.jpeg" alt="Modern Family Container Home"
+      <img src="project2/40-FT-Ready-Made-Villa-Design-Container-House-6-768x768.jpg" alt="Modern Family Container Home"
            onerror="this.style.background='#1e1e1e'"/>
       <div class="catalog-overlay">
         <span class="catalog-tag">Family</span>
@@ -1291,10 +1480,12 @@
       <img src="images/catalog-10.jpeg" alt="Designer Container Home"
            onerror="this.style.background='#1a1a1a'"/>
       <div class="catalog-overlay">
-        <span class="catalog-tag">Designer</span>
-        <div class="catalog-name">Designer<br>Container Home</div>
+        <!-- <span class="catalog-tag">Remote</span>
+        <div class="catalog-name">Remote<br>Container Home</div> -->
+         <span class="catalog-tag">Off-Grid</span>
+        <div class="catalog-name">Off-Grid<br>Container Home</div>
         <div class="catalog-desc">A bold, design-forward home concept with curated interiors and balanced natural light.</div>
-        <a href="https://wa.me/27608306956?text=Hello%2C%20I%27m%20interested%20in%20the%20Designer%20Container%20Home" target="_blank" class="catalog-link">Enquire <span class="arrow"></span></a>
+        <a href="https://wa.me/27608306956?text=Hello%2C%20I%27m%20interested%20in%20the%20Remote%20Container%20Home" target="_blank" class="catalog-link">Enquire <span class="arrow"></span></a>
       </div>
     </div>
 
@@ -1313,15 +1504,17 @@
       <img src="images/catalog-12.jpeg" alt="Off-Grid Container Home"
            onerror="this.style.background='#1b1b1b'"/>
       <div class="catalog-overlay">
-        <span class="catalog-tag">Off-Grid</span>
-        <div class="catalog-name">Off-Grid<br>Container Home</div>
+        <!-- <span class="catalog-tag">Off-Grid</span>
+        <div class="catalog-name">Off-Grid<br>Container Home</div> -->
+        <span class="catalog-tag">Double Unit</span>
+        <div class="catalog-name">Double Unit<br>Container Home</div>
         <div class="catalog-desc">Ideal for remote sites with optional solar integration and durable weather-ready finishes.</div>
         <a href="https://wa.me/27608306956?text=Hello%2C%20I%27m%20interested%20in%20the%20Off-Grid%20Container%20Home" target="_blank" class="catalog-link">Enquire <span class="arrow"></span></a>
       </div>
     </div>
 
     <div class="catalog-item reveal reveal-delay-1">
-      <img src="images/catalog-13.jpeg" alt="Flagship Container Home"
+      <img src="project2/40-FT-Ready-Made-Villa-Design-Container-House-2.jpg" alt="Flagship Container Home"
            onerror="this.style.background='#1a1a1a'"/>
       <div class="catalog-overlay">
         <span class="catalog-tag">Flagship</span>
@@ -1386,23 +1579,23 @@
       </div>
       <div class="gallery-grid">
         <div class="gallery-img reveal">
-          <img src="gallery/shipping-container-house-500x300.jpg" alt="Contemporary single-family container residence exterior" onerror="this.style.background='#1a1a1a'"/>
+          <img src="gallery/show4.jpg" alt="Contemporary single-family container residence exterior" onerror="this.style.background='#1a1a1a'"/>
           <div class="gallery-caption">Contemporary Residential Unit</div>
         </div>
         <div class="gallery-img reveal reveal-delay-1">
-          <img src="gallery/12m-double-wide-e-house-500x300.jpg" alt="Double-wide modular home with expanded interior footprint" onerror="this.style.background='#222'"/>
+          <img src="gallery/Brits-600x600.png" alt="Double-wide modular home with expanded interior footprint" onerror="this.style.background='#222'"/>
           <div class="gallery-caption">Double-Wide Family Home</div>
         </div>
         <div class="gallery-img reveal reveal-delay-2">
-          <img src="gallery/glass-door-500x300.jpg" alt="Premium residential unit with full-height glass entry" onerror="this.style.background='#1d1d1d'"/>
+          <img src="gallery2/offgrid-container-home-with-minimalist-interior-solar-power_1242877-1723.jpg" alt="Premium residential unit with full-height glass entry" onerror="this.style.background='#1d1d1d'"/>
           <div class="gallery-caption">Premium Glass-Front Unit</div>
         </div>
         <div class="gallery-img reveal reveal-delay-3">
-          <img src="gallery/stacking-doors-500x300.jpg" alt="Residential module with stacking patio door system" onerror="this.style.background='#111'"/>
+          <img src="gallery2/large-luxury-modern-bright-interiors-living-room-mockup-illustration-3d-rendering-computer-digitally-generated-image_653967-22200.jpg" alt="Residential module with stacking patio door system" onerror="this.style.background='#111'"/>
           <div class="gallery-caption">Indoor-Outdoor Living Unit</div>
         </div>
         <div class="gallery-img reveal reveal-delay-2">
-          <img src="gallery/kitchen-500x300.jpg" alt="Fitted kitchen and interior finish inside a residential unit" onerror="this.style.background='#1a1a1a'"/>
+          <img src="images/catalog-11.jpeg" alt="Fitted kitchen and interior finish inside a residential unit" onerror="this.style.background='#1a1a1a'"/>
           <div class="gallery-caption">Fitted Kitchen Interior</div>
         </div>
       </div>
@@ -1440,11 +1633,11 @@
           <div class="gallery-caption">Brits Lifestyle Site</div>
         </div>
         <div class="gallery-img reveal reveal-delay-1">
-          <img src="gallery/Cederberg-600x600.png" alt="Scenic recreational container installation in Cederberg" onerror="this.style.background='#222'"/>
+          <img src="gallery2/modern-container-home-with-outdoor-seating-balcony_555015-39.jpg" alt="Scenic recreational container installation in Cederberg" onerror="this.style.background='#222'"/>
           <div class="gallery-caption">Cederberg Leisure Build</div>
         </div>
         <div class="gallery-img reveal reveal-delay-2">
-          <img src="gallery/Grootbraak-Mossel-Bay-600x600.png" alt="Coastal lifestyle container project in Groot Brak Mossel Bay" onerror="this.style.background='#1d1d1d'"/>
+          <img src="unit6/66722195_494742954614984_416399338499997696_n.jpg" alt="Coastal lifestyle container project in Groot Brak Mossel Bay" onerror="this.style.background='#1d1d1d'"/>
           <div class="gallery-caption">Coastal Retreat Unit</div>
         </div>
         <div class="gallery-img reveal reveal-delay-3">
@@ -1465,7 +1658,7 @@
       </div>
       <div class="gallery-grid">
         <div class="gallery-img reveal">
-          <img src="gallery/crane-500x300.jpg" alt="On-site crane installation of modular container unit" onerror="this.style.background='#1a1a1a'"/>
+          <img src="gallery/Grootbraak-Mossel-Bay-600x600.png" alt="On-site crane installation of modular container unit" onerror="this.style.background='#1a1a1a'"/>
           <div class="gallery-caption">On-Site Crane Installation</div>
         </div>
         <div class="gallery-img reveal reveal-delay-1">
@@ -1510,6 +1703,167 @@
         </div>
       </div>
     </div>
+
+    <div class="gallery-category reveal reveal-delay-4">
+      <div class="gallery-category-head">
+        <div class="gallery-category-title">Unit, Project & Recreational Collections</div>
+        <div class="gallery-category-note">Grouped by Folder</div>
+      </div>
+      <div class="folder-groups" id="folderGroups"></div>
+    </div>
+  </div>
+</section>
+
+<!-- VISUALISATIONS -->
+<section id="visualisations">
+  <div class="gallery-intro">
+    <div class="section-label reveal">Design Vision</div>
+    <h2 class="section-title reveal reveal-delay-1">Renders & <em>Concept Art</em></h2>
+    <p class="section-body reveal reveal-delay-2" style="max-width:760px;">3D renders, architectural illustrations, and AI-assisted design concepts — visualising possibilities across residential living, premium interiors, and commercial container spaces.</p>
+  </div>
+  <div class="gallery-categories">
+
+    <!-- RESIDENTIAL RENDERS -->
+    <div class="gallery-category reveal">
+      <div class="gallery-category-head">
+        <div class="gallery-category-title">Residential Concept Renders</div>
+        <div class="gallery-category-note">3D Renders & Illustrations</div>
+      </div>
+      <div class="gallery-grid">
+
+        <div class="gallery-img reveal">
+          <img src="gallery2/3d-render-house-model_933329-4523.jpg" alt="3D render of a contemporary container residence" onerror="this.style.background='#1a1a1a'"/>
+          <div class="gallery-caption">Container Residence – Concept Render</div>
+          <span class="concept-note">Render</span>
+        </div>
+
+        <div class="gallery-img reveal reveal-delay-1">
+          <img src="gallery2/3d-render-house-model_933329-4529.jpg" alt="Dual-level container home 3D design model" onerror="this.style.background='#222'"/>
+          <div class="gallery-caption">Dual-Level Container Home – Design Model</div>
+          <span class="concept-note">Render</span>
+        </div>
+
+        <div class="gallery-img reveal reveal-delay-2">
+          <img src="gallery2/3d-render-house-model_933329-4532.jpg" alt="Modern residential container unit 3D model" onerror="this.style.background='#1d1d1d'"/>
+          <div class="gallery-caption">Modern Residential Unit – 3D Model</div>
+          <span class="concept-note">Render</span>
+        </div>
+
+        <div class="gallery-img reveal reveal-delay-3">
+          <img src="gallery2/container-house-isolated-background_258219-611.jpg" alt="Contemporary container home design study on isolated background" onerror="this.style.background='#111'"/>
+          <div class="gallery-caption">Contemporary Container Home – Design Study</div>
+          <span class="concept-note">Render</span>
+        </div>
+
+        <div class="gallery-img reveal">
+          <img src="gallery2/house-black-cargo-container_174639-825.jpg" alt="Single-storey black cargo container home concept" onerror="this.style.background='#1a1a1a'"/>
+          <div class="gallery-caption">Single-Storey Container Home – Concept</div>
+          <span class="concept-note">Illustration</span>
+        </div>
+
+        <div class="gallery-img reveal reveal-delay-1">
+          <img src="gallery2/house-black-cargo-container-large-house-out-container-ship-isolated_174639-1540.jpg" alt="Large container residence design render on isolated background" onerror="this.style.background='#222'"/>
+          <div class="gallery-caption">Large Container Residence – Design Render</div>
+          <span class="concept-note">Illustration</span>
+        </div>
+
+        <div class="gallery-img reveal reveal-delay-2">
+          <img src="gallery2/modern-black-shipping-container-building-with-windows_1043913-5620.jpg" alt="Modern black shipping container building with large windows" onerror="this.style.background='#1d1d1d'"/>
+          <div class="gallery-caption">Black Container Building – Architectural Render</div>
+          <span class="concept-note">Render</span>
+        </div>
+
+        <div class="gallery-img reveal reveal-delay-3">
+          <img src="gallery2/house-is-designed-by-architect-has-large-deck-with-view-surrounding-trees_1227606-35301.jpg" alt="Architect-designed container home with large deck surrounded by trees" onerror="this.style.background='#111'"/>
+          <div class="gallery-caption">Architect-Designed Deck Home – Wooded Setting</div>
+          <span class="concept-note">Render</span>
+        </div>
+
+        <div class="gallery-img reveal">
+          <img src="gallery2/modern-container-home-with-outdoor-seating-balcony_555015-39.jpg" alt="Modern container home with outdoor seating and balcony" onerror="this.style.background='#1a1a1a'"/>
+          <div class="gallery-caption">Container Home with Outdoor Balcony</div>
+          <span class="concept-note">Illustration</span>
+        </div>
+
+        <div class="gallery-img reveal reveal-delay-1">
+          <img src="gallery2/modern-prefabricated-shipping-container-home_555015-205.jpg" alt="Modern prefabricated shipping container home front elevation" onerror="this.style.background='#222'"/>
+          <div class="gallery-caption">Prefabricated Container Home – Front Elevation</div>
+          <span class="concept-note">Illustration</span>
+        </div>
+
+        <div class="gallery-img reveal reveal-delay-2">
+          <img src="gallery2/modern-shipping-container-home-with-balcony-terrace_555015-42.jpg" alt="Modern shipping container home with balcony and terrace" onerror="this.style.background='#1d1d1d'"/>
+          <div class="gallery-caption">Container Home with Terrace – Design Concept</div>
+          <span class="concept-note">Illustration</span>
+        </div>
+
+        <div class="gallery-img reveal reveal-delay-3">
+          <img src="gallery2/offgrid-container-home-with-minimalist-interior-solar-power_1242877-1723.jpg" alt="Off-grid container home with solar power and minimalist interior" onerror="this.style.background='#111'"/>
+          <div class="gallery-caption">Off-Grid Solar Container – Minimalist Design</div>
+          <span class="concept-note">Render</span>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- INTERIOR CONCEPTS -->
+    <div class="gallery-category reveal reveal-delay-1">
+      <div class="gallery-category-head">
+        <div class="gallery-category-title">Interior Design Concepts</div>
+        <div class="gallery-category-note">3D Illustration · Mockup</div>
+      </div>
+      <div class="gallery-grid" style="grid-template-columns: repeat(2,1fr);">
+
+        <div class="gallery-img reveal">
+          <img src="gallery2/large-luxury-modern-bright-interiors-living-room-mockup-illustration-3d-rendering-computer-digitally-generated-image_653967-22139.jpg" alt="Luxury modern bright living room interior – 3D illustration and rendering" onerror="this.style.background='#1a1a1a'"/>
+          <div class="gallery-caption">Luxury Living Room – 3D Interior Illustration</div>
+          <span class="concept-note">3D Render</span>
+        </div>
+
+        <div class="gallery-img reveal reveal-delay-1">
+          <img src="gallery2/large-luxury-modern-bright-interiors-living-room-mockup-illustration-3d-rendering-computer-digitally-generated-image_653967-22200.jpg" alt="Bright modern luxury interior living room – design mockup render" onerror="this.style.background='#222'"/>
+          <div class="gallery-caption">Bright Modern Interior – Design Mockup</div>
+          <span class="concept-note">3D Render</span>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- COMMERCIAL & LIFESTYLE CONCEPTS -->
+    <div class="gallery-category reveal reveal-delay-2">
+      <div class="gallery-category-head">
+        <div class="gallery-category-title">Commercial & Lifestyle Concepts</div>
+        <div class="gallery-category-note">Café · Office · Hospitality</div>
+      </div>
+      <div class="gallery-grid">
+
+        <div class="gallery-img reveal">
+          <img src="gallery2/2-storey-container-cafe-restaurant-3d-illustration_555015-7.jpg" alt="Two-storey container café and restaurant – 3D illustration" onerror="this.style.background='#1a1a1a'"/>
+          <div class="gallery-caption">Two-Storey Container Café & Restaurant</div>
+          <span class="concept-note">3D Illustration</span>
+        </div>
+
+        <div class="gallery-img reveal reveal-delay-1">
+          <img src="gallery2/house-cafe-black-cargo-container-single-storey-building-with-veranda-out-container_579837-203.jpg" alt="Single-storey black cargo container café with veranda" onerror="this.style.background='#222'"/>
+          <div class="gallery-caption">Container Café with Veranda – Single Storey</div>
+          <span class="concept-note">Illustration</span>
+        </div>
+
+        <div class="gallery-img reveal reveal-delay-2">
+          <img src="gallery2/modern-container-cafe-with-outdoor-seating_555015-41.jpg" alt="Modern container café with outdoor seating area" onerror="this.style.background='#1d1d1d'"/>
+          <div class="gallery-caption">Modern Container Café – Outdoor Seating Concept</div>
+          <span class="concept-note">Illustration</span>
+        </div>
+
+        <div class="gallery-img reveal reveal-delay-3">
+          <img src="gallery2/shipping-container-office-png_937392-4811.jpg" alt="Shipping container office building design render" onerror="this.style.background='#111'"/>
+          <div class="gallery-caption">Container Office Building – Design Render</div>
+          <span class="concept-note">Render</span>
+        </div>
+
+      </div>
+    </div>
+
   </div>
 </section>
 
@@ -1657,7 +2011,7 @@
 <footer>
   <div class="footer-top">
     <div class="footer-logo">
-      <img src="assets/logo2.jpeg" alt="Urban Box Living"
+      <img src="assets/logo.jpeg" alt="Urban Box Living"
            onerror="this.onerror=null; this.src='assets/logo.png'"/>
       <div style="display:none; font-family:'Playfair Display',serif; font-size:1.3rem; color:var(--gold); letter-spacing:0.1em;">URBAN BOX LIVING</div>
       <p>Supplying ready-made container units and custom builds on request across South Africa for residential, office, and recreational use.</p>
@@ -1712,6 +2066,24 @@
   <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
 </a>
 
+<div class="folder-lightbox" id="folderLightbox" aria-hidden="true">
+  <div class="folder-lightbox-dialog">
+    <div class="folder-lightbox-top">
+      <div>
+        <span class="folder-lightbox-title" id="folderLightboxTitle"></span>
+        <span class="folder-lightbox-count" id="folderLightboxCount"></span>
+      </div>
+      <button class="folder-lightbox-close" id="folderLightboxClose" type="button" aria-label="Close image viewer">x</button>
+    </div>
+    <div class="folder-lightbox-stage">
+      <button class="folder-lightbox-nav folder-lightbox-prev" id="folderLightboxPrev" type="button" aria-label="Previous image">&#10094;</button>
+      <img class="folder-lightbox-img" id="folderLightboxImg" src="" alt=""/>
+      <button class="folder-lightbox-nav folder-lightbox-next" id="folderLightboxNext" type="button" aria-label="Next image">&#10095;</button>
+    </div>
+    <div class="folder-lightbox-caption" id="folderLightboxCaption"></div>
+  </div>
+</div>
+
 <script>
   // ── LOADER ──
   const hideLoader = () => {
@@ -1746,16 +2118,21 @@
   }
   animateRing();
 
-  document.querySelectorAll('a, button, .catalog-item, .gallery-img, .feature-card').forEach(el => {
-    el.addEventListener('mouseenter', () => {
-      cursor.classList.add('hovering');
-      cursorRing.classList.add('hovering');
+  function bindHoverStates(root = document) {
+    root.querySelectorAll('a, button, .catalog-item, .gallery-img, .feature-card').forEach(el => {
+      if (el.dataset.hoverBound === 'true') return;
+      el.dataset.hoverBound = 'true';
+      el.addEventListener('mouseenter', () => {
+        cursor.classList.add('hovering');
+        cursorRing.classList.add('hovering');
+      });
+      el.addEventListener('mouseleave', () => {
+        cursor.classList.remove('hovering');
+        cursorRing.classList.remove('hovering');
+      });
     });
-    el.addEventListener('mouseleave', () => {
-      cursor.classList.remove('hovering');
-      cursorRing.classList.remove('hovering');
-    });
-  });
+  }
+  bindHoverStates();
 
   // ── NAV SCROLL ──
   const nav = document.getElementById('nav');
@@ -1779,6 +2156,315 @@
       mobileMenu.classList.remove('open');
       document.body.style.overflow = '';
     });
+  });
+
+  // ── FOLDER GALLERY (UNIT / PROJECT / REC) ──
+  const folderCollections = [
+    {
+      id: 'unit-1',
+      title: 'Unit 1',
+      folder: 'unit',
+      images: [
+        '20ft_expandable_folding_house___Layout_1_png.png',
+        '20ft_expandable_folding_house___Layout_5_png_0326fdc5-df01-4695-810f-1b13ae076bb8.png',
+        '20ft_Outside_View_5.png',
+        '20ft_Outside_View_8.png',
+        '51h_LPVUkOL._AC__1.jpg',
+        '51iPPohRgKL._AC_04da7e37-afc3-46a8-ba02-32d0ee250793.jpg',
+        '75e8bb62b10cd20d197b9ab0c8ce5658.jpg',
+        'Bathroom_3.jpg',
+        'Bedroom_1_3be3f70c-edba-4eda-86ec-6204b885b599.jpg',
+        'DSC04647.jpg',
+        'DSC04648.jpg',
+        'DSC04965.jpg',
+        'DSC04967.jpg',
+        'DSC04970.jpg',
+        'DSC04973.jpg',
+        'Living_Space.jpg',
+        'MDSC04586-Copy.png',
+        'MDSC04586.png',
+        'MDSC04647.png',
+        'unblurimageai_Bathroom_1.png',
+        'unblurimageai_Bathroom_7.png'
+      ]
+    },
+    {
+      id: 'unit-2',
+      title: 'Unit 2',
+      folder: 'unit2',
+      images: [
+        '1-bedroom-plan.jpg',
+        '1-bedroom.jpg',
+        '2-bedroom-1.jpg',
+        '2-bedroom-plan.jpg',
+        '3-bedroom-1.jpg',
+        '3-bedroom-plan.jpg'
+      ]
+    },
+    {
+      id: 'unit-3',
+      title: 'Unit 3',
+      folder: 'unit3',
+      images: [
+        'customized-40ft-shipping-container-made-into-luxurious-1-bedroom-300x300.jpg',
+        'customized-40ft-shipping-container-made-into-luxurious-1-bedroom1-768x566.jpg',
+        'customized-40ft-shipping-container-made-into-luxurious-1-bedroom2-768x574.jpg',
+        'customized-40ft-shipping-container-made-into-luxurious-1-bedroom3-768x560.jpg'
+      ]
+    },
+    {
+      id: 'unit-4',
+      title: 'Unit 4',
+      folder: 'unit4',
+      images: [
+        'Luxury-40ft-expandable-container-barndominium-prefabricated-with-easy-folding-sandwich-panels-1-768x915.jpg',
+        'Luxury-40ft-expandable-container-barndominium-prefabricated-with-easy-folding-sandwich-panels-10-768x950.jpg',
+        'Luxury-40ft-expandable-container-barndominium-prefabricated-with-easy-folding-sandwich-panels-14-768x950.jpg',
+        'Luxury-40ft-expandable-container-barndominium-prefabricated-with-easy-folding-sandwich-panels-15-768x947.jpg',
+        'Luxury-40ft-expandable-container-barndominium-prefabricated-with-easy-folding-sandwich-panels-6-768x947.jpg'
+      ]
+    },
+    {
+      id: 'unit-5',
+      title: 'Unit 5',
+      folder: 'unit5',
+      images: [
+        'Custom-40ft-Shipping-Container-House-1-300x300.jpg',
+        'Custom-40ft-Shipping-Container-House-2-768x896.jpg',
+        'Custom-40ft-Shipping-Container-House-3-768x895.jpg',
+        'Custom-40ft-Shipping-Container-House-4-768x895.jpg',
+        'Custom-40ft-Shipping-Container-House-5-768x904.jpg',
+        'Custom-40ft-Shipping-Container-House-6-768x903.jpg',
+        'Custom-40ft-Shipping-Container-House-7-768x905.jpg',
+        'Custom-40ft-Shipping-Container-House-8-768x900.jpg'
+      ]
+    },
+    {
+      id: 'unit-6',
+      title: 'Unit 6',
+      folder: 'unit6',
+      images: [
+        '66278253_494742961281650_7603284731848818688_n.jpg',
+        '66335642_494743017948311_399070141893050368_n.jpg',
+        '66448962_494743004614979_7658324900955815936_n.jpg',
+        '66722195_494742954614984_416399338499997696_n.jpg'
+      ]
+    },
+    {
+      id: 'project-2',
+      title: 'Project 2',
+      folder: 'project2',
+      images: [
+        'IMG-20241128-WA0002.jpg',
+        'IMG-20241128-WA0003.jpg',
+        'IMG-20241128-WA0004.jpg',
+        'IMG-20241128-WA0005.jpg',
+        'IMG-20241128-WA0006.jpg',
+        'IMG-20241128-WA0007.jpg',
+        'IMG-20241128-WA0008.jpg'
+      ]
+    },
+    {
+      id: 'project-3',
+      title: 'Project 3',
+      folder: 'project3',
+      images: [
+        '40-FT-Ready-Made-Villa-Design-Container-House-1-768x768.jpg',
+        '40-FT-Ready-Made-Villa-Design-Container-House-2.jpg',
+        '40-FT-Ready-Made-Villa-Design-Container-House-3-768x768.jpg',
+        '40-FT-Ready-Made-Villa-Design-Container-House-5-768x768.jpg',
+        '40-FT-Ready-Made-Villa-Design-Container-House-6-768x768.jpg',
+        '40ft-Shipping-Container-Bar5-300x300.jpg',
+        'Luxury-40ft-expandable-container-barndominium-prefabricated-with-easy-folding-sandwich-panels-10-300x300.jpg'
+      ]
+    },
+    {
+      id: 'project-4',
+      title: 'Project 4',
+      folder: 'project4',
+      images: [
+        '0f5678d9-d522-4053-b7d3-e7b10cd686b9.jpeg',
+        '2e70c992-914a-4b92-9e25-51e87b0ffe40.jpeg',
+        '338d8ffb-ec56-4151-98df-d3f230b00197.jpeg',
+        '45c70d10-4f66-444a-9be8-6bee915ded20.jpeg',
+        '51aa6e3f-d7b5-4624-9449-379f865745f8.jpeg',
+        '643f5563-cedc-47ab-9c33-426a61012619.jpeg',
+        '795047a4-4314-423b-bbbb-246ac70a45f0.jpeg',
+        '7e37bb18-5066-45ae-989d-efa1cb11c878.jpeg',
+        '7fd36785-b6a7-4bf7-b0b1-7d96fc0ed93e.jpeg',
+        '868242af-e42f-4db2-99d9-2d7a2bb00a3f.jpeg',
+        'b4e480a2-1ab2-42f5-b6e7-97d8eaf9f78c.jpeg',
+        'f7ec42c2-d16b-4cc8-baab-1e5a6d490f4f.jpeg'
+      ]
+    },
+    {
+      id: 'recreational',
+      title: 'Recreational',
+      folder: 'rec',
+      images: [
+        '653382361_907460108717899_8206309327871501681_n.jpg',
+        '653698446_907460025384574_2384211991871379752_n.jpg',
+        '653713031_907460255384551_2849248820959295367_n.jpg',
+        '653713582_908535741943669_6163083373163602607_n.jpg',
+        '654912000_908535768610333_8622856703544129492_n.jpg',
+        '655690643_908535981943645_7760562476193245605_n.jpg'
+      ]
+    }
+  ];
+
+  const folderCollectionsById = Object.fromEntries(
+    folderCollections.map(group => [group.id, group])
+  );
+
+  const folderGroups = document.getElementById('folderGroups');
+  const folderLightbox = document.getElementById('folderLightbox');
+  const folderLightboxImg = document.getElementById('folderLightboxImg');
+  const folderLightboxTitle = document.getElementById('folderLightboxTitle');
+  const folderLightboxCount = document.getElementById('folderLightboxCount');
+  const folderLightboxCaption = document.getElementById('folderLightboxCaption');
+  const folderLightboxPrev = document.getElementById('folderLightboxPrev');
+  const folderLightboxNext = document.getElementById('folderLightboxNext');
+  const folderLightboxClose = document.getElementById('folderLightboxClose');
+
+  const folderViewState = {
+    groupId: null,
+    index: 0
+  };
+
+  function getReadableImageName(fileName) {
+    return fileName
+      .replace(/\.[^/.]+$/, '')
+      .replace(/[_-]+/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  function renderFolderCollections() {
+    if (!folderGroups) return;
+
+    folderCollections.forEach((group, groupIndex) => {
+      const card = document.createElement('div');
+      card.className = 'folder-card reveal';
+      if (groupIndex % 3 === 1) card.classList.add('reveal-delay-1');
+      if (groupIndex % 3 === 2) card.classList.add('reveal-delay-2');
+
+      const head = document.createElement('div');
+      head.className = 'folder-card-head';
+      head.innerHTML = `<div class="folder-card-title">${group.title}</div><div class="folder-card-meta">${group.folder} · ${group.images.length} images</div>`;
+      card.appendChild(head);
+
+      const grid = document.createElement('div');
+      grid.className = 'folder-thumb-grid';
+
+      group.images.slice(0, 4).forEach((fileName, imageIndex) => {
+        const thumb = document.createElement('button');
+        thumb.type = 'button';
+        thumb.className = 'gallery-img folder-thumb';
+        thumb.dataset.groupId = group.id;
+        thumb.dataset.imageIndex = String(imageIndex);
+        thumb.innerHTML = `
+          <img src="${group.folder}/${fileName}" alt="${group.title} image ${imageIndex + 1}" onerror="this.style.background='#1a1a1a'"/>
+          <div class="gallery-caption">${getReadableImageName(fileName)}</div>
+        `;
+        grid.appendChild(thumb);
+      });
+
+      if (group.images.length > 4) {
+        const more = document.createElement('button');
+        more.type = 'button';
+        more.className = 'folder-more';
+        more.dataset.groupId = group.id;
+        more.dataset.imageIndex = '4';
+        more.textContent = `+${group.images.length - 4} more`;
+        grid.appendChild(more);
+      }
+
+      const openButton = document.createElement('button');
+      openButton.type = 'button';
+      openButton.className = 'folder-open';
+      openButton.dataset.groupId = group.id;
+      openButton.dataset.imageIndex = '0';
+      openButton.textContent = 'View full folder';
+
+      card.appendChild(grid);
+      card.appendChild(openButton);
+      folderGroups.appendChild(card);
+    });
+
+    bindHoverStates(folderGroups);
+  }
+
+  function updateFolderLightbox() {
+    const group = folderCollectionsById[folderViewState.groupId];
+    if (!group) return;
+
+    const imageName = group.images[folderViewState.index];
+    folderLightboxImg.src = `${group.folder}/${imageName}`;
+    folderLightboxImg.alt = `${group.title} image ${folderViewState.index + 1}`;
+    folderLightboxTitle.textContent = group.title;
+    folderLightboxCount.textContent = `${folderViewState.index + 1} / ${group.images.length}`;
+    folderLightboxCaption.textContent = getReadableImageName(imageName);
+  }
+
+  function openFolderLightbox(groupId, imageIndex) {
+    const group = folderCollectionsById[groupId];
+    if (!group) return;
+
+    folderViewState.groupId = groupId;
+    folderViewState.index = Math.max(0, Math.min(imageIndex, group.images.length - 1));
+    updateFolderLightbox();
+    folderLightbox.classList.add('open');
+    folderLightbox.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeFolderLightbox() {
+    folderLightbox.classList.remove('open');
+    folderLightbox.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  function moveFolderLightbox(step) {
+    const group = folderCollectionsById[folderViewState.groupId];
+    if (!group) return;
+
+    folderViewState.index = (folderViewState.index + step + group.images.length) % group.images.length;
+    updateFolderLightbox();
+  }
+
+  renderFolderCollections();
+
+  if (folderGroups) {
+    folderGroups.addEventListener('click', event => {
+      const trigger = event.target.closest('[data-group-id]');
+      if (!trigger) return;
+
+      const groupId = trigger.dataset.groupId;
+      const imageIndex = Number(trigger.dataset.imageIndex || 0);
+      openFolderLightbox(groupId, imageIndex);
+    });
+  }
+
+  if (folderLightboxClose) {
+    folderLightboxClose.addEventListener('click', closeFolderLightbox);
+  }
+  if (folderLightboxPrev) {
+    folderLightboxPrev.addEventListener('click', () => moveFolderLightbox(-1));
+  }
+  if (folderLightboxNext) {
+    folderLightboxNext.addEventListener('click', () => moveFolderLightbox(1));
+  }
+  if (folderLightbox) {
+    folderLightbox.addEventListener('click', event => {
+      if (event.target === folderLightbox) closeFolderLightbox();
+    });
+  }
+
+  document.addEventListener('keydown', event => {
+    if (!folderLightbox || !folderLightbox.classList.contains('open')) return;
+    if (event.key === 'Escape') closeFolderLightbox();
+    if (event.key === 'ArrowLeft') moveFolderLightbox(-1);
+    if (event.key === 'ArrowRight') moveFolderLightbox(1);
   });
 
   // ── SCROLL REVEAL ──
