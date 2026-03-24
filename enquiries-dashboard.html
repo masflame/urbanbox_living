@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Urban Box Living Admin Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #091018;
+      --panel: rgba(14, 24, 36, 0.86);
+      --panel-strong: rgba(10, 18, 29, 0.96);
+      --panel-soft: rgba(255, 255, 255, 0.04);
+      --line: rgba(255, 255, 255, 0.08);
+      --gold: #d2ad58;
+      --gold-soft: rgba(210, 173, 88, 0.18);
+      --text: #edf2f7;
+      --muted: rgba(237, 242, 247, 0.68);
+      --danger: #ff8f8f;
+      --success: #8de0b4;
+      --shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top left, rgba(210, 173, 88, 0.15), transparent 30%),
+        radial-gradient(circle at right 20%, rgba(78, 135, 200, 0.12), transparent 26%),
+        linear-gradient(180deg, #0a1119 0%, #060b12 100%);
+      color: var(--text);
+      font-family: 'Instrument Sans', sans-serif;
+      padding: 28px;
+    }
+
+    .dashboard-shell {
+      max-width: 1500px;
+      margin: 0 auto;
+      display: grid;
+      gap: 22px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding: 24px 28px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      backdrop-filter: blur(18px);
+      box-shadow: var(--shadow);
+    }
+
+    .eyebrow {
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 0.34em;
+      font-size: 0.62rem;
+      margin-bottom: 10px;
+    }
+
+    .page-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 3vw, 3rem);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .page-copy {
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.8;
+      max-width: 700px;
+    }
+
+    .topbar-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.03);
+      color: var(--text);
+      padding: 12px 16px;
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+    .btn-primary {
+      background: var(--gold);
+      color: #101010;
+      border-color: var(--gold);
+      font-weight: 700;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .stat-card {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      backdrop-filter: blur(18px);
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .stat-label {
+      font-size: 0.66rem;
+      text-transform: uppercase;
+      letter-spacing: 0.28em;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+
+    .stat-value {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .stat-note {
+      color: var(--muted);
+      font-size: 0.84rem;
+    }
+
+    .workspace-grid {
+      display: grid;
+      grid-template-columns: minmax(320px, 430px) minmax(0, 1fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      backdrop-filter: blur(18px);
+      box-shadow: var(--shadow);
+    }
+
+    .inbox-panel,
+    .detail-panel,
+    .analytics-panel {
+      overflow: hidden;
+    }
+
+    .panel-head {
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255,255,255,0.02);
+    }
+
+    .panel-title {
+      font-size: 0.78rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    .toolbar {
+      display: grid;
+      gap: 12px;
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .search-input,
+    .filter-select {
+      width: 100%;
+      background: var(--panel-soft);
+      border: 1px solid var(--line);
+      color: var(--text);
+      padding: 12px 14px;
+      font-size: 0.9rem;
+      outline: none;
+    }
+
+    .inbox-list {
+      max-height: 760px;
+      overflow: auto;
+    }
+
+    .inbox-item {
+      padding: 18px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      cursor: pointer;
+      transition: background 0.2s ease, border-color 0.2s ease;
+    }
+    .inbox-item:hover,
+    .inbox-item.active {
+      background: rgba(255,255,255,0.04);
+    }
+
+    .inbox-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: flex-start;
+      margin-bottom: 8px;
+    }
+
+    .inbox-name {
+      font-weight: 600;
+      font-size: 0.98rem;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.58rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      padding: 6px 8px;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      background: rgba(255,255,255,0.03);
+      white-space: nowrap;
+    }
+
+    .badge-unread {
+      color: var(--gold);
+      border-color: rgba(210,173,88,0.35);
+      background: var(--gold-soft);
+    }
+
+    .badge-read {
+      color: var(--success);
+      border-color: rgba(141,224,180,0.22);
+      background: rgba(141,224,180,0.08);
+    }
+
+    .inbox-meta,
+    .inbox-preview {
+      color: var(--muted);
+      font-size: 0.83rem;
+      line-height: 1.6;
+    }
+
+    .inbox-preview {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+
+    .detail-body {
+      padding: 24px;
+      display: grid;
+      gap: 22px;
+    }
+
+    .detail-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: flex-start;
+      flex-wrap: wrap;
+    }
+
+    .detail-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      margin-bottom: 8px;
+    }
+
+    .detail-sub {
+      color: var(--muted);
+      line-height: 1.8;
+      font-size: 0.92rem;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .field-card,
+    .message-card,
+    .analytics-block {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.03);
+      padding: 18px;
+    }
+
+    .field-label {
+      font-size: 0.58rem;
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      color: var(--gold);
+      margin-bottom: 8px;
+    }
+
+    .field-value,
+    .message-text {
+      color: var(--text);
+      line-height: 1.8;
+      word-break: break-word;
+    }
+
+    .message-text {
+      white-space: pre-wrap;
+      font-size: 0.95rem;
+    }
+
+    .analytics-panel {
+      margin-top: 18px;
+    }
+
+    .analytics-grid {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 18px;
+      padding: 18px;
+    }
+
+    .analytics-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .type-row {
+      display: grid;
+      gap: 8px;
+    }
+
+    .type-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 0.86rem;
+    }
+
+    .type-bar {
+      height: 8px;
+      background: rgba(255,255,255,0.06);
+      overflow: hidden;
+    }
+    .type-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--gold), #f0d38d);
+    }
+
+    .empty-state {
+      padding: 40px 24px;
+      text-align: center;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .status-line {
+      padding: 12px 18px 0;
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    .hidden { display: none !important; }
+
+    @media (max-width: 1180px) {
+      .stats-grid,
+      .analytics-grid,
+      .workspace-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 720px) {
+      body { padding: 16px; }
+      .topbar,
+      .detail-body { padding: 18px; }
+      .detail-grid { grid-template-columns: 1fr; }
+      .topbar-actions { width: 100%; }
+      .topbar-actions .btn { flex: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard-shell">
+    <section class="topbar">
+      <div>
+        <div class="eyebrow">Private Admin Panel</div>
+        <h1 class="page-title">Enquiries Inbox & Analytics</h1>
+        <p class="page-copy">Track incoming enquiries, review each message in full, and monitor unread activity and project interest trends across the inbox.</p>
+      </div>
+      <div class="topbar-actions">
+        <button class="btn" id="refreshBtn" type="button">Refresh Inbox</button>
+        <button class="btn btn-primary" id="logoutBtn" type="button">Logout</button>
+      </div>
+    </section>
+
+    <section class="stats-grid">
+      <article class="stat-card">
+        <div class="stat-label">Total Enquiries</div>
+        <div class="stat-value" id="totalCount">0</div>
+        <div class="stat-note">All records currently loaded from Supabase.</div>
+      </article>
+      <article class="stat-card">
+        <div class="stat-label">Unread</div>
+        <div class="stat-value" id="unreadCount">0</div>
+        <div class="stat-note">Messages not yet opened in this dashboard.</div>
+      </article>
+      <article class="stat-card">
+        <div class="stat-label">Last 7 Days</div>
+        <div class="stat-value" id="weeklyCount">0</div>
+        <div class="stat-note">Recent enquiry volume over the past week.</div>
+      </article>
+      <article class="stat-card">
+        <div class="stat-label">Today</div>
+        <div class="stat-value" id="todayCount">0</div>
+        <div class="stat-note">New enquiries received today.</div>
+      </article>
+    </section>
+
+    <section class="workspace-grid">
+      <aside class="panel inbox-panel">
+        <div class="panel-head">
+          <div class="panel-title">Inbox</div>
+        </div>
+        <div class="toolbar">
+          <input class="search-input" id="searchInput" type="search" placeholder="Search by name, email, project, or message" />
+          <select class="filter-select" id="statusFilter">
+            <option value="all">Show all enquiries</option>
+            <option value="unread">Show unread only</option>
+            <option value="read">Show read only</option>
+          </select>
+        </div>
+        <div class="status-line" id="resultsCount">0 enquiries</div>
+        <div class="inbox-list" id="inboxList"></div>
+      </aside>
+
+      <div>
+        <section class="panel detail-panel">
+          <div class="panel-head">
+            <div class="panel-title">Enquiry Detail</div>
+          </div>
+          <div class="detail-body" id="detailBody">
+            <div class="empty-state">Select an enquiry from the inbox to read the full message, review contact details, and manage read status.</div>
+          </div>
+        </section>
+
+        <section class="panel analytics-panel">
+          <div class="panel-head">
+            <div class="panel-title">Analytics Snapshot</div>
+          </div>
+          <div class="analytics-grid">
+            <div class="analytics-block">
+              <div class="field-label">Project Type Distribution</div>
+              <div class="analytics-list" id="typeBreakdown"></div>
+            </div>
+            <div class="analytics-block">
+              <div class="field-label">Inbox Summary</div>
+              <div class="analytics-list" id="summaryFacts"></div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </section>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const DASHBOARD_AUTH_KEY = 'ubl_dashboard_auth';
+    const SUPABASE_PROJECT_URL = 'https://pzmphwkeailqpeteiexc.supabase.co';
+    const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_xjjSHPFIuek8uf1bmSbyuQ_8rED0Lys';
+    const SUPABASE_ENQUIRIES_TABLE = 'enquiries';
+    const READ_STATE_KEY = 'ubl_enquiry_read_state_v1';
+
+    if (sessionStorage.getItem(DASHBOARD_AUTH_KEY) !== 'granted') {
+      window.location.replace('index.html');
+    }
+
+    const supabaseClient = window.supabase.createClient(SUPABASE_PROJECT_URL, SUPABASE_PUBLISHABLE_KEY);
+
+    const inboxList = document.getElementById('inboxList');
+    const detailBody = document.getElementById('detailBody');
+    const searchInput = document.getElementById('searchInput');
+    const statusFilter = document.getElementById('statusFilter');
+    const resultsCount = document.getElementById('resultsCount');
+    const refreshBtn = document.getElementById('refreshBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const totalCount = document.getElementById('totalCount');
+    const unreadCount = document.getElementById('unreadCount');
+    const weeklyCount = document.getElementById('weeklyCount');
+    const todayCount = document.getElementById('todayCount');
+    const typeBreakdown = document.getElementById('typeBreakdown');
+    const summaryFacts = document.getElementById('summaryFacts');
+
+    let enquiries = [];
+    let filteredEnquiries = [];
+    let selectedKey = null;
+
+    function getReadState() {
+      try {
+        return JSON.parse(localStorage.getItem(READ_STATE_KEY) || '{}');
+      } catch {
+        return {};
+      }
+    }
+
+    function saveReadState(state) {
+      localStorage.setItem(READ_STATE_KEY, JSON.stringify(state));
+    }
+
+    function enquiryKey(item) {
+      return [getCreatedAt(item), item.email || '', item.first_name || '', item.last_name || ''].join('|');
+    }
+
+    function getCreatedAt(item) {
+      return item.created_at || item.createdat || '';
+    }
+
+    function isRead(item) {
+      return Boolean(getReadState()[enquiryKey(item)]);
+    }
+
+    function setRead(item, read) {
+      const state = getReadState();
+      state[enquiryKey(item)] = read;
+      saveReadState(state);
+    }
+
+    function escapeHtml(value) {
+      return String(value || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function formatDate(value) {
+      if (!value) return 'Unknown date';
+      const date = new Date(value);
+      return date.toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' });
+    }
+
+    function formatShortDate(value) {
+      if (!value) return 'Unknown';
+      return new Date(value).toLocaleDateString([], { month: 'short', day: 'numeric' });
+    }
+
+    function getProjectCounts(items) {
+      const counts = {};
+      items.forEach(item => {
+        const key = item.project_type || 'General enquiry';
+        counts[key] = (counts[key] || 0) + 1;
+      });
+      return Object.entries(counts).sort((a, b) => b[1] - a[1]);
+    }
+
+    function renderSummary(items) {
+      const now = new Date();
+      const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const weekStart = new Date(now);
+      weekStart.setDate(now.getDate() - 7);
+
+      const unread = items.filter(item => !isRead(item)).length;
+      const today = items.filter(item => getCreatedAt(item) && new Date(getCreatedAt(item)) >= todayStart).length;
+      const weekly = items.filter(item => getCreatedAt(item) && new Date(getCreatedAt(item)) >= weekStart).length;
+      const topProject = getProjectCounts(items)[0];
+
+      totalCount.textContent = String(items.length);
+      unreadCount.textContent = String(unread);
+      weeklyCount.textContent = String(weekly);
+      todayCount.textContent = String(today);
+
+      const typeCounts = getProjectCounts(items);
+      const maxCount = typeCounts.length ? typeCounts[0][1] : 1;
+      typeBreakdown.innerHTML = typeCounts.length
+        ? typeCounts.map(([label, count]) => `
+            <div class="type-row">
+              <div class="type-top"><span>${escapeHtml(label)}</span><span>${count}</span></div>
+              <div class="type-bar"><div class="type-fill" style="width:${(count / maxCount) * 100}%"></div></div>
+            </div>
+          `).join('')
+        : '<div class="empty-state">No project analytics available yet.</div>';
+
+      summaryFacts.innerHTML = `
+        <div class="field-card">
+          <div class="field-label">Most Requested</div>
+          <div class="field-value">${topProject ? `${escapeHtml(topProject[0])} (${topProject[1]})` : 'No enquiries yet'}</div>
+        </div>
+        <div class="field-card">
+          <div class="field-label">Unread Ratio</div>
+          <div class="field-value">${items.length ? Math.round((unread / items.length) * 100) : 0}% of inbox still needs review</div>
+        </div>
+        <div class="field-card">
+          <div class="field-label">Recent Activity</div>
+          <div class="field-value">${weekly} enquiry${weekly === 1 ? '' : 'ies'} in the last 7 days</div>
+        </div>
+      `;
+    }
+
+    function renderInbox(items) {
+      filteredEnquiries = items;
+      resultsCount.textContent = `${items.length} ${items.length === 1 ? 'enquiry' : 'enquiries'}`;
+
+      if (!items.length) {
+        inboxList.innerHTML = '<div class="empty-state">No enquiries match the current search or filter.</div>';
+        return;
+      }
+
+      inboxList.innerHTML = items.map(item => {
+        const key = enquiryKey(item);
+        const read = isRead(item);
+        const fullName = `${item.first_name || ''} ${item.last_name || ''}`.trim() || 'Unnamed enquiry';
+        const preview = (item.message || '').slice(0, 120);
+
+        return `
+          <article class="inbox-item ${selectedKey === key ? 'active' : ''}" data-key="${escapeHtml(key)}">
+            <div class="inbox-row">
+              <div class="inbox-name">${escapeHtml(fullName)}</div>
+              <span class="badge ${read ? 'badge-read' : 'badge-unread'}">${read ? 'Read' : 'Unread'}</span>
+            </div>
+            <div class="inbox-meta">${escapeHtml(item.project_type || 'General enquiry')} · ${escapeHtml(formatShortDate(getCreatedAt(item)))}</div>
+            <div class="inbox-meta">${escapeHtml(item.email || 'No email provided')}</div>
+            <div class="inbox-preview">${escapeHtml(preview || 'No message content.')}</div>
+          </article>
+        `;
+      }).join('');
+
+      inboxList.querySelectorAll('.inbox-item').forEach(node => {
+        node.addEventListener('click', () => {
+          const item = enquiries.find(entry => enquiryKey(entry) === node.dataset.key);
+          if (item) {
+            selectedKey = enquiryKey(item);
+            setRead(item, true);
+            renderAll();
+          }
+        });
+      });
+    }
+
+    function renderDetail(item) {
+      if (!item) {
+        detailBody.innerHTML = '<div class="empty-state">Select an enquiry from the inbox to read the full message, review contact details, and manage read status.</div>';
+        return;
+      }
+
+      const read = isRead(item);
+      const fullName = `${item.first_name || ''} ${item.last_name || ''}`.trim() || 'Unnamed enquiry';
+      detailBody.innerHTML = `
+        <div class="detail-header">
+          <div>
+            <div class="detail-name">${escapeHtml(fullName)}</div>
+            <div class="detail-sub">${escapeHtml(item.project_type || 'General enquiry')} · Received ${escapeHtml(formatDate(getCreatedAt(item)))}</div>
+          </div>
+          <div class="topbar-actions">
+            <span class="badge ${read ? 'badge-read' : 'badge-unread'}">${read ? 'Read' : 'Unread'}</span>
+            <button class="btn" id="toggleReadBtn" type="button">Mark as ${read ? 'Unread' : 'Read'}</button>
+          </div>
+        </div>
+        <div class="detail-grid">
+          <div class="field-card">
+            <div class="field-label">Email</div>
+            <div class="field-value">${escapeHtml(item.email || 'No email provided')}</div>
+          </div>
+          <div class="field-card">
+            <div class="field-label">Phone</div>
+            <div class="field-value">${escapeHtml(item.phone || 'No phone provided')}</div>
+          </div>
+        </div>
+        <div class="message-card">
+          <div class="field-label">Message</div>
+          <div class="message-text">${escapeHtml(item.message || 'No message provided.')}</div>
+        </div>
+      `;
+
+      document.getElementById('toggleReadBtn').addEventListener('click', () => {
+        setRead(item, !isRead(item));
+        renderAll();
+      });
+    }
+
+    function applyFilters() {
+      const query = searchInput.value.trim().toLowerCase();
+      const status = statusFilter.value;
+      return enquiries.filter(item => {
+        const haystack = [
+          item.first_name,
+          item.last_name,
+          item.email,
+          item.phone,
+          item.project_type,
+          item.message
+        ].join(' ').toLowerCase();
+
+        const matchesQuery = !query || haystack.includes(query);
+        const read = isRead(item);
+        const matchesStatus =
+          status === 'all' ||
+          (status === 'read' && read) ||
+          (status === 'unread' && !read);
+
+        return matchesQuery && matchesStatus;
+      });
+    }
+
+    function renderAll() {
+      const visible = applyFilters();
+      renderSummary(enquiries);
+      renderInbox(visible);
+      const selected = enquiries.find(item => enquiryKey(item) === selectedKey) || visible[0] || null;
+      if (!selected && visible.length) selectedKey = enquiryKey(visible[0]);
+      renderDetail(selected);
+    }
+
+    async function loadEnquiries() {
+      inboxList.innerHTML = '<div class="empty-state">Loading enquiries...</div>';
+      detailBody.innerHTML = '<div class="empty-state">Fetching dashboard data...</div>';
+      const { data, error } = await supabaseClient
+        .from(SUPABASE_ENQUIRIES_TABLE)
+        .select('first_name,last_name,email,phone,project_type,message,created_at')
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        inboxList.innerHTML = `<div class="empty-state">Could not load enquiries: ${escapeHtml(error.message)}</div>`;
+        detailBody.innerHTML = '<div class="empty-state">Please check your Supabase SELECT policy for the enquiries table.</div>';
+        renderSummary([]);
+        return;
+      }
+
+      enquiries = data || [];
+      renderAll();
+    }
+
+    searchInput.addEventListener('input', renderAll);
+    statusFilter.addEventListener('change', renderAll);
+    refreshBtn.addEventListener('click', loadEnquiries);
+    logoutBtn.addEventListener('click', () => {
+      sessionStorage.removeItem(DASHBOARD_AUTH_KEY);
+      window.location.replace('index.html');
+    });
+
+    loadEnquiries();
+  </script>
+</body>
+</html>
