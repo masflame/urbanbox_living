@@ -310,77 +310,217 @@ function buildMarkdown(form, estimate) {
   ].join('\n')
 }
 
-function downloadPdf(form, estimate) {
+async function downloadPdf(form, estimate) {
   const doc = new jsPDF({ unit: 'pt', format: 'a4' })
-  const left = 50
-  let y = 60
+  const PW = 595   // A4 width pts
+  const PH = 842   // A4 height pts
+  const LEFT = 48
+  const RIGHT = PW - 48
+  const CONTENT_W = RIGHT - LEFT
+  const GOLD  = [201, 168, 76]
+  const DARK  = [12,  12,  12]
+  const WHITE = [255, 255, 255]
+  const GREY  = [90,  90,  90]
+  const LGREY = [245, 244, 240]
+  const MGREY = [210, 208, 200]
 
-  doc.setFillColor(201, 168, 76)
-  doc.rect(0, 0, 595, 34, 'F')
-  doc.setTextColor(8, 8, 8)
+  // ── HEADER BAND ──────────────────────────────────────────
+  doc.setFillColor(...DARK)
+  doc.rect(0, 0, PW, 90, 'F')
+
+  // gold left accent bar
+  doc.setFillColor(...GOLD)
+  doc.rect(0, 0, 6, 90, 'F')
+
+  // logo
+  try {
+    const res = await fetch('/logo.png')
+    const blob = await res.blob()
+    const b64 = await new Promise((resolve) => {
+      const reader = new FileReader()
+      reader.onloadend = () => resolve(reader.result)
+      reader.readAsDataURL(blob)
+    })
+    doc.addImage(b64, 'PNG', LEFT, 18, 52, 52)
+  } catch (_) { /* logo failed to load – skip */ }
+
+  // company name + tagline
+  doc.setTextColor(...GOLD)
   doc.setFont('helvetica', 'bold')
-  doc.setFontSize(11)
-  doc.text('URBAN PLANNER - URBAN BOX LIVING', left, 22)
-
-  doc.setTextColor(20, 20, 20)
-  doc.setFontSize(20)
-  doc.text('Project Brief', left, y)
-  y += 30
-
-  const rows = [
-    ['Project type', projectTypes.find((item) => item.id === form.projectType)?.label],
-    ['Template', estimate.template?.label ?? 'Custom selection'],
-    ['Preferred portfolio design', form.selectedDesign || 'Not selected'],
-    ['Selected portfolio images', String((form.selectedGalleryImages || []).length)],
-    ['Custom plan attachment', form.customPlanFileName || 'Not uploaded'],
-    ['Province', form.province],
-    ['Location', form.location || 'To be confirmed'],
-    ['Container size', form.unitSize],
-    ['Units', String(form.units)],
-    ['Rooms', String(form.rooms)],
-    ['Bathrooms', String(form.bathrooms)],
-    ['Finish level', finishLevels[form.finishLevel].label],
-    ['Estimated investment', currency.format(estimate.estimatedPrice)],
-    ['Build timeline', `${estimate.buildWeeks} weeks`],
-    ['Installation', `${estimate.installDays} days`],
-    ['Feasibility', estimate.feasibility],
-  ]
-
+  doc.setFontSize(15)
+  doc.text('URBAN BOX LIVING', LEFT + 62, 44)
   doc.setFont('helvetica', 'normal')
+  doc.setFontSize(8.5)
+  doc.setTextColor(...MGREY)
+  doc.text('Modular Container Homes & Structures', LEFT + 62, 58)
+
+  // document title (right-aligned)
+  doc.setFont('helvetica', 'bold')
   doc.setFontSize(10)
-  rows.forEach(([label, value]) => {
-    doc.setTextColor(120, 100, 45)
-    doc.text(`${label}:`, left, y)
-    doc.setTextColor(30, 30, 30)
-    doc.text(String(value), left + 130, y)
-    y += 18
-  })
-
-  y += 8
-  doc.setTextColor(120, 100, 45)
-  doc.setFont('helvetica', 'bold')
-  doc.text('Payment milestones', left, y)
-  y += 18
+  doc.setTextColor(...GOLD)
+  doc.text('PROJECT BRIEF', RIGHT, 38, { align: 'right' })
   doc.setFont('helvetica', 'normal')
-  doc.setTextColor(30, 30, 30)
-  estimate.milestones.forEach((m) => {
-    doc.text(`- ${m.label} (${m.percent}%): ${currency.format(m.amount)}`, left, y)
-    y += 16
+  doc.setFontSize(8)
+  doc.setTextColor(...MGREY)
+  const today = new Date().toLocaleDateString('en-ZA', { day: '2-digit', month: 'long', year: 'numeric' })
+  doc.text(`Generated: ${today}`, RIGHT, 52, { align: 'right' })
+  const refNum = `UBL-${Date.now().toString(36).toUpperCase().slice(-6)}`
+  doc.text(`Ref: ${refNum}`, RIGHT, 64, { align: 'right' })
+
+  // ── CONTACT BAR ──────────────────────────────────────────
+  doc.setFillColor(...GOLD)
+  doc.rect(0, 90, PW, 22, 'F')
+  doc.setFont('helvetica', 'normal')
+  doc.setFontSize(7.5)
+  doc.setTextColor(...DARK)
+  const contacts = [
+    '📞 +27 60 830 6956',
+    '✉  urbanboxliving@outlook.com',
+    '🌐 urbanboxliving.co.za',
+  ]
+  const cSpacing = CONTENT_W / contacts.length
+  contacts.forEach((c, i) => {
+    doc.text(c, LEFT + i * cSpacing, 104, { baseline: 'middle' })
   })
 
-  if (form.notes) {
-    y += 10
-    doc.setTextColor(120, 100, 45)
+  let y = 132
+
+  // ── SECTION HELPER ───────────────────────────────────────
+  function sectionTitle(title) {
+    doc.setFillColor(...LGREY)
+    doc.roundedRect(LEFT, y, CONTENT_W, 20, 3, 3, 'F')
+    doc.setDrawColor(...GOLD)
+    doc.setLineWidth(2)
+    doc.line(LEFT, y + 20, LEFT + 4, y + 20)
     doc.setFont('helvetica', 'bold')
-    doc.text('Client notes', left, y)
-    y += 16
-    doc.setTextColor(30, 30, 30)
-    doc.setFont('helvetica', 'normal')
-    const noteLines = doc.splitTextToSize(form.notes, 500)
-    doc.text(noteLines, left, y)
+    doc.setFontSize(9)
+    doc.setTextColor(...DARK)
+    doc.text(title.toUpperCase(), LEFT + 10, y + 13)
+    y += 28
   }
 
-  doc.save(`urban-planner-brief-${form.projectType}.pdf`)
+  function row(label, value, shade) {
+    if (shade) {
+      doc.setFillColor(249, 248, 244)
+      doc.rect(LEFT, y - 11, CONTENT_W, 17, 'F')
+    }
+    doc.setFont('helvetica', 'bold')
+    doc.setFontSize(8.5)
+    doc.setTextColor(...GREY)
+    doc.text(label, LEFT + 6, y)
+    doc.setFont('helvetica', 'normal')
+    doc.setTextColor(...DARK)
+    doc.text(String(value ?? '—'), LEFT + 180, y)
+    y += 17
+  }
+
+  function divider() {
+    doc.setDrawColor(...MGREY)
+    doc.setLineWidth(0.4)
+    doc.line(LEFT, y, RIGHT, y)
+    y += 10
+  }
+
+  // ── PROJECT OVERVIEW ─────────────────────────────────────
+  sectionTitle('Project Overview')
+  row('Project Type',         projectTypes.find(i => i.id === form.projectType)?.label, false)
+  row('Template / Package',   estimate.template?.label ?? 'Custom selection', true)
+  row('Preferred Design',     form.selectedDesign || 'Not selected', false)
+  row('Gallery Images Selected', String((form.selectedGalleryImages || []).length), true)
+  row('Custom Plan Attached', form.customPlanFileName || 'Not uploaded', false)
+  divider()
+
+  // ── SITE & SPECS ─────────────────────────────────────────
+  sectionTitle('Site & Specifications')
+  row('Province',      form.province, false)
+  row('Location',      form.location || 'To be confirmed', true)
+  row('Container Size', form.unitSize, false)
+  row('Number of Units', String(form.units), true)
+  row('Bedrooms',      String(form.rooms), false)
+  row('Bathrooms',     String(form.bathrooms), true)
+  row('Finish Level',  finishLevels[form.finishLevel].label, false)
+  divider()
+
+  // ── INVESTMENT ESTIMATE ───────────────────────────────────
+  sectionTitle('Investment Estimate')
+
+  // big price highlight box
+  doc.setFillColor(...DARK)
+  doc.roundedRect(LEFT, y, CONTENT_W, 38, 4, 4, 'F')
+  doc.setFillColor(...GOLD)
+  doc.roundedRect(LEFT, y, 4, 38, 2, 2, 'F')
+  doc.setFont('helvetica', 'bold')
+  doc.setFontSize(11)
+  doc.setTextColor(...GOLD)
+  doc.text('Estimated Investment', LEFT + 14, y + 14)
+  doc.setFontSize(16)
+  doc.text(currency.format(estimate.estimatedPrice), LEFT + 14, y + 30)
+  doc.setFont('helvetica', 'normal')
+  doc.setFontSize(8)
+  doc.setTextColor(...MGREY)
+  doc.text(`Build: ${estimate.buildWeeks} weeks  |  Installation: ${estimate.installDays} days  |  Feasibility: ${estimate.feasibility}`, RIGHT - 4, y + 22, { align: 'right' })
+  y += 48
+
+  // milestone table header
+  doc.setFillColor(...DARK)
+  doc.rect(LEFT, y, CONTENT_W, 16, 'F')
+  doc.setFont('helvetica', 'bold')
+  doc.setFontSize(8)
+  doc.setTextColor(...GOLD)
+  doc.text('PAYMENT MILESTONE', LEFT + 6, y + 11)
+  doc.text('%', LEFT + 280, y + 11)
+  doc.text('AMOUNT', RIGHT - 6, y + 11, { align: 'right' })
+  y += 16
+
+  estimate.milestones.forEach((m, i) => {
+    if (i % 2 === 0) {
+      doc.setFillColor(249, 248, 244)
+      doc.rect(LEFT, y, CONTENT_W, 16, 'F')
+    }
+    doc.setFont('helvetica', 'normal')
+    doc.setFontSize(8.5)
+    doc.setTextColor(...DARK)
+    doc.text(m.label, LEFT + 6, y + 11)
+    doc.setTextColor(...GREY)
+    doc.text(`${m.percent}%`, LEFT + 280, y + 11)
+    doc.setFont('helvetica', 'bold')
+    doc.setTextColor(...DARK)
+    doc.text(currency.format(m.amount), RIGHT - 6, y + 11, { align: 'right' })
+    y += 16
+  })
+  y += 12
+  divider()
+
+  // ── CLIENT NOTES ─────────────────────────────────────────
+  if (form.notes) {
+    sectionTitle('Client Notes')
+    doc.setFont('helvetica', 'normal')
+    doc.setFontSize(8.5)
+    doc.setTextColor(...DARK)
+    const noteLines = doc.splitTextToSize(form.notes, CONTENT_W - 12)
+    doc.text(noteLines, LEFT + 6, y)
+    y += noteLines.length * 13 + 12
+    divider()
+  }
+
+  // ── DISCLAIMER ───────────────────────────────────────────
+  y = Math.max(y, PH - 80)
+  doc.setFillColor(...LGREY)
+  doc.rect(0, y, PW, PH - y, 'F')
+  doc.setFillColor(...GOLD)
+  doc.rect(0, y, PW, 2, 'F')
+  doc.setFont('helvetica', 'italic')
+  doc.setFontSize(7)
+  doc.setTextColor(...GREY)
+  const disclaimer = 'This document is a preliminary estimate only. Prices are subject to change based on site assessment, final specifications and material availability. Urban Box Living reserves the right to revise any figures prior to signing a formal contract.'
+  const dLines = doc.splitTextToSize(disclaimer, CONTENT_W)
+  doc.text(dLines, LEFT, y + 14)
+  doc.setFont('helvetica', 'bold')
+  doc.setFontSize(7.5)
+  doc.setTextColor(...GOLD)
+  doc.text('Urban Box Living (Pty) Ltd  ·  urbanboxliving@outlook.com  ·  +27 60 830 6956', PW / 2, y + 32, { align: 'center' })
+
+  doc.save(`UBL-Project-Brief-${form.projectType}-${refNum}.pdf`)
 }
 
 function App() {
@@ -916,7 +1056,7 @@ function App() {
             <div className="actions">
               <button type="button" className="btn-primary" onClick={downloadTxt}>Download .txt</button>
               <button type="button" className="btn-primary" onClick={downloadMd}>Download .md</button>
-              <button type="button" className="btn-primary" onClick={() => downloadPdf(form, estimate)}>Download .pdf</button>
+              <button type="button" className="btn-primary" onClick={() => downloadPdf(form, estimate).catch(console.error)}>Download .pdf</button>
               <button type="button" className="btn-primary" onClick={continueToEnquiry}>Send to Enquiry Form</button>
               <a className="btn-ghost" href={whatsappHref} target="_blank" rel="noreferrer">Send to WhatsApp</a>
               <a className="btn-ghost" href={emailHref}>Email sales team</a>
