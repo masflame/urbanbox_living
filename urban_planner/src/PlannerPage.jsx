@@ -374,9 +374,9 @@ async function downloadPdf(form, estimate) {
   doc.setFontSize(7.5)
   doc.setTextColor(...DARK)
   const contacts = [
-    '📞 +27 60 830 6956',
-    '✉  urbanboxliving@outlook.com',
-    '🌐 urbanboxliving.co.za',
+    'Tel: +27 60 830 6956',
+    'Email: urbanboxliving@outlook.com',
+    'Web: urbanboxliving.co.za',
   ]
   const cSpacing = CONTENT_W / contacts.length
   contacts.forEach((c, i) => {
