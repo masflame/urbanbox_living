@@ -697,6 +697,25 @@
       color: var(--white);
       background: linear-gradient(to top, rgba(8,8,8,0.92), rgba(8,8,8,0));
     }
+    .gallery-plan-link {
+      position: absolute;
+      left: 12px;
+      top: 12px;
+      font-size: 0.52rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      text-decoration: none;
+      border: 1px solid rgba(201,168,76,0.45);
+      background: rgba(8,8,8,0.68);
+      padding: 7px 10px;
+      transition: background 0.3s, color 0.3s, border-color 0.3s;
+    }
+    .gallery-plan-link:hover {
+      background: var(--gold);
+      color: var(--black);
+      border-color: var(--gold);
+    }
 
     .folder-groups {
       display: grid;
@@ -1029,6 +1048,49 @@
       background: rgba(201,168,76,0.04);
     }
     .form-group textarea { height: 130px; resize: none; }
+    .attachment-input-hidden { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+    .attachment-dropzone {
+      border: 1px dashed rgba(201,168,76,0.45);
+      background: rgba(255,255,255,0.02);
+      padding: 14px;
+      transition: border-color 0.25s, background 0.25s;
+      cursor: none;
+    }
+    .attachment-dropzone:hover,
+    .attachment-dropzone.is-dragover {
+      border-color: var(--gold);
+      background: rgba(201,168,76,0.08);
+    }
+    .attachment-dropzone-title {
+      font-size: 0.68rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--white);
+    }
+    .attachment-dropzone-sub {
+      margin-top: 6px;
+      font-size: 0.72rem;
+      color: var(--white-dim);
+      line-height: 1.55;
+    }
+    .attachment-dropzone-name {
+      margin-top: 10px;
+      font-size: 0.75rem;
+      color: var(--gold);
+      letter-spacing: 0.08em;
+    }
+    .attachment-pick-btn {
+      margin-top: 12px;
+      background: transparent;
+      border: 1px solid rgba(245,240,232,0.32);
+      color: var(--white);
+      padding: 8px 14px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      cursor: none;
+    }
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
     .submit-btn {
       width: 100%;
@@ -1355,6 +1417,7 @@
   <ul class="nav-links">
     <li><a href="#about">About</a></li>
     <li><a href="#catalog">Catalog</a></li>
+    <li><a href="urban_planner/index.html">Planner</a></li>
     <li><a href="#features">Features</a></li>
     <li><a href="#gallery">Gallery</a></li>
     <li><a href="#contact">Contact</a></li>
@@ -1369,6 +1432,7 @@
 <div class="mobile-menu" id="mobileMenu">
   <a href="#about" class="mobile-nav-link">About</a>
   <a href="#catalog" class="mobile-nav-link">Catalog</a>
+  <a href="urban_planner/index.html" class="mobile-nav-link">Planner</a>
   <a href="#features" class="mobile-nav-link">Features</a>
   <a href="#gallery" class="mobile-nav-link">Gallery</a>
   <a href="#contact" class="mobile-nav-link">Contact</a>
@@ -1385,8 +1449,8 @@
     <h1 class="hero-h1">Redefining Space.<br><em>One Container</em><br>at a Time.</h1>
     <p class="hero-sub">Ready-made container solutions and custom builds on request, delivered across South Africa. From homes to office spaces and recreational builds, every unit is designed to perform and impress.</p>
     <div class="hero-btns">
-      <a href="#catalog" class="btn-primary">View Catalog</a>
-      <a href="https://wa.me/27608306956" target="_blank" class="btn-ghost">WhatsApp Us</a>
+      <a href="urban_planner/index.html" class="btn-primary">Start Your Build</a>
+      <a href="#catalog" class="btn-ghost">View Catalog</a>
     </div>
   </div>
   <div class="hero-scroll">
@@ -1477,7 +1541,7 @@
         <span class="catalog-tag">Compact</span>
         <div class="catalog-name">20ft Studio Home</div>
         <div class="catalog-desc">Perfectly proportioned for single occupancy or as a garden flat. Efficient, modern and complete.</div>
-        <a href="https://wa.me/27608306956?text=Hello%2C%20I%27m%20interested%20in%20the%2020ft%20Studio%20Home" target="_blank" class="catalog-link">Enquire <span class="arrow"></span></a>
+        <a href="urban_planner/index.html?fromCatalog=1&project=home&design=20ft%20Studio%20Home" class="catalog-link">Plan This Design <span class="arrow"></span></a>
       </div>
     </div>
 
@@ -1488,7 +1552,7 @@
         <span class="catalog-tag">Bathroom</span>
         <div class="catalog-name">Shower</div>
         <div class="catalog-desc">Modern shower area with clean finishes, quality fixtures, and practical layout for daily comfort in container living.</div>
-        <a href="https://wa.me/27608306956?text=Hello%2C%20I%27m%20interested%20in%20a%20Fully%20Furnished%20Container%20Home" target="_blank" class="catalog-link">Enquire <span class="arrow"></span></a>
+        <a href="urban_planner/index.html?fromCatalog=1&project=home&design=Shower" class="catalog-link">Plan This Design <span class="arrow"></span></a>
       </div>
     </div>
 
@@ -1499,7 +1563,7 @@
          <span class="catalog-tag">Bathroom</span>
         <div class="catalog-name">Beautiful Furnished<br>Bathroom</div>
         <div class="catalog-desc">Bathroom vanity setup featuring integrated basin, mirror, and storage cabinetry with a polished, space-efficient finish.</div>
-        <a href="https://wa.me/27608306956?text=Hello%2C%20I%27m%20interested%20in%20the%20Premium%20Container%20Home" target="_blank" class="catalog-link">Enquire <span class="arrow"></span></a>
+        <a href="urban_planner/index.html?fromCatalog=1&project=home&design=Beautiful%20Furnished%20Bathroom" class="catalog-link">Plan This Design <span class="arrow"></span></a>
       </div>
     </div>
 
@@ -1510,7 +1574,7 @@
         <span class="catalog-tag">Custom</span>
         <div class="catalog-name">Custom Urban<br>Home</div>
         <div class="catalog-desc">Your vision, our craft. Fully custom builds to your specifications — size, layout, and finishes.</div>
-        <a href="https://wa.me/27608306956?text=Hello%2C%20I%27m%20interested%20in%20a%20Custom%20Container%20Home" target="_blank" class="catalog-link">Enquire <span class="arrow"></span></a>
+        <a href="urban_planner/index.html?fromCatalog=1&project=home&design=Custom%20on%20Request" class="catalog-link">Plan This Design <span class="arrow"></span></a>
       </div>
     </div>
 
@@ -1521,7 +1585,7 @@
         <span class="catalog-tag">Luxury</span>
         <div class="catalog-name">Luxury Container<br>Residence</div>
         <div class="catalog-desc">A premium finish home with high-end interior styling and refined open-plan flow.</div>
-        <a href="https://wa.me/27608306956?text=Hello%2C%20I%27m%20interested%20in%20the%20Luxury%20Container%20Residence" target="_blank" class="catalog-link">Enquire <span class="arrow"></span></a>
+        <a href="urban_planner/index.html?fromCatalog=1&project=home&design=Luxury%20Container%20Residence" class="catalog-link">Plan This Design <span class="arrow"></span></a>
       </div>
     </div>
 
@@ -1532,7 +1596,7 @@
         <span class="catalog-tag">Family</span>
         <div class="catalog-name">Modern Family<br>Container Home</div>
         <div class="catalog-desc">Expanded living space designed for growing families with practical storage and comfort.</div>
-        <a href="https://wa.me/27608306956?text=Hello%2C%20I%27m%20interested%20in%20the%20Modern%20Family%20Container%20Home" target="_blank" class="catalog-link">Enquire <span class="arrow"></span></a>
+        <a href="urban_planner/index.html?fromCatalog=1&project=home&design=Modern%20Family%20Container%20Home" class="catalog-link">Plan This Design <span class="arrow"></span></a>
       </div>
     </div>
 
@@ -1543,7 +1607,7 @@
         <span class="catalog-tag">Executive</span>
         <div class="catalog-name">Executive<br>Container Home</div>
         <div class="catalog-desc">Smart, elegant, and built for elevated living with standout finishes throughout.</div>
-        <a href="https://wa.me/27608306956?text=Hello%2C%20I%27m%20interested%20in%20the%20Executive%20Container%20Home" target="_blank" class="catalog-link">Enquire <span class="arrow"></span></a>
+        <a href="urban_planner/index.html?fromCatalog=1&project=home&design=Executive%20Container%20Home" class="catalog-link">Plan This Design <span class="arrow"></span></a>
       </div>
     </div>
 
@@ -1554,7 +1618,7 @@
         <span class="catalog-tag">Contemporary</span>
         <div class="catalog-name">Contemporary<br>Container Build</div>
         <div class="catalog-desc">Clean lines and modern finishes in a versatile design suitable for urban and rural plots.</div>
-        <a href="https://wa.me/27608306956?text=Hello%2C%20I%27m%20interested%20in%20the%20Contemporary%20Container%20Build" target="_blank" class="catalog-link">Enquire <span class="arrow"></span></a>
+        <a href="urban_planner/index.html?fromCatalog=1&project=home&design=Contemporary%20Container%20Build" class="catalog-link">Plan This Design <span class="arrow"></span></a>
       </div>
     </div>
 
@@ -1567,7 +1631,7 @@
          <span class="catalog-tag">Off-Grid</span>
         <div class="catalog-name">Off-Grid<br>Container Home</div>
         <div class="catalog-desc">A bold, design-forward home concept with curated interiors and balanced natural light.</div>
-        <a href="https://wa.me/27608306956?text=Hello%2C%20I%27m%20interested%20in%20the%20Remote%20Container%20Home" target="_blank" class="catalog-link">Enquire <span class="arrow"></span></a>
+        <a href="urban_planner/index.html?fromCatalog=1&project=cabin&design=Off-Grid%20Container%20Home" class="catalog-link">Plan This Design <span class="arrow"></span></a>
       </div>
     </div>
 
@@ -1578,7 +1642,7 @@
         <span class="catalog-tag">Double Unit</span>
         <div class="catalog-name">Double Unit<br>Container Home</div>
         <div class="catalog-desc">Wider internal layout by combining units for added bedrooms, lounge space, and utility rooms.</div>
-        <a href="https://wa.me/27608306956?text=Hello%2C%20I%27m%20interested%20in%20the%20Double%20Unit%20Container%20Home" target="_blank" class="catalog-link">Enquire <span class="arrow"></span></a>
+        <a href="urban_planner/index.html?fromCatalog=1&project=home&design=Double%20Unit%20Container%20Home" class="catalog-link">Plan This Design <span class="arrow"></span></a>
       </div>
     </div>
 
@@ -1591,7 +1655,7 @@
         <span class="catalog-tag">Double Unit</span>
         <div class="catalog-name">Double Unit<br>Container Home</div>
         <div class="catalog-desc">Ideal for remote sites with optional solar integration and durable weather-ready finishes.</div>
-        <a href="https://wa.me/27608306956?text=Hello%2C%20I%27m%20interested%20in%20the%20Off-Grid%20Container%20Home" target="_blank" class="catalog-link">Enquire <span class="arrow"></span></a>
+        <a href="urban_planner/index.html?fromCatalog=1&project=cabin&design=Off-Grid%20Container%20Home" class="catalog-link">Plan This Design <span class="arrow"></span></a>
       </div>
     </div>
 
@@ -1602,7 +1666,7 @@
         <span class="catalog-tag">Flagship</span>
         <div class="catalog-name">Flagship<br>Container Home</div>
         <div class="catalog-desc">Our signature top-tier concept showcasing the full Urban Box Living quality standard.</div>
-        <a href="https://wa.me/27608306956?text=Hello%2C%20I%27m%20interested%20in%20the%20Flagship%20Container%20Home" target="_blank" class="catalog-link">Enquire <span class="arrow"></span></a>
+        <a href="urban_planner/index.html?fromCatalog=1&project=home&design=Flagship%20Container%20Home" class="catalog-link">Plan This Design <span class="arrow"></span></a>
       </div>
     </div>
   </div>
@@ -2133,6 +2197,19 @@
       <div class="form-group">
         <label for="message">Message</label>
         <textarea id="message" placeholder="Tell us about your project goals, use case, and delivery location..."></textarea>
+      </div>
+      <div class="form-group">
+        <label for="plannerAttachment">Attachment (optional)</label>
+        <div id="plannerDropzone" class="attachment-dropzone" tabindex="0" role="button" aria-label="Drag and drop your file or click to upload">
+          <div class="attachment-dropzone-title">Drag and drop planner files here</div>
+          <div class="attachment-dropzone-sub">Accepted: PDF, TXT, MD, JPG, PNG, WEBP (max 12MB)</div>
+          <div id="plannerAttachmentName" class="attachment-dropzone-name">No file selected</div>
+          <button type="button" id="plannerAttachmentPickBtn" class="attachment-pick-btn">Choose File</button>
+        </div>
+        <input type="file" id="plannerAttachment" class="attachment-input-hidden" accept=".pdf,.txt,.md,.markdown,image/*"/>
+      </div>
+      <div id="plannerTransferNote" style="display:none; margin-top:8px; margin-bottom:14px; font-size:0.72rem; color:var(--white-dim); letter-spacing:0.05em; line-height:1.6;">
+        Planner details were loaded into the message field. Please attach your downloaded planner files before sending this enquiry.
       </div>
       <div style="position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden;" aria-hidden="true">
         <label for="website">Website</label>
@@ -2742,9 +2819,11 @@
   const SUPABASE_PROJECT_URL = 'https://pzmphwkeailqpeteiexc.supabase.co';
   const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_xjjSHPFIuek8uf1bmSbyuQ_8rED0Lys';
   const SUPABASE_ENQUIRIES_TABLE = 'enquiries';
+  const SUPABASE_ATTACHMENTS_BUCKET = 'enquiry-attachments';
   const ENQUIRY_MIN_FILL_MS = 2500;
   const ENQUIRY_RATE_LIMIT_MS = 15000;
   const ENQUIRY_LAST_SUBMIT_KEY = 'ubl_last_enquiry_submit_at';
+  const PLANNER_BRIEF_STORAGE_KEY = 'urbanPlannerBrief';
   const enquiryFormLoadedAt = Date.now();
   const DASHBOARD_AUTH_KEY = 'ubl_dashboard_auth';
   const DASHBOARD_USERNAME = 'nyofu@admin';
@@ -2777,6 +2856,195 @@
     return /^[+()\d\s-]{7,20}$/.test(value);
   }
 
+  function toSafeFileName(value) {
+    return (value || '')
+      .replace(/[^a-zA-Z0-9._-]/g, '-')
+      .replace(/-+/g, '-')
+      .slice(0, 120);
+  }
+
+  function updateAttachmentUi(file) {
+    const nameEl = document.getElementById('plannerAttachmentName');
+    if (!nameEl) return;
+    if (!file) {
+      nameEl.textContent = 'No file selected';
+      return;
+    }
+    const sizeKb = Math.max(1, Math.round((file.size || 0) / 1024));
+    nameEl.textContent = `${file.name} (${sizeKb} KB)`;
+  }
+
+  function setupAttachmentDropzone() {
+    const dropzone = document.getElementById('plannerDropzone');
+    const attachmentInput = document.getElementById('plannerAttachment');
+    const pickBtn = document.getElementById('plannerAttachmentPickBtn');
+    if (!dropzone || !attachmentInput) return;
+
+    const openPicker = () => attachmentInput.click();
+
+    if (pickBtn) {
+      pickBtn.addEventListener('click', (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        openPicker();
+      });
+    }
+
+    dropzone.addEventListener('click', openPicker);
+    dropzone.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        openPicker();
+      }
+    });
+
+    ;['dragenter', 'dragover'].forEach((eventName) => {
+      dropzone.addEventListener(eventName, (event) => {
+        event.preventDefault();
+        dropzone.classList.add('is-dragover');
+      });
+    });
+
+    ;['dragleave', 'dragend', 'drop'].forEach((eventName) => {
+      dropzone.addEventListener(eventName, (event) => {
+        event.preventDefault();
+        if (eventName !== 'drop') {
+          dropzone.classList.remove('is-dragover');
+        }
+      });
+    });
+
+    dropzone.addEventListener('drop', (event) => {
+      dropzone.classList.remove('is-dragover');
+      const files = event.dataTransfer && event.dataTransfer.files;
+      if (!files || !files.length) return;
+      attachmentInput.files = files;
+      updateAttachmentUi(files[0]);
+    });
+
+    attachmentInput.addEventListener('change', () => {
+      const file = attachmentInput.files && attachmentInput.files[0] ? attachmentInput.files[0] : null;
+      updateAttachmentUi(file);
+    });
+
+    updateAttachmentUi(null);
+  }
+
+  function prefillEnquiryFromPlanner() {
+    const params = new URLSearchParams(window.location.search);
+    const fromPlanner = params.get('fromPlanner') === '1';
+    const plannerBrief = localStorage.getItem(PLANNER_BRIEF_STORAGE_KEY);
+    if (!fromPlanner && !plannerBrief) return;
+
+    const fnameEl = document.getElementById('fname');
+    const interestEl = document.getElementById('interest');
+    const messageEl = document.getElementById('message');
+    const transferNoteEl = document.getElementById('plannerTransferNote');
+
+    if (fnameEl && !fnameEl.value.trim()) {
+      fnameEl.value = 'Planner Lead';
+    }
+
+    if (interestEl) {
+      const projectType = sanitizeText(params.get('projectType') || '', 120);
+      const matchingOption = Array.from(interestEl.options).find(opt => opt.value === projectType || opt.text === projectType);
+      if (matchingOption) {
+        interestEl.value = matchingOption.value;
+      } else {
+        interestEl.value = 'Custom Build';
+      }
+    }
+
+    if (messageEl && plannerBrief && !messageEl.value.trim()) {
+      const design = sanitizeText(params.get('design') || '', 120);
+      const plannerIntro = [
+        'Urban Planner lead summary:',
+        design ? `Preferred design: ${design}` : null,
+        '',
+        plannerBrief,
+        '',
+        'Please attach the downloaded planner files (.txt / .md / .pdf) below before submitting.',
+      ].filter(Boolean).join('\n');
+      messageEl.value = plannerIntro.slice(0, 2400);
+    }
+
+    if (transferNoteEl) {
+      transferNoteEl.style.display = 'block';
+    }
+
+    localStorage.removeItem(PLANNER_BRIEF_STORAGE_KEY);
+  }
+
+  function inferGalleryPlannerTarget(captionText, categoryTitle) {
+    const caption = (captionText || '').toLowerCase();
+    const category = (categoryTitle || '').toLowerCase();
+
+    let project = 'home';
+    let design = 'Custom on Request';
+
+    if (category.includes('office')) {
+      project = 'office';
+      design = 'Office / Workspace Unit';
+    } else if (category.includes('recreational') || category.includes('lifestyle')) {
+      project = 'cabin';
+      design = 'Off-Grid Container Home';
+    }
+
+    if (caption.includes('studio')) {
+      design = '20ft Studio Home';
+      project = 'home';
+    } else if (caption.includes('family')) {
+      design = 'Modern Family Container Home';
+      project = 'home';
+    } else if (caption.includes('luxury')) {
+      design = 'Luxury Container Residence';
+      project = 'home';
+    } else if (caption.includes('executive')) {
+      design = 'Executive Container Home';
+      project = 'home';
+    } else if (caption.includes('contemporary')) {
+      design = 'Contemporary Container Build';
+      project = 'home';
+    } else if (caption.includes('off-grid') || caption.includes('retreat')) {
+      design = 'Off-Grid Container Home';
+      project = 'cabin';
+    } else if (caption.includes('double')) {
+      design = 'Double Unit Container Home';
+      project = 'home';
+    } else if (caption.includes('flagship')) {
+      design = 'Flagship Container Home';
+      project = 'home';
+    } else if (caption.includes('office')) {
+      design = 'Office / Workspace Unit';
+      project = 'office';
+    }
+
+    return { project, design };
+  }
+
+  function setupGalleryPlannerLinks() {
+    const gallerySection = document.getElementById('gallery');
+    if (!gallerySection) return;
+
+    gallerySection.querySelectorAll('.gallery-img').forEach((card) => {
+      if (card.querySelector('.gallery-plan-link')) return;
+
+      const captionEl = card.querySelector('.gallery-caption');
+      const categoryEl = card.closest('.gallery-category')?.querySelector('.gallery-category-title');
+      const captionText = captionEl ? captionEl.textContent.trim() : 'Custom on Request';
+      const categoryTitle = categoryEl ? categoryEl.textContent.trim() : '';
+      const target = inferGalleryPlannerTarget(captionText, categoryTitle);
+
+      const link = document.createElement('a');
+      link.className = 'gallery-plan-link';
+      link.textContent = 'Open in Planner';
+      link.href = `urban_planner/index.html?fromGallery=1&project=${encodeURIComponent(target.project)}&design=${encodeURIComponent(target.design)}`;
+      link.setAttribute('aria-label', `Open ${captionText} in planner`);
+
+      card.appendChild(link);
+    });
+  }
+
   async function handleFormSubmit() {
     const rawFname = document.getElementById('fname').value;
     const rawLname = document.getElementById('lname').value;
@@ -2784,6 +3052,8 @@
     const rawMessage = document.getElementById('message').value;
     const rawInterest = document.getElementById('interest').value;
     const rawPhone = document.getElementById('phone').value;
+    const attachmentInput = document.getElementById('plannerAttachment');
+    const attachmentFile = attachmentInput && attachmentInput.files ? attachmentInput.files[0] : null;
     const honeypot = document.getElementById('website').value;
 
     const fname = sanitizeText(rawFname, 80);
@@ -2844,6 +3114,21 @@
       return;
     }
 
+    if (attachmentFile) {
+      const maxSizeBytes = 12 * 1024 * 1024;
+      const allowedFile = /\.(pdf|txt|md|markdown|jpg|jpeg|png|webp)$/i.test(attachmentFile.name || '');
+      if (!allowedFile) {
+        errorEl.textContent = 'Attachment must be PDF, TXT, MD, JPG, PNG, or WEBP.';
+        errorEl.style.display = 'block';
+        return;
+      }
+      if (attachmentFile.size > maxSizeBytes) {
+        errorEl.textContent = 'Attachment is too large. Maximum size is 12MB.';
+        errorEl.style.display = 'block';
+        return;
+      }
+    }
+
     const suspiciousInput = [fname, lname, email, phone, interest, message].some(hasSuspiciousPattern);
     if (suspiciousInput) {
       errorEl.textContent = 'Your enquiry contains blocked characters or patterns. Please revise and try again.';
@@ -2863,13 +3148,39 @@
       return;
     }
 
+    let messageForSubmit = message;
+
+    if (attachmentFile) {
+      const fileName = toSafeFileName(attachmentFile.name);
+      const filePath = `enquiries/${Date.now()}-${fileName}`;
+      const { error: uploadError } = await supabaseClient
+        .storage
+        .from(SUPABASE_ATTACHMENTS_BUCKET)
+        .upload(filePath, attachmentFile, { upsert: false });
+
+      if (uploadError) {
+        errorEl.textContent = `Attachment upload failed: ${uploadError.message}`;
+        errorEl.style.display = 'block';
+        return;
+      }
+
+      const { data: publicData } = supabaseClient
+        .storage
+        .from(SUPABASE_ATTACHMENTS_BUCKET)
+        .getPublicUrl(filePath);
+
+      if (publicData && publicData.publicUrl) {
+        messageForSubmit = `${message}\n\nAttachment: ${publicData.publicUrl}`;
+      }
+    }
+
     const payload = {
       first_name: fname,
       last_name: lname,
       email: email,
       phone: phone,
       project_type: interest || 'General enquiry',
-      message: message
+      message: messageForSubmit
     };
 
     try {
@@ -2890,6 +3201,8 @@
       document.getElementById('phone').value = '';
       document.getElementById('interest').value = '';
       document.getElementById('message').value = '';
+      document.getElementById('plannerAttachment').value = '';
+      updateAttachmentUi(null);
       document.getElementById('website').value = '';
       localStorage.setItem(ENQUIRY_LAST_SUBMIT_KEY, String(Date.now()));
 
@@ -2911,6 +3224,10 @@
       submitBtn.textContent = 'Send Enquiry';
     }
   }
+
+  prefillEnquiryFromPlanner();
+  setupAttachmentDropzone();
+  setupGalleryPlannerLinks();
 
   // ── PARALLAX HERO ──
   window.addEventListener('scroll', () => {
