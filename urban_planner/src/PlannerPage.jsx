@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { jsPDF } from 'jspdf'
 import galleryConfig from './data/design-gallery.json'
 import './App.css'
@@ -545,6 +546,8 @@ function App() {
     URL.revokeObjectURL(objectUrl)
   }
 
+  const navigate = useNavigate()
+
   function continueToEnquiry() {
     if (!estimate) return
     const summary = [
@@ -574,7 +577,7 @@ function App() {
       projectType: projectTypes.find((item) => item.id === form.projectType)?.label || 'Custom Build',
       design: form.selectedDesign || '',
     })
-    window.location.href = `/?${params.toString()}#contact`
+    navigate(`/?${params.toString()}#contact`)
   }
 
   return (

@@ -3388,6 +3388,24 @@
 
   const statEl = document.querySelector('.about-stat-num');
   if (statEl) statObs.observe(statEl);
+
+  // ── SCROLL TO HASH on load (works when loaded inside iframe with hash) ──
+  function scrollToHash(id) {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  if (window.location.hash) {
+    const id = window.location.hash.replace('#', '');
+    // slight delay to let page render
+    setTimeout(() => scrollToHash(id), 200);
+  }
+
+  // ── POSTMESSAGE from parent React app ──
+  window.addEventListener('message', (e) => {
+    if (e.data && e.data.scrollTo) {
+      setTimeout(() => scrollToHash(e.data.scrollTo), 100);
+    }
+  });
 </script>
   <script src="assets/content-protection.js"></script>
 </body>
