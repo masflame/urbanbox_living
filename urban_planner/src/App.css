@@ -583,6 +583,22 @@
   line-height: 1.65;
 }
 
+.payment-plan-grid {
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.payment-plan-card {
+  margin-top: 0;
+}
+
+.payment-plan-card.is-selected {
+  border-color: rgba(201, 168, 76, 0.6);
+  box-shadow: inset 0 0 0 1px rgba(201, 168, 76, 0.28);
+}
+
 .finance-options {
   margin-top: 0.9rem;
   border-top: 1px solid rgba(245, 240, 232, 0.08);
@@ -702,10 +718,11 @@
   .results-grid,
   .toggle-grid,
   .design-gallery-grid {
-
-  .finance-options ul {
     grid-template-columns: 1fr;
   }
+
+  .payment-plan-grid,
+  .finance-options ul {
     grid-template-columns: 1fr;
   }
 }

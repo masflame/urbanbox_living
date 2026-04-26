@@ -68,6 +68,20 @@ const paymentPlans = [
   { id: 'finance', label: 'Monthly Finance Estimate' },
 ]
 
+const standardMilestoneTemplate = [
+  { label: 'Project Initiation Payment', percent: 40 },
+  { label: 'Production Milestone Payment', percent: 40 },
+  { label: 'Completion Payment', percent: 20 },
+]
+
+const flexibleMilestoneTemplate = [
+  { label: 'Design & Deposit', percent: 20 },
+  { label: 'Materials Procurement', percent: 20 },
+  { label: 'Fabrication Start', percent: 20 },
+  { label: 'Fabrication Completion', percent: 20 },
+  { label: 'Delivery / Installation', percent: 20 },
+]
+
 const portfolioDesigns = [
   '1-Bedroom Container Home',
   '20ft Studio Home',
@@ -209,21 +223,10 @@ function estimateProject(form) {
   }
 
   const paymentPlan = form.paymentPlan || 'flexible'
-  const standardMilestones = [
-    { label: 'Project Initiation Payment', percent: 40 },
-    { label: 'Production Milestone Payment', percent: 40 },
-    { label: 'Completion Payment', percent: 20 },
-  ]
-  const flexibleMilestones = [
-    { label: 'Design & Deposit', percent: 20 },
-    { label: 'Materials Procurement', percent: 20 },
-    { label: 'Fabrication Start', percent: 20 },
-    { label: 'Fabrication Completion', percent: 20 },
-    { label: 'Delivery / Installation', percent: 20 },
-  ]
-
-  const milestoneBase = paymentPlan === 'standard' ? standardMilestones : paymentPlan === 'flexible' ? flexibleMilestones : []
-  const milestones = milestoneBase.map((milestone) => ({ ...milestone, amount: Math.round((estimatedPrice * milestone.percent) / 100) }))
+  const mapMilestonesWithAmount = (milestones) => milestones.map((milestone) => ({
+    ...milestone,
+    amount: Math.round((estimatedPrice * milestone.percent) / 100),
+  }))
 
   const financeFactorByTerm = { 12: 1.08, 24: 1.16, 36: 1.24 }
   const financeScenarios = [12, 24, 36].map((months) => {
@@ -234,6 +237,27 @@ function estimateProject(form) {
       repayTotal,
     }
   })
+
+  const paymentPlanOptions = [
+    {
+      ...paymentPlans.find((item) => item.id === 'standard'),
+      milestones: mapMilestonesWithAmount(standardMilestoneTemplate),
+      financeScenarios: [],
+    },
+    {
+      ...paymentPlans.find((item) => item.id === 'flexible'),
+      milestones: mapMilestonesWithAmount(flexibleMilestoneTemplate),
+      financeScenarios: [],
+    },
+    {
+      ...paymentPlans.find((item) => item.id === 'finance'),
+      milestones: [],
+      financeScenarios,
+    },
+  ]
+
+  const selectedPlan = paymentPlanOptions.find((item) => item.id === paymentPlan) || paymentPlanOptions[1]
+  const milestones = selectedPlan.milestones
 
   const template = templatesByProject[form.projectType].find((option) => option.id === form.templateId)
 
@@ -287,8 +311,9 @@ function estimateProject(form) {
     feasibility,
     recommendation: recommendationMap[form.projectType],
     milestones,
+    paymentPlanOptions,
     paymentPlan,
-    paymentPlanLabel: paymentPlans.find((item) => item.id === paymentPlan)?.label ?? 'Standard Plan',
+    paymentPlanLabel: selectedPlan.label,
     financeScenarios,
     brief,
   }
@@ -1106,29 +1131,32 @@ function App() {
               </article>
             </div>
 
-            <div className="milestones">
-              <h4>{estimate.paymentPlanLabel}</h4>
-              {estimate.milestones.length > 0 ? (
-                <ul>
-                  {estimate.milestones.map((milestone) => (
-                    <li key={milestone.label}><span>{milestone.label} ({milestone.percent}%)</span><strong>{currency.format(milestone.amount)}</strong></li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="milestones-note">Monthly finance mode selected. These scenarios are indicative and subject to final lender approval.</p>
-              )}
+            <div className="payment-plan-grid">
+              {estimate.paymentPlanOptions.map((plan) => (
+                <article key={plan.id} className={`milestones payment-plan-card${estimate.paymentPlan === plan.id ? ' is-selected' : ''}`}>
+                  <h4>{plan.label}</h4>
 
-              <div className="finance-options">
-                <h5>Estimated financing</h5>
-                <ul>
-                  {estimate.financeScenarios.map((item) => (
-                    <li key={item.months}>
-                      <span>{item.months} months</span>
-                      <strong>From {currency.format(item.monthly)}/month</strong>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+                  {plan.milestones.length > 0 ? (
+                    <ul>
+                      {plan.milestones.map((milestone) => (
+                        <li key={milestone.label}><span>{milestone.label} ({milestone.percent}%)</span><strong>{currency.format(milestone.amount)}</strong></li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <div className="finance-options">
+                      <h5>Estimated financing</h5>
+                      <ul>
+                        {plan.financeScenarios.map((item) => (
+                          <li key={item.months}>
+                            <span>{item.months} months</span>
+                            <strong>From {currency.format(item.monthly)}/month</strong>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </article>
+              ))}
             </div>
 
             <div className="actions">
