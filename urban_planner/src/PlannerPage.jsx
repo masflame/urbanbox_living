@@ -62,6 +62,12 @@ const budgetBands = [
   { value: '2000000', label: 'R1.2m+' },
 ]
 
+const paymentPlans = [
+  { id: 'standard', label: 'Standard Plan' },
+  { id: 'flexible', label: 'Flexible Plan (Recommended)' },
+  { id: 'finance', label: 'Monthly Finance Estimate' },
+]
+
 const portfolioDesigns = [
   '1-Bedroom Container Home',
   '20ft Studio Home',
@@ -130,6 +136,7 @@ const initialForm = {
   bathrooms: 1,
   finishLevel: 'premium',
   budget: '450000',
+  paymentPlan: 'flexible',
   plumbing: true,
   solar: false,
   insulation: true,
@@ -201,11 +208,32 @@ function estimateProject(form) {
     cabin: 'Position utilities, off-grid allowance and transport logistics as the main decisions.',
   }
 
-  const milestones = [
-    { label: 'Deposit', percent: 40 },
-    { label: 'Production midpoint', percent: 40 },
-    { label: 'Delivery and handover', percent: 20 },
-  ].map((milestone) => ({ ...milestone, amount: Math.round((estimatedPrice * milestone.percent) / 100) }))
+  const paymentPlan = form.paymentPlan || 'flexible'
+  const standardMilestones = [
+    { label: 'Project Initiation Payment', percent: 40 },
+    { label: 'Production Milestone Payment', percent: 40 },
+    { label: 'Completion Payment', percent: 20 },
+  ]
+  const flexibleMilestones = [
+    { label: 'Design & Deposit', percent: 20 },
+    { label: 'Materials Procurement', percent: 20 },
+    { label: 'Fabrication Start', percent: 20 },
+    { label: 'Fabrication Completion', percent: 20 },
+    { label: 'Delivery / Installation', percent: 20 },
+  ]
+
+  const milestoneBase = paymentPlan === 'standard' ? standardMilestones : paymentPlan === 'flexible' ? flexibleMilestones : []
+  const milestones = milestoneBase.map((milestone) => ({ ...milestone, amount: Math.round((estimatedPrice * milestone.percent) / 100) }))
+
+  const financeFactorByTerm = { 12: 1.08, 24: 1.16, 36: 1.24 }
+  const financeScenarios = [12, 24, 36].map((months) => {
+    const repayTotal = Math.round(estimatedPrice * financeFactorByTerm[months])
+    return {
+      months,
+      monthly: Math.round(repayTotal / months),
+      repayTotal,
+    }
+  })
 
   const template = templatesByProject[form.projectType].find((option) => option.id === form.templateId)
 
@@ -230,6 +258,7 @@ function estimateProject(form) {
     `Rooms/spaces: ${rooms}`,
     `Bathrooms: ${bathrooms}`,
     `Finish level: ${finishLevels[form.finishLevel].label}`,
+    `Payment option: ${paymentPlans.find((item) => item.id === paymentPlan)?.label ?? 'Standard Plan'}`,
     `Budget band: ${budgetBands.find((item) => item.value === form.budget)?.label ?? 'Not specified'}`,
     `Solar: ${form.solar ? 'Yes' : 'No'}`,
     `Insulation: ${form.insulation ? 'Yes' : 'No'}`,
@@ -240,6 +269,7 @@ function estimateProject(form) {
     `Estimated production: ${buildWeeks} weeks`,
     `Estimated installation: ${installDays} days`,
     `Feasibility signal: ${feasibility}`,
+    paymentPlan === 'finance' ? `Estimated financing: ${financeScenarios.map((item) => `${item.months} months from ${currency.format(item.monthly)}/month`).join(' | ')}` : null,
     '',
     `Recommendation: ${recommendationMap[form.projectType]}`,
     form.notes ? '' : null,
@@ -257,6 +287,9 @@ function estimateProject(form) {
     feasibility,
     recommendation: recommendationMap[form.projectType],
     milestones,
+    paymentPlan,
+    paymentPlanLabel: paymentPlans.find((item) => item.id === paymentPlan)?.label ?? 'Standard Plan',
+    financeScenarios,
     brief,
   }
 }
@@ -286,6 +319,7 @@ function buildMarkdown(form, estimate) {
     `- Rooms: ${form.rooms}`,
     `- Bathrooms: ${form.bathrooms}`,
     `- Finish level: ${finishLevels[form.finishLevel].label}`,
+    `- Payment option: ${estimate.paymentPlanLabel}`,
     `- Budget band: ${budgetBands.find((item) => item.value === form.budget)?.label ?? 'Not specified'}`,
     `- Plumbing: ${form.plumbing ? 'Yes' : 'No'}`,
     `- Insulation: ${form.insulation ? 'Yes' : 'No'}`,
@@ -301,7 +335,12 @@ function buildMarkdown(form, estimate) {
     `- Contingency: ${currency.format(estimate.contingency)}`,
     '',
     '## Milestones',
-    ...estimate.milestones.map((m) => `- ${m.label} (${m.percent}%): ${currency.format(m.amount)}`),
+    ...(estimate.milestones.length
+      ? estimate.milestones.map((m) => `- ${m.label} (${m.percent}%): ${currency.format(m.amount)}`)
+      : ['- Monthly finance estimate selected (see affordability scenarios below).']),
+    '',
+    '## Estimated Financing',
+    ...estimate.financeScenarios.map((item) => `- ${item.months} months: from ${currency.format(item.monthly)} / month (est. total ${currency.format(item.repayTotal)})`),
     '',
     '## Recommendation',
     estimate.recommendation,
@@ -439,6 +478,7 @@ async function downloadPdf(form, estimate) {
   row('Bedrooms',      String(form.rooms), false)
   row('Bathrooms',     String(form.bathrooms), true)
   row('Finish Level',  finishLevels[form.finishLevel].label, false)
+  row('Payment Option', estimate.paymentPlanLabel, true)
   divider()
 
   // ── INVESTMENT ESTIMATE ───────────────────────────────────
@@ -461,18 +501,30 @@ async function downloadPdf(form, estimate) {
   doc.text(`Build: ${estimate.buildWeeks} weeks  |  Installation: ${estimate.installDays} days  |  Feasibility: ${estimate.feasibility}`, RIGHT - 4, y + 22, { align: 'right' })
   y += 48
 
-  // milestone table header
+  // payment table header
   doc.setFillColor(...DARK)
   doc.rect(LEFT, y, CONTENT_W, 16, 'F')
   doc.setFont('helvetica', 'bold')
   doc.setFontSize(8)
   doc.setTextColor(...GOLD)
-  doc.text('PAYMENT MILESTONE', LEFT + 6, y + 11)
-  doc.text('%', LEFT + 280, y + 11)
-  doc.text('AMOUNT', RIGHT - 6, y + 11, { align: 'right' })
+  doc.text(estimate.paymentPlan === 'finance' ? 'MONTHLY FINANCE ESTIMATE' : 'PAYMENT MILESTONE', LEFT + 6, y + 11)
+  doc.text(estimate.paymentPlan === 'finance' ? 'TERM' : '%', LEFT + 280, y + 11)
+  doc.text(estimate.paymentPlan === 'finance' ? 'EST. MONTHLY' : 'AMOUNT', RIGHT - 6, y + 11, { align: 'right' })
   y += 16
 
-  estimate.milestones.forEach((m, i) => {
+  const paymentRows = estimate.paymentPlan === 'finance'
+    ? estimate.financeScenarios.map((item) => ({
+        label: `${item.months} months`,
+        rightMeta: `${item.months}m`,
+        amountText: `${currency.format(item.monthly)} / mo`,
+      }))
+    : estimate.milestones.map((m) => ({
+        label: m.label,
+        rightMeta: `${m.percent}%`,
+        amountText: currency.format(m.amount),
+      }))
+
+  paymentRows.forEach((m, i) => {
     if (i % 2 === 0) {
       doc.setFillColor(249, 248, 244)
       doc.rect(LEFT, y, CONTENT_W, 16, 'F')
@@ -482,10 +534,10 @@ async function downloadPdf(form, estimate) {
     doc.setTextColor(...DARK)
     doc.text(m.label, LEFT + 6, y + 11)
     doc.setTextColor(...GREY)
-    doc.text(`${m.percent}%`, LEFT + 280, y + 11)
+    doc.text(m.rightMeta, LEFT + 280, y + 11)
     doc.setFont('helvetica', 'bold')
     doc.setTextColor(...DARK)
-    doc.text(currency.format(m.amount), RIGHT - 6, y + 11, { align: 'right' })
+    doc.text(m.amountText, RIGHT - 6, y + 11, { align: 'right' })
     y += 16
   })
   y += 12
@@ -1002,6 +1054,16 @@ function App() {
               </div>
             </div>
 
+            <div className="form-group">
+              <label>Payment plan</label>
+              <select value={form.paymentPlan} onChange={(event) => updateField('paymentPlan', event.target.value)}>
+                {paymentPlans.map((plan) => (
+                  <option key={plan.id} value={plan.id}>{plan.label}</option>
+                ))}
+              </select>
+              <small className="field-note">Choose your preferred structure: fixed milestones, flexible stages, or estimated monthly affordability.</small>
+            </div>
+
             <div className="toggle-grid">
               <label className="toggle-card"><input type="checkbox" checked={form.plumbing} onChange={(event) => updateField('plumbing', event.target.checked)} /><span>Plumbing pack</span></label>
               <label className="toggle-card"><input type="checkbox" checked={form.insulation} onChange={(event) => updateField('insulation', event.target.checked)} /><span>Insulation</span></label>
@@ -1045,12 +1107,28 @@ function App() {
             </div>
 
             <div className="milestones">
-              <h4>Payment milestones</h4>
-              <ul>
-                {estimate.milestones.map((milestone) => (
-                  <li key={milestone.label}><span>{milestone.label} ({milestone.percent}%)</span><strong>{currency.format(milestone.amount)}</strong></li>
-                ))}
-              </ul>
+              <h4>{estimate.paymentPlanLabel}</h4>
+              {estimate.milestones.length > 0 ? (
+                <ul>
+                  {estimate.milestones.map((milestone) => (
+                    <li key={milestone.label}><span>{milestone.label} ({milestone.percent}%)</span><strong>{currency.format(milestone.amount)}</strong></li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="milestones-note">Monthly finance mode selected. These scenarios are indicative and subject to final lender approval.</p>
+              )}
+
+              <div className="finance-options">
+                <h5>Estimated financing</h5>
+                <ul>
+                  {estimate.financeScenarios.map((item) => (
+                    <li key={item.months}>
+                      <span>{item.months} months</span>
+                      <strong>From {currency.format(item.monthly)}/month</strong>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
 
             <div className="actions">

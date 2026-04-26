@@ -1363,8 +1363,20 @@
       .form-group input, .form-group textarea, .form-group select { padding: 13px 14px; }
       .submit-btn { letter-spacing: 0.2em; }
       footer { padding: 50px 24px 30px; }
-      .footer-top { flex-direction: column; }
+      .footer-top {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 22px 18px;
+      }
+      .footer-logo { grid-column: 1 / -1; }
       .footer-logo img { height: 72px; }
+      .footer-links ul {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px 14px;
+      }
+      .footer-links ul li { margin-bottom: 0; }
+      .footer-links ul a { display: block; }
       .footer-copy { width: 100%; text-align: center; }
       .footer-socials { width: 100%; justify-content: center; }
       .map-wrap { height: 320px; }
@@ -1374,6 +1386,9 @@
     }
 
     @media (max-width: 520px) {
+      .footer-top { grid-template-columns: 1fr; }
+      .footer-logo { grid-column: auto; }
+      .footer-links ul { grid-template-columns: 1fr 1fr; }
       .gallery-grid { grid-template-columns: 1fr; }
       .folder-thumb-grid { grid-template-columns: 1fr; }
       .section-label { letter-spacing: 0.3em; }

@@ -576,6 +576,58 @@
   font-weight: 500;
 }
 
+.milestones-note {
+  margin: 0;
+  color: var(--white-dim);
+  font-size: 0.8rem;
+  line-height: 1.65;
+}
+
+.finance-options {
+  margin-top: 0.9rem;
+  border-top: 1px solid rgba(245, 240, 232, 0.08);
+  padding-top: 0.8rem;
+}
+
+.finance-options h5 {
+  margin: 0 0 0.55rem;
+  color: var(--gold);
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.finance-options ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.6rem;
+}
+
+.finance-options li {
+  border: 1px solid rgba(201, 168, 76, 0.35);
+  background: rgba(201, 168, 76, 0.08);
+  padding: 0.55rem 0.65rem;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.finance-options li span {
+  color: var(--white-dim);
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.finance-options li strong {
+  color: var(--white);
+  font-size: 0.77rem;
+  font-weight: 500;
+}
+
 .actions {
   margin-top: 1rem;
   display: flex;
@@ -650,6 +702,10 @@
   .results-grid,
   .toggle-grid,
   .design-gallery-grid {
+
+  .finance-options ul {
+    grid-template-columns: 1fr;
+  }
     grid-template-columns: 1fr;
   }
 }
