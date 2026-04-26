@@ -1,6 +1,19 @@
 (function () {
   'use strict';
 
+  function isMobileOrTouchDevice() {
+    var ua = navigator.userAgent || navigator.vendor || window.opera || '';
+    var mobileRegex = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini|mobile|tablet/i;
+    var hasTouch = navigator.maxTouchPoints > 0 || 'ontouchstart' in window;
+    var coarsePointer = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+    return mobileRegex.test(ua) || hasTouch || coarsePointer;
+  }
+
+  // Only protect desktop. Do nothing on mobile/touch devices.
+  if (isMobileOrTouchDevice()) {
+    return;
+  }
+
   function blockEvent(event) {
     event.preventDefault();
     event.stopPropagation();
