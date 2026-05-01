@@ -1,0 +1,23 @@
+[
+  {
+    "platform": "urbanbox",
+    "product_name": "Contemporary 12m Luxury Studio – Turnkey High-Cube Living",
+    "product_name_hint": "12m High-Cube Luxury Studio",
+    "product_group_key": "12m-luxury-studio-container",
+    "relationship_group_id": "urbanbox:12m-luxury-studio-container",
+    "unit_slug": "12m-luxury-studio-container",
+    "local_path": "src/assets/Units/UnitsZ/12m-luxury-studio-container/Custom-40ft-Shipping-Container-House-1-300x300.jpg",
+    "asset_filename": "Custom-40ft-Shipping-Container-House-1-300x300.jpg",
+    "unit_size": "40ft / 12m High Cube (~28m²)",
+    "unit_size_sqm": "28",
+    "manufacturing_time": "10 - 14 weeks",
+    "price": "ZAR 165000",
+    "price_amount": "165000",
+    "primary_description": "Step into the future of modular living with this meticulously crafted 12m High-Cube container home. Finished in a sophisticated matte Industrial Grey, this unit is designed for those who refuse to compromise on style or durability. The interior features an expansive open-plan layout with premium chevron flooring and a minimalist white gallery aesthetic. Large-format sliding glass doors dissolve the boundary between indoors and out, while the high-cube height offers an airy, residential feel often missing in standard conversions.",
+    "product_description": "12m (40ft) High Cube luxury studio container home. Designer kitchen with white cabinetry and gooseneck faucet, light oak chevron flooring, full SANS 10400-XA insulation, pre-installed split-unit air conditioner, and large black-framed aluminium sliding glass doors with vertical sliver windows.",
+    "unit_features": "Size: 12.19m × 2.44m × 2.90m HC (~28-30m² interior) | Insulation: Double-layered with reflective foil barrier (SANS 10400-XA) | Flooring: Light-oak chevron herringbone laminate | Climate: External split-unit HVAC | Glazing: Black-framed aluminium sliding glass doors + vertical sliver windows | Wiring: SA electrical standards | Plumbing: Pre-installed for rapid on-site connection",
+    "included_items": "12m HC steel container | Designer white kitchen cabinetry | Sleek black gooseneck faucet | Integrated sink | Chevron laminate flooring | SANS 10400-XA insulation | Pre-installed split-unit air conditioner | Aluminium sliding glass doors | Vertical aluminium windows | SA-spec electrical wiring | Plumbing rough-in",
+    "optional_extras": "Off-grid solar kit | Greywater recycling | Outdoor deck extension | Custom paint finishes | Premium appliance upgrades",
+    "excluded_items": "Land | Site preparation | Municipal connection fees | Transport | Foundations"
+  }
+]

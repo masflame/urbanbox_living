@@ -10,16 +10,16 @@
 
   <style>
     :root {
-      --gold: #C9A84C;
-      --gold-light: #E8C97A;
-      --gold-dark: #8A6820;
-      --black: #080808;
-      --dark: #111111;
-      --dark-2: #1A1A1A;
-      --dark-3: #222222;
-      --white: #F5F0E8;
-      --white-dim: rgba(245,240,232,0.7);
-      --white-faint: rgba(245,240,232,0.15);
+      --gold: #91a27f;
+      --gold-light: #9dae8b;
+      --gold-dark: #6b7d64;
+      --black: #ffffff;
+      --dark: #fff9ef;
+      --dark-2: #4f4c4f;
+      --dark-3: #ede8df;
+      --white: #4f4c4f;
+      --white-dim: rgba(79,76,79,0.7);
+      --white-faint: rgba(79,76,79,0.15);
       --transition: cubic-bezier(0.76, 0, 0.24, 1);
     }
 
@@ -63,7 +63,7 @@
     }
     .cursor-ring {
       width: 36px; height: 36px;
-      border: 1px solid rgba(201,168,76,0.5);
+      border: 1px solid rgba(145,162,127,0.5);
       border-radius: 50%;
       position: fixed; top: 0; left: 0;
       pointer-events: none;
@@ -137,9 +137,9 @@
     }
     nav.scrolled {
       padding: 10px 60px;
-      background: rgba(8,8,8,0.92);
+      background: rgba(255,249,239,0.92);
       backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(201,168,76,0.1);
+      border-bottom: 1px solid rgba(145,162,127,0.1);
     }
     .nav-logo {
       display: flex; align-items: center; gap: 12px;
@@ -211,7 +211,7 @@
     .mobile-menu {
       display: none;
       position: fixed; inset: 0;
-      background: rgba(8,8,8,0.97);
+      background: rgba(255,249,239,0.97);
       backdrop-filter: blur(24px);
       z-index: 999;
       flex-direction: column; align-items: center; justify-content: center;
@@ -257,9 +257,9 @@
       position: absolute; inset: 0;
       background: linear-gradient(
         to top,
-        rgba(8,8,8,0.95) 0%,
-        rgba(8,8,8,0.4) 50%,
-        rgba(8,8,8,0.2) 100%
+        rgba(255,249,239,0.95) 0%,
+        rgba(255,249,239,0.4) 50%,
+        rgba(255,249,239,0.2) 100%
       );
     }
     .hero-content {
@@ -272,7 +272,7 @@
       letter-spacing: 0.45em;
       text-transform: uppercase;
       color: var(--gold);
-      border: 1px solid rgba(201,168,76,0.35);
+      border: 1px solid rgba(145,162,127,0.35);
       padding: 6px 18px;
       margin-bottom: 28px;
       opacity: 0;
@@ -320,7 +320,7 @@
     .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); }
     .btn-ghost {
       background: transparent;
-      border: 1px solid rgba(245,240,232,0.3);
+      border: 1px solid rgba(79,76,79,0.3);
       color: var(--white);
       padding: 15px 38px;
       font-family: 'Montserrat', sans-serif;
@@ -447,7 +447,7 @@
       position: absolute;
       top: -20px; left: -20px;
       right: 20px; bottom: 20px;
-      border: 1px solid rgba(201,168,76,0.3);
+      border: 1px solid rgba(145,162,127,0.3);
       z-index: 0;
       pointer-events: none;
     }
@@ -512,11 +512,11 @@
       position: absolute; inset: 0;
       display: flex; flex-direction: column; justify-content: flex-end;
       padding: 36px 32px;
-      background: linear-gradient(to top, rgba(8,8,8,0.9) 0%, transparent 60%);
+      background: linear-gradient(to top, rgba(255,249,239,0.9) 0%, transparent 60%);
       transition: background 0.5s;
     }
     .catalog-item:hover .catalog-overlay {
-      background: linear-gradient(to top, rgba(8,8,8,0.95) 0%, rgba(8,8,8,0.3) 100%);
+      background: linear-gradient(to top, rgba(255,249,239,0.95) 0%, rgba(255,249,239,0.3) 100%);
     }
     .catalog-tag {
       font-size: 0.55rem; letter-spacing: 0.4em; text-transform: uppercase;
@@ -577,7 +577,7 @@
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 1px;
-      background: rgba(201,168,76,0.1);
+      background: rgba(145,162,127,0.1);
     }
     .feature-card {
       background: var(--dark-2);
@@ -637,7 +637,7 @@
       gap: 44px;
     }
     .gallery-category {
-      border: 1px solid rgba(201,168,76,0.12);
+      border: 1px solid rgba(145,162,127,0.12);
       background: rgba(255,255,255,0.015);
       padding: 28px;
     }
@@ -695,7 +695,7 @@
       letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--white);
-      background: linear-gradient(to top, rgba(8,8,8,0.92), rgba(8,8,8,0));
+      background: linear-gradient(to top, rgba(255,249,239,0.92), rgba(255,249,239,0));
     }
 
     /* ── VISUALISATIONS ── */
@@ -804,7 +804,7 @@
     }
     .contact-icon {
       width: 42px; height: 42px;
-      border: 1px solid rgba(201,168,76,0.4);
+      border: 1px solid rgba(145,162,127,0.4);
       display: flex; align-items: center; justify-content: center;
       color: var(--gold);
       flex-shrink: 0;
@@ -857,12 +857,12 @@
       appearance: none;
       -webkit-appearance: none;
     }
-    .form-group select option { background: #1a1a1a; color: var(--white); }
+    .form-group select option { background: #4f4c4f; color: var(--white); }
     .form-group input:focus,
     .form-group textarea:focus,
     .form-group select:focus {
       border-color: var(--gold);
-      background: rgba(201,168,76,0.04);
+      background: rgba(145,162,127,0.04);
     }
     .form-group textarea { height: 130px; resize: none; }
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
@@ -897,9 +897,9 @@
     .map-overlay {
       position: absolute; top: 50%; left: 60px;
       transform: translateY(-50%);
-      background: rgba(8,8,8,0.92);
+      background: rgba(255,249,239,0.92);
       backdrop-filter: blur(16px);
-      border: 1px solid rgba(201,168,76,0.25);
+      border: 1px solid rgba(145,162,127,0.25);
       padding: 28px 36px;
     }
     .map-overlay-name {
@@ -917,7 +917,7 @@
     footer {
       background: var(--black);
       padding: 60px 60px 36px;
-      border-top: 1px solid rgba(201,168,76,0.1);
+      border-top: 1px solid rgba(145,162,127,0.1);
     }
     .footer-top {
       display: flex; justify-content: space-between; align-items: flex-start;
@@ -950,7 +950,7 @@
       padding-top: 28px;
       border-top: 1px solid rgba(255,255,255,0.06);
     }
-    .footer-copy { font-size: 0.68rem; color: rgba(245,240,232,0.3); }
+    .footer-copy { font-size: 0.68rem; color: rgba(79,76,79,0.3); }
     .footer-socials {
       display: flex; gap: 16px;
     }
@@ -1175,7 +1175,7 @@
   <div class="about-grid">
     <div class="about-img-wrap reveal">
       <img src="images/about.jpeg" alt="Urban Box Living Workshop"
-           onerror="this.src=''; this.style.background='#1a1a1a'; this.style.minHeight='480px'"/>
+           onerror="this.src=''; this.style.background='#4f4c4f'; this.style.minHeight='480px'"/>
       <div class="about-stat">
         <span class="about-stat-num">500+</span>
         <span class="about-stat-label">Projects Delivered</span>
@@ -1206,7 +1206,7 @@
     <!-- Featured -->
     <div class="catalog-item featured reveal">
       <img src="images/catalog-1.jpeg" alt="1-Bedroom Container Home"
-           onerror="this.style.background='#1a1a1a'"/>
+           onerror="this.style.background='#4f4c4f'"/>
       <div class="catalog-overlay">
         <span class="catalog-tag">Signature</span>
         <div class="catalog-name">1-Bedroom<br>Container Home</div>
@@ -1239,7 +1239,7 @@
 
     <div class="catalog-item reveal reveal-delay-1">
       <img src="images/catalog-4.jpeg" alt="Beautiful Container Home"
-           onerror="this.style.background='#1a1a1a'"/>
+           onerror="this.style.background='#4f4c4f'"/>
       <div class="catalog-overlay">
         <span class="catalog-tag">Premium</span>
         <div class="catalog-name">Beautiful<br>Container Home</div>
@@ -1261,7 +1261,7 @@
 
     <div class="catalog-item reveal reveal-delay-3">
       <img src="images/catalog-6.jpeg" alt="Luxury Container Home"
-           onerror="this.style.background='#1a1a1a'"/>
+           onerror="this.style.background='#4f4c4f'"/>
       <div class="catalog-overlay">
         <span class="catalog-tag">Luxury</span>
         <div class="catalog-name">Luxury Container<br>Residence</div>
@@ -1305,7 +1305,7 @@
 
     <div class="catalog-item reveal reveal-delay-3">
       <img src="images/catalog-10.jpeg" alt="Designer Container Home"
-           onerror="this.style.background='#1a1a1a'"/>
+           onerror="this.style.background='#4f4c4f'"/>
       <div class="catalog-overlay">
         <span class="catalog-tag">Designer</span>
         <div class="catalog-name">Designer<br>Container Home</div>
@@ -1338,7 +1338,7 @@
 
     <div class="catalog-item reveal reveal-delay-1">
       <img src="images/catalog-13.jpeg" alt="Flagship Container Home"
-           onerror="this.style.background='#1a1a1a'"/>
+           onerror="this.style.background='#4f4c4f'"/>
       <div class="catalog-overlay">
         <span class="catalog-tag">Flagship</span>
         <div class="catalog-name">Flagship<br>Container Home</div>
@@ -1402,7 +1402,7 @@
       </div>
       <div class="gallery-grid">
         <div class="gallery-img reveal">
-          <img src="gallery/show4.jpg" alt="Contemporary single-family container residence exterior" onerror="this.style.background='#1a1a1a'"/>
+          <img src="gallery/show4.jpg" alt="Contemporary single-family container residence exterior" onerror="this.style.background='#4f4c4f'"/>
           <div class="gallery-caption">Contemporary Residential Unit</div>
         </div>
         <div class="gallery-img reveal reveal-delay-1">
@@ -1418,7 +1418,7 @@
           <div class="gallery-caption">Indoor-Outdoor Living Unit</div>
         </div>
         <div class="gallery-img reveal reveal-delay-2">
-          <img src="images/catalog-11.jpeg" alt="Fitted kitchen and interior finish inside a residential unit" onerror="this.style.background='#1a1a1a'"/>
+          <img src="images/catalog-11.jpeg" alt="Fitted kitchen and interior finish inside a residential unit" onerror="this.style.background='#4f4c4f'"/>
           <div class="gallery-caption">Fitted Kitchen Interior</div>
         </div>
       </div>
@@ -1435,7 +1435,7 @@
           <div class="gallery-caption">Executive Boardroom Unit</div>
         </div>
         <div class="gallery-img reveal reveal-delay-1">
-          <img src="gallery/triple-wide-call-centre-500x300.jpg" alt="Triple-wide modular office configured for call-centre operations" onerror="this.style.background='#1a1a1a'"/>
+          <img src="gallery/triple-wide-call-centre-500x300.jpg" alt="Triple-wide modular office configured for call-centre operations" onerror="this.style.background='#4f4c4f'"/>
           <div class="gallery-caption">Triple-Wide Call Centre Hub</div>
         </div>
         <div class="gallery-img reveal reveal-delay-2">
@@ -1452,7 +1452,7 @@
       </div>
       <div class="gallery-grid">
         <div class="gallery-img reveal">
-          <img src="gallery/Brits-600x600.png" alt="Lifestyle container project site in Brits" onerror="this.style.background='#1a1a1a'"/>
+          <img src="gallery/Brits-600x600.png" alt="Lifestyle container project site in Brits" onerror="this.style.background='#4f4c4f'"/>
           <div class="gallery-caption">Brits Lifestyle Site</div>
         </div>
         <div class="gallery-img reveal reveal-delay-1">
@@ -1468,7 +1468,7 @@
           <div class="gallery-caption">Tesselaarsdal Lifestyle Unit</div>
         </div>
         <div class="gallery-img reveal reveal-delay-2">
-          <img src="gallery/Wiesenhof-600x600.png" alt="Container lifestyle development at Wiesenhof" onerror="this.style.background='#1a1a1a'"/>
+          <img src="gallery/Wiesenhof-600x600.png" alt="Container lifestyle development at Wiesenhof" onerror="this.style.background='#4f4c4f'"/>
           <div class="gallery-caption">Wiesenhof Lifestyle Build</div>
         </div>
       </div>
@@ -1481,7 +1481,7 @@
       </div>
       <div class="gallery-grid">
         <div class="gallery-img reveal">
-          <img src="gallery/Grootbraak-Mossel-Bay-600x600.png" alt="On-site crane installation of modular container unit" onerror="this.style.background='#1a1a1a'"/>
+          <img src="gallery/Grootbraak-Mossel-Bay-600x600.png" alt="On-site crane installation of modular container unit" onerror="this.style.background='#4f4c4f'"/>
           <div class="gallery-caption">On-Site Crane Installation</div>
         </div>
         <div class="gallery-img reveal reveal-delay-1">
@@ -1497,7 +1497,7 @@
           <div class="gallery-caption">Aerial Progress 0036</div>
         </div>
         <div class="gallery-img reveal reveal-delay-2">
-          <img src="gallery/DJI_0038.jpg" alt="Aerial project overview showing modular layout phase 0038" onerror="this.style.background='#1a1a1a'"/>
+          <img src="gallery/DJI_0038.jpg" alt="Aerial project overview showing modular layout phase 0038" onerror="this.style.background='#4f4c4f'"/>
           <div class="gallery-caption">Aerial Progress 0038</div>
         </div>
         <div class="gallery-img reveal reveal-delay-1">
@@ -1505,7 +1505,7 @@
           <div class="gallery-caption">Aerial Progress 0041</div>
         </div>
         <div class="gallery-img reveal reveal-delay-2">
-          <img src="gallery/DJI_0047.jpg" alt="Aerial project overview showing modular layout phase 0047" onerror="this.style.background='#1a1a1a'"/>
+          <img src="gallery/DJI_0047.jpg" alt="Aerial project overview showing modular layout phase 0047" onerror="this.style.background='#4f4c4f'"/>
           <div class="gallery-caption">Aerial Progress 0047</div>
         </div>
         <div class="gallery-img reveal reveal-delay-3">
@@ -1517,7 +1517,7 @@
           <div class="gallery-caption">Aerial Progress 0056</div>
         </div>
         <div class="gallery-img reveal reveal-delay-1">
-          <img src="gallery/DJI_0057.jpg" alt="Aerial project overview showing modular layout phase 0057" onerror="this.style.background='#1a1a1a'"/>
+          <img src="gallery/DJI_0057.jpg" alt="Aerial project overview showing modular layout phase 0057" onerror="this.style.background='#4f4c4f'"/>
           <div class="gallery-caption">Aerial Progress 0057</div>
         </div>
         <div class="gallery-img reveal reveal-delay-2">
@@ -1547,7 +1547,7 @@
       <div class="gallery-grid">
 
         <div class="gallery-img reveal">
-          <img src="gallery2/3d-render-house-model_933329-4523.jpg" alt="3D render of a contemporary container residence" onerror="this.style.background='#1a1a1a'"/>
+          <img src="gallery2/3d-render-house-model_933329-4523.jpg" alt="3D render of a contemporary container residence" onerror="this.style.background='#4f4c4f'"/>
           <div class="gallery-caption">Container Residence – Concept Render</div>
           <span class="concept-note">Render</span>
         </div>
@@ -1571,7 +1571,7 @@
         </div>
 
         <div class="gallery-img reveal">
-          <img src="gallery2/house-black-cargo-container_174639-825.jpg" alt="Single-storey black cargo container home concept" onerror="this.style.background='#1a1a1a'"/>
+          <img src="gallery2/house-black-cargo-container_174639-825.jpg" alt="Single-storey black cargo container home concept" onerror="this.style.background='#4f4c4f'"/>
           <div class="gallery-caption">Single-Storey Container Home – Concept</div>
           <span class="concept-note">Illustration</span>
         </div>
@@ -1595,7 +1595,7 @@
         </div>
 
         <div class="gallery-img reveal">
-          <img src="gallery2/modern-container-home-with-outdoor-seating-balcony_555015-39.jpg" alt="Modern container home with outdoor seating and balcony" onerror="this.style.background='#1a1a1a'"/>
+          <img src="gallery2/modern-container-home-with-outdoor-seating-balcony_555015-39.jpg" alt="Modern container home with outdoor seating and balcony" onerror="this.style.background='#4f4c4f'"/>
           <div class="gallery-caption">Container Home with Outdoor Balcony</div>
           <span class="concept-note">Illustration</span>
         </div>
@@ -1630,7 +1630,7 @@
       <div class="gallery-grid" style="grid-template-columns: repeat(2,1fr);">
 
         <div class="gallery-img reveal">
-          <img src="gallery2/large-luxury-modern-bright-interiors-living-room-mockup-illustration-3d-rendering-computer-digitally-generated-image_653967-22139.jpg" alt="Luxury modern bright living room interior – 3D illustration and rendering" onerror="this.style.background='#1a1a1a'"/>
+          <img src="gallery2/large-luxury-modern-bright-interiors-living-room-mockup-illustration-3d-rendering-computer-digitally-generated-image_653967-22139.jpg" alt="Luxury modern bright living room interior – 3D illustration and rendering" onerror="this.style.background='#4f4c4f'"/>
           <div class="gallery-caption">Luxury Living Room – 3D Interior Illustration</div>
           <span class="concept-note">3D Render</span>
         </div>
@@ -1653,7 +1653,7 @@
       <div class="gallery-grid">
 
         <div class="gallery-img reveal">
-          <img src="gallery2/2-storey-container-cafe-restaurant-3d-illustration_555015-7.jpg" alt="Two-storey container café and restaurant – 3D illustration" onerror="this.style.background='#1a1a1a'"/>
+          <img src="gallery2/2-storey-container-cafe-restaurant-3d-illustration_555015-7.jpg" alt="Two-storey container café and restaurant – 3D illustration" onerror="this.style.background='#4f4c4f'"/>
           <div class="gallery-caption">Two-Storey Container Café & Restaurant</div>
           <span class="concept-note">3D Illustration</span>
         </div>

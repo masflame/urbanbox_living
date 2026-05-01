@@ -1,16 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@200;300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
 
 :root {
-  --gold: #C9A84C;
-  --gold-light: #E8C97A;
-  --gold-dark: #8A6820;
-  --black: #080808;
-  --dark: #111111;
-  --dark-2: #1A1A1A;
-  --dark-3: #222222;
-  --white: #F5F0E8;
-  --white-dim: rgba(245,240,232,0.7);
-  --white-faint: rgba(245,240,232,0.15);
+  --gold: #91a27f;
+  --gold-light: #9dae8b;
+  --gold-dark: #6b7d64;
+  --black: #ffffff;
+  --dark: #f4f6ee;
+  --dark-2: #4f4c4f;
+  --dark-3: #e6ebd9;
+  --white: #4f4c4f;
+  --white-dim: rgba(79,76,79,0.7);
+  --white-faint: rgba(79,76,79,0.15);
   --transition: cubic-bezier(0.76, 0, 0.24, 1);
 }
 
@@ -18,8 +18,14 @@
   box-sizing: border-box;
 }
 
+html, body, #root {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
@@ -31,6 +37,7 @@ body {
   font-family: 'Montserrat', sans-serif;
   font-weight: 300;
   overflow-x: hidden;
+  width: 100%;
 }
 
 body,
@@ -47,6 +54,19 @@ a {
 
 #root {
   min-height: 100vh;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+/* Common culprits of mobile horizontal overflow */
+img, video, iframe, canvas, svg {
+  max-width: 100%;
+  height: auto;
+}
+table, pre, code {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 h1,

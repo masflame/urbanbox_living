@@ -1,0 +1,23 @@
+[
+  {
+    "platform": "urbanbox",
+    "product_name": "Elite Expandable 2-Bedroom Home – Luxury Living Delivered & Unfolded",
+    "product_name_hint": "Elite Expandable 37m² Home",
+    "product_group_key": "elite-expandable-37m-home",
+    "relationship_group_id": "urbanbox:elite-expandable-37m-home",
+    "unit_slug": "elite-expandable-37m-home",
+    "local_path": "src/assets/Units/UnitsZZZ/elite-expandable-37m-home/20ft_Outside_View_5.png",
+    "asset_filename": "20ft_Outside_View_5.png",
+    "unit_size": "20ft Expandable (~37m² deployed)",
+    "unit_size_sqm": "37",
+    "manufacturing_time": "8 - 12 weeks",
+    "price": "ZAR 415000",
+    "price_amount": "415000",
+    "primary_description": "Redefine your living space with this state-of-the-art expandable modular home. Engineered for the ultimate in flexibility and speed, this unit arrives as a compact container and unfolds in under 30 minutes into a spacious, light-filled 37m² residence. The intelligent floor plan features a generous central living and dining area, a fully fitted modern kitchen, and a separated dry & wet bathroom with premium fixtures. Available in both a 4-bed dormitory style or a private 2-bedroom family layout — perfect for luxury guest housing, remote retreats, or rapid-deployment family homes.",
+    "product_description": "20ft expandable folding container home that unfolds from a transport-compact core into a 5.8m × 6.3m × 2.5m residence (~37m²). High-grade galvanised steel frame with 50mm fireproof insulated sandwich panels (rock wool / EPS), double-glazed aluminium windows and sliding doors, factory-installed DB board, LED lighting and SA-spec power sockets.",
+    "unit_features": "Expanded footprint: 5.8m × 6.3m × 2.5m (~37m²) | Setup time: 10-30 minutes | Frame: High-grade galvanised steel | Walls: 50mm fireproof sandwich panels (rock wool / EPS) | Glazing: Double-glazed aluminium windows and sliding doors | Layouts: 4-bed dormitory or 2-bed family | Bathroom: Separated dry & wet zones with premium fixtures | Kitchen: Fully fitted with modern cabinetry | Utilities: Factory-installed DB board, LED lighting, SA-spec sockets",
+    "included_items": "Galvanised steel folding frame | 50mm fireproof insulated sandwich panel walls | Double-glazed aluminium windows | Aluminium sliding doors | Luxury laminate flooring | Custom cabinetry | Modern bathroom pod (dry/wet zones) | Factory-installed DB board | LED lighting | SA-spec power sockets",
+    "optional_extras": "Solar / off-grid kit | Outdoor deck | Air conditioning | Premium appliance package | Custom exterior cladding | Joined multi-unit configuration",
+    "excluded_items": "Land | Major site preparation | Municipal connection fees (basic utility connections from ~R40,000) | Transport | Foundation pads"
+  }
+]

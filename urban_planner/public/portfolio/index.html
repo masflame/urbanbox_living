@@ -1,31 +1,31 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Urban Box Living — Homes, Offices & Recreational Spaces</title>
+  <title>Urban Box Living - Homes, Offices & Recreational Spaces</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@200;300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>
 
   <style>
     :root {
-      --gold: #C9A84C;
-      --gold-light: #E8C97A;
-      --gold-dark: #8A6820;
-      --black: #080808;
-      --dark: #111111;
-      --dark-2: #1A1A1A;
-      --dark-3: #222222;
-      --white: #F5F0E8;
-      --white-dim: rgba(245,240,232,0.7);
-      --white-faint: rgba(245,240,232,0.15);
+      --gold: #91a27f;
+      --gold-light: #9dae8b;
+      --gold-dark: #6b7d64;
+      --black: #ffffff;
+      --dark: #ffffff;
+      --dark-2: #ffffff;
+      --dark-3: #f7f7f7;
+      --white: #4f4c4f;
+      --white-dim: rgba(79,76,79,0.72);
+      --white-faint: rgba(79,76,79,0.12);
       --transition: cubic-bezier(0.76, 0, 0.24, 1);
     }
 
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-    html { scroll-behavior: smooth; font-size: 16px; }
+    html { scroll-behavior: smooth; font-size: 16px; overflow-x: hidden; }
 
     body {
       background: var(--black);
@@ -63,7 +63,7 @@
     }
     .cursor-ring {
       width: 36px; height: 36px;
-      border: 1px solid rgba(201,168,76,0.5);
+      border: 1px solid rgba(145,162,127,0.5);
       border-radius: 50%;
       position: fixed; top: 0; left: 0;
       pointer-events: none;
@@ -110,7 +110,7 @@
     }
     .loader-bar-wrap {
       width: 180px; height: 1px;
-      background: rgba(255,255,255,0.1);
+      background: rgba(79,76,79,0.12);
       overflow: hidden;
       opacity: 0;
       animation: fadeUp 0.5s 0.9s forwards;
@@ -137,9 +137,9 @@
     }
     nav.scrolled {
       padding: 10px 60px;
-      background: rgba(8,8,8,0.92);
+      background: rgba(255,255,255,0.94);
       backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(201,168,76,0.1);
+      border-bottom: 1px solid rgba(145,162,127,0.25);
     }
     .nav-logo {
       display: flex; align-items: center; gap: 12px;
@@ -150,23 +150,24 @@
       box-shadow: none;
     }
     .nav-logo img {
-      height: 132px;
+      height: 180px;
       width: auto;
       filter: none;
       display: block;
-      margin: -24px 0;
+      margin: -36px 0;
     }
     .nav-links {
       display: flex; gap: 44px; list-style: none;
     }
     .nav-links a {
-      color: var(--white-dim);
+      color: #ffffff;
+      text-shadow: 0 1px 6px rgba(0,0,0,0.55), 0 0 14px rgba(0,0,0,0.35);
       text-decoration: none;
       font-size: 0.68rem;
       letter-spacing: 0.22em;
       text-transform: uppercase;
       position: relative;
-      transition: color 0.3s;
+      transition: color 0.3s, text-shadow 0.3s;
     }
     .nav-links a::after {
       content: '';
@@ -175,13 +176,22 @@
       background: var(--gold);
       transition: width 0.4s var(--transition);
     }
-    .nav-links a:hover { color: var(--white); }
+    .nav-links a:hover { color: var(--gold); }
     .nav-links a:hover::after { width: 100%; }
 
+    /* Once the user scrolls past the hero, the nav background turns light;
+       switch the link colour back to the dark dim tone for contrast. */
+    nav.scrolled .nav-links a {
+      color: var(--white-dim);
+      text-shadow: none;
+    }
+    nav.scrolled .nav-links a:hover { color: var(--white); }
+
     .nav-cta {
-      background: transparent;
-      border: 1px solid var(--gold);
-      color: var(--gold);
+      background: rgba(0,0,0,0.18);
+      border: 1px solid rgba(255,255,255,0.7);
+      color: #ffffff;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.45);
       padding: 10px 26px;
       font-family: 'Montserrat', sans-serif;
       font-size: 0.65rem;
@@ -191,7 +201,16 @@
       cursor: none;
       transition: background 0.35s, color 0.35s;
     }
-    .nav-cta:hover { background: var(--gold); color: var(--black); }
+    .nav-cta:hover { background: var(--gold); color: var(--black); border-color: var(--gold); text-shadow: none; }
+
+    /* When the nav has a light scrolled background, restore the original gold-on-transparent CTA. */
+    nav.scrolled .nav-cta {
+      background: transparent;
+      border-color: var(--gold);
+      color: var(--gold);
+      text-shadow: none;
+    }
+    nav.scrolled .nav-cta:hover { background: var(--gold); color: var(--black); }
 
     /* hamburger */
     .hamburger {
@@ -209,34 +228,118 @@
     .hamburger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
 
     .mobile-menu {
-      display: none;
-      position: fixed; inset: 0;
-      background: rgba(8,8,8,0.97);
+      display: flex;
+      position: fixed;
+      top: 0; right: 0;
+      height: 100vh; height: 100dvh;
+      width: min(82vw, 340px);
+      background: rgba(255,255,255,0.98);
       backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-left: 1px solid rgba(145,162,127,0.18);
+      box-shadow: -24px 0 60px rgba(0,0,0,0.08);
       z-index: 999;
-      flex-direction: column; align-items: center; justify-content: center;
-      gap: 36px;
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: flex-start;
+      gap: 0;
+      padding: 96px 28px 32px;
+      transform: translateX(100%);
       opacity: 0;
-      transition: opacity 0.5s var(--transition);
+      pointer-events: none;
+      transition: transform 0.45s var(--transition), opacity 0.35s ease;
+      overflow-y: auto;
     }
-    .mobile-menu.open { display: flex; opacity: 1; }
+    .mobile-menu.open {
+      transform: translateX(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .mobile-menu::before {
+      content: '';
+      position: absolute;
+      top: 72px; left: 28px; right: 28px;
+      height: 1px;
+      background: rgba(79,76,79,0.08);
+    }
     .mobile-menu a {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(2rem, 5vw, 3.5rem);
-      color: var(--white-dim);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem;
+      font-weight: 400;
+      color: var(--white);
       text-decoration: none;
-      letter-spacing: 0.05em;
-      transition: color 0.3s;
+      letter-spacing: 0.02em;
+      padding: 14px 4px;
+      border-bottom: 1px solid rgba(79,76,79,0.06);
+      transition: color 0.25s, padding 0.25s;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
-    .mobile-menu a:hover { color: var(--gold); }
+    .mobile-menu a::after {
+      content: '→';
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.85rem;
+      color: var(--gold);
+      opacity: 0;
+      transform: translateX(-6px);
+      transition: opacity 0.25s, transform 0.25s;
+    }
+    .mobile-menu a:hover,
+    .mobile-menu a:active {
+      color: var(--gold);
+      padding-left: 10px;
+    }
+    .mobile-menu a:hover::after,
+    .mobile-menu a:active::after {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    .mobile-menu .mobile-cta {
+      margin-top: auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 20px;
+      background: var(--gold);
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      border: none;
+      border-bottom: none;
+    }
+    .mobile-menu .mobile-cta::after { content: none; }
+    .mobile-menu .mobile-cta:hover {
+      background: var(--gold-dark);
+      color: #fff;
+      padding-left: 20px;
+    }
+    .mobile-menu-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(20,20,20,0.35);
+      opacity: 0;
+      pointer-events: none;
+      z-index: 998;
+      transition: opacity 0.35s ease;
+    }
+    .mobile-menu-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
 
     /* ── HERO ── */
     #hero {
-      height: 100vh; min-height: 700px;
+      min-height: 100vh;
+      min-height: 760px;
       position: relative;
       overflow: hidden;
-      display: flex; align-items: flex-end;
-      padding: 0 60px 80px;
+      display: grid;
+      align-items: end;
+      padding: 132px 60px 72px;
     }
     .hero-bg {
       position: absolute; inset: 0;
@@ -246,61 +349,74 @@
     .hero-bg img {
       width: 100%; height: 100%;
       object-fit: cover;
-      opacity: 0.45;
+      opacity: 1;
       transform: scale(1.08);
       animation: zoomIn 12s var(--transition) forwards;
-      filter: brightness(0.7) saturate(0.8);
+      filter: none;
     }
     @keyframes zoomIn { to { transform: scale(1); } }
     .hero-bg::after {
       content: '';
       position: absolute; inset: 0;
-      background: linear-gradient(
-        to top,
-        rgba(8,8,8,0.95) 0%,
-        rgba(8,8,8,0.4) 50%,
-        rgba(8,8,8,0.2) 100%
-      );
+      background:
+        radial-gradient(circle at 78% 14%, rgba(145,162,127,0.08), transparent 40%),
+        linear-gradient(112deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.0) 44%, rgba(255,255,255,0.02) 100%);
+    }
+    .hero-layout {
+      position: relative;
+      z-index: 2;
+      width: min(1280px, 100%);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: minmax(0, 1.12fr) minmax(280px, 0.56fr);
+      align-items: end;
+      gap: 26px;
     }
     .hero-content {
-      position: relative; z-index: 2;
-      max-width: 720px;
+      max-width: 760px;
+      border: 1px solid rgba(79,76,79,0.2);
+      background: linear-gradient(145deg, rgba(255,255,255,0.88), rgba(255,255,255,0.68));
+      backdrop-filter: blur(5px);
+      padding: 38px 40px 34px;
     }
     .hero-tag {
       display: inline-block;
-      font-size: 0.6rem;
-      letter-spacing: 0.45em;
+      font-size: 0.58rem;
+      letter-spacing: 0.34em;
       text-transform: uppercase;
       color: var(--gold);
-      border: 1px solid rgba(201,168,76,0.35);
-      padding: 6px 18px;
-      margin-bottom: 28px;
+      border: 1px solid rgba(145,162,127,0.35);
+      padding: 7px 14px;
+      margin-bottom: 24px;
+      background: rgba(255,255,255,0.72);
       opacity: 0;
       animation: fadeUp 0.9s 2.4s var(--transition) forwards;
     }
     .hero-h1 {
       font-family: 'Playfair Display', serif;
-      font-size: clamp(2.8rem, 6vw, 5.5rem);
+      font-size: clamp(2.5rem, 5.4vw, 4.8rem);
       font-weight: 400;
-      line-height: 1.1;
+      line-height: 1.06;
       letter-spacing: -0.01em;
       color: var(--white);
-      margin-bottom: 24px;
+      margin-bottom: 18px;
       opacity: 0;
       animation: fadeUp 1s 2.6s var(--transition) forwards;
     }
     .hero-h1 em { color: var(--gold); font-style: italic; }
     .hero-sub {
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       color: var(--white-dim);
-      line-height: 1.8;
-      max-width: 520px;
-      margin-bottom: 44px;
+      line-height: 1.78;
+      max-width: 620px;
+      margin-bottom: 30px;
       opacity: 0;
       animation: fadeUp 1s 2.8s var(--transition) forwards;
     }
     .hero-btns {
-      display: flex; gap: 20px; flex-wrap: wrap;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
       opacity: 0;
       animation: fadeUp 1s 3s var(--transition) forwards;
     }
@@ -316,11 +432,13 @@
       cursor: none;
       transition: background 0.3s, transform 0.3s var(--transition);
       display: inline-block;
+      min-width: 210px;
+      text-align: center;
     }
     .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); }
     .btn-ghost {
       background: transparent;
-      border: 1px solid rgba(245,240,232,0.3);
+      border: 1px solid rgba(79,76,79,0.38);
       color: var(--white);
       padding: 15px 38px;
       font-family: 'Montserrat', sans-serif;
@@ -329,13 +447,67 @@
       text-transform: uppercase;
       text-decoration: none;
       cursor: none;
-      transition: border-color 0.3s, transform 0.3s var(--transition);
+      transition: border-color 0.3s, background 0.3s, transform 0.3s var(--transition);
       display: inline-block;
+      min-width: 210px;
+      text-align: center;
     }
-    .btn-ghost:hover { border-color: var(--gold); transform: translateY(-2px); }
+    .btn-ghost:hover {
+      border-color: var(--gold);
+      background: rgba(145,162,127,0.1);
+      transform: translateY(-2px);
+    }
+
+    .hero-side {
+      border: 1px solid rgba(145,162,127,0.32);
+      background: linear-gradient(155deg, rgba(255,255,255,0.88), rgba(255,255,255,0.72));
+      padding: 20px;
+      opacity: 0;
+      animation: fadeUp 1s 3.15s var(--transition) forwards;
+    }
+    .hero-side-head {
+      font-size: 0.55rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 14px;
+    }
+    .hero-side-list {
+      display: grid;
+      gap: 9px;
+      list-style: none;
+      margin-bottom: 14px;
+    }
+    .hero-side-list li {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: baseline;
+      border-bottom: 1px solid rgba(79,76,79,0.12);
+      padding-bottom: 9px;
+    }
+    .hero-side-label {
+      color: rgba(79,76,79,0.72);
+      font-size: 0.72rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .hero-side-value {
+      color: var(--white);
+      font-family: 'Playfair Display', serif;
+      font-size: 1.24rem;
+      line-height: 1;
+    }
+    .hero-side-note {
+      font-size: 0.67rem;
+      line-height: 1.6;
+      color: rgba(79,76,79,0.68);
+    }
 
     .hero-scroll {
-      position: absolute; bottom: 40px; right: 60px;
+      position: absolute;
+      bottom: 34px;
+      right: 36px;
       display: flex; flex-direction: column; align-items: center; gap: 12px;
       opacity: 0;
       animation: fadeUp 1s 3.4s var(--transition) forwards;
@@ -417,7 +589,12 @@
       transform: translateY(40px);
       transition: opacity 0.9s var(--transition), transform 0.9s var(--transition);
     }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal:not(.reveal-scroll) {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+    .reveal.reveal-scroll.visible { opacity: 1; transform: translateY(0); }
     .reveal-delay-1 { transition-delay: 0.1s; }
     .reveal-delay-2 { transition-delay: 0.2s; }
     .reveal-delay-3 { transition-delay: 0.3s; }
@@ -447,7 +624,7 @@
       position: absolute;
       top: -20px; left: -20px;
       right: 20px; bottom: 20px;
-      border: 1px solid rgba(201,168,76,0.3);
+      border: 1px solid rgba(145,162,127,0.3);
       z-index: 0;
       pointer-events: none;
     }
@@ -473,6 +650,147 @@
       text-transform: uppercase;
       margin-top: 6px;
       display: block;
+    }
+
+    /* ── READY-MADE UNITS SPOTLIGHT ── */
+    #units-spotlight {
+      background: linear-gradient(180deg, #ffffff 0%, #ffffff 100%);
+      border-top: 1px solid rgba(145,162,127,0.16);
+      border-bottom: 1px solid rgba(145,162,127,0.12);
+    }
+    .units-spotlight-head {
+      max-width: 1300px;
+      margin: 0 auto 28px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .units-spotlight-head p {
+      max-width: 540px;
+      color: var(--white-dim);
+      font-size: 0.85rem;
+      line-height: 1.8;
+    }
+    .units-spotlight-grid {
+      max-width: 1300px;
+      margin: 0 auto;
+      display: grid;
+      gap: 20px;
+    }
+    .units-spotlight-row {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 20px;
+    }
+    .units-spotlight-card {
+      border: 1px solid rgba(79,76,79,0.1);
+      background: rgba(255,255,255,0.96);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      min-height: 100%;
+    }
+    .units-spotlight-card img {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      display: block;
+    }
+    .units-spotlight-copy {
+      padding: 18px 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex: 1;
+    }
+    .units-spotlight-kicker {
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      font-size: 0.56rem;
+    }
+    .units-spotlight-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      color: var(--white);
+      line-height: 1.2;
+    }
+    .units-spotlight-copy p {
+      color: var(--white-dim);
+      font-size: 0.78rem;
+      line-height: 1.72;
+      min-height: 3.5em;
+      display: -webkit-box;
+      line-clamp: 2;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .units-spotlight-price {
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold-light);
+    }
+    .units-spotlight-actions {
+      margin-top: auto;
+      display: flex;
+      gap: 10px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(145,162,127,0.24);
+      align-items: center;
+      justify-content: space-between;
+    }
+    .units-spotlight-link {
+      color: var(--gold);
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-size: 0.6rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--gold);
+      padding: 7px 14px;
+      transition: background 0.28s, color 0.28s;
+    }
+    .units-spotlight-link:hover {
+      background: var(--gold);
+      color: var(--black);
+    }
+
+    .portfolio-more-cta {
+      max-width: 1300px;
+      margin: 40px auto 0;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    .portfolio-more-cta p {
+      color: var(--white-dim);
+      font-size: 0.8rem;
+      margin-bottom: 4px;
+    }
+
+    /* Landing page shows curated slices only - see full portfolio at /portfolio */
+    #catalog .catalog-grid .catalog-item:nth-child(n+4) {
+      display: none;
+    }
+    #gallery .gallery-categories > .gallery-category:nth-child(n+2) {
+      display: none;
+    }
+    #gallery .gallery-grid .gallery-img:nth-child(n+4) {
+      display: none;
+    }
+    #visualisations .gallery-categories > .gallery-category:nth-child(n+2) {
+      display: none;
+    }
+    #visualisations .gallery-grid .gallery-img:nth-child(n+4) {
+      display: none;
     }
 
     /* ── CATALOG ── */
@@ -512,11 +830,11 @@
       position: absolute; inset: 0;
       display: flex; flex-direction: column; justify-content: flex-end;
       padding: 36px 32px;
-      background: linear-gradient(to top, rgba(8,8,8,0.9) 0%, transparent 60%);
+      background: linear-gradient(to top, rgba(18,18,18,0.88) 0%, rgba(18,18,18,0.18) 58%, transparent 100%);
       transition: background 0.5s;
     }
     .catalog-item:hover .catalog-overlay {
-      background: linear-gradient(to top, rgba(8,8,8,0.95) 0%, rgba(8,8,8,0.3) 100%);
+      background: linear-gradient(to top, rgba(14,14,14,0.94) 0%, rgba(14,14,14,0.42) 72%, rgba(14,14,14,0.1) 100%);
     }
     .catalog-tag {
       font-size: 0.55rem; letter-spacing: 0.4em; text-transform: uppercase;
@@ -527,14 +845,15 @@
     .catalog-name {
       font-family: 'Playfair Display', serif;
       font-size: 1.4rem;
-      color: var(--white);
+      color: #ffffff;
       line-height: 1.2;
       transform: translateY(8px);
       transition: transform 0.4s var(--transition);
+      text-shadow: 0 2px 16px rgba(0,0,0,0.48);
     }
     .catalog-desc {
       font-size: 0.75rem;
-      color: var(--white-dim);
+      color: rgba(255,255,255,0.88);
       line-height: 1.7;
       margin-top: 12px;
       max-height: 0; overflow: hidden;
@@ -577,7 +896,7 @@
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 1px;
-      background: rgba(201,168,76,0.1);
+      background: rgba(145,162,127,0.1);
     }
     .feature-card {
       background: var(--dark-2);
@@ -637,8 +956,8 @@
       gap: 44px;
     }
     .gallery-category {
-      border: 1px solid rgba(201,168,76,0.12);
-      background: rgba(255,255,255,0.015);
+      border: 1px solid rgba(79,76,79,0.16);
+      background: #fcfcfc;
       padding: 28px;
     }
     .gallery-category-head {
@@ -649,7 +968,7 @@
       flex-wrap: wrap;
       margin-bottom: 18px;
       padding-bottom: 14px;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
+      border-bottom: 1px solid rgba(79,76,79,0.12);
     }
     .gallery-category-title {
       font-family: 'Playfair Display', serif;
@@ -665,9 +984,17 @@
     }
     .gallery-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 3px;
+      grid-template-columns: repeat(6, 1fr);
+      grid-auto-rows: 180px;
+      grid-auto-flow: dense;
+      gap: 6px;
     }
+    /* Editorial mosaic — varied spans repeating every 7 cards for rhythm */
+    .gallery-grid > .gallery-img { grid-column: span 2; grid-row: span 2; }
+    .gallery-grid > .gallery-img:nth-child(7n+1) { grid-column: span 3; grid-row: span 3; } /* hero */
+    .gallery-grid > .gallery-img:nth-child(7n+2) { grid-column: span 3; grid-row: span 2; } /* wide */
+    .gallery-grid > .gallery-img:nth-child(7n+5) { grid-column: span 2; grid-row: span 3; } /* tall */
+    .gallery-grid > .gallery-img:nth-child(7n+7) { grid-column: span 4; grid-row: span 2; } /* ultra-wide */
     .gallery-img {
       overflow: hidden;
       cursor: none;
@@ -675,7 +1002,6 @@
     }
     .gallery-img img {
       width: 100%; height: 100%;
-      min-height: 280px;
       object-fit: cover;
       display: block;
       transition: transform 0.7s var(--transition), filter 0.5s;
@@ -694,8 +1020,9 @@
       font-size: 0.62rem;
       letter-spacing: 0.2em;
       text-transform: uppercase;
-      color: var(--white);
+      color: #ffffff;
       background: linear-gradient(to top, rgba(8,8,8,0.92), rgba(8,8,8,0));
+      text-shadow: 0 2px 10px rgba(0,0,0,0.62);
     }
     .gallery-plan-link {
       position: absolute;
@@ -723,8 +1050,8 @@
       gap: 20px;
     }
     .folder-card {
-      border: 1px solid rgba(201,168,76,0.18);
-      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(79,76,79,0.16);
+      background: #fcfcfc;
       padding: 18px;
     }
     .folder-card-head {
@@ -734,7 +1061,7 @@
       gap: 10px;
       margin-bottom: 14px;
       padding-bottom: 10px;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
+      border-bottom: 1px solid rgba(79,76,79,0.12);
     }
     .folder-card-title {
       font-family: 'Playfair Display', serif;
@@ -766,8 +1093,8 @@
       min-height: 170px;
     }
     .folder-more {
-      border: 1px dashed rgba(201,168,76,0.35);
-      background: linear-gradient(135deg, rgba(201,168,76,0.08), rgba(255,255,255,0.03));
+      border: 1px dashed rgba(145,162,127,0.35);
+      background: linear-gradient(135deg, rgba(145,162,127,0.08), rgba(255,255,255,0.03));
       min-height: 170px;
       display: flex;
       align-items: center;
@@ -1017,6 +1344,13 @@
     }
     .contact-value:hover { color: var(--gold); }
 
+    .contact-form {
+      border: 1px solid rgba(79,76,79,0.16);
+      background: #fdfdfd;
+      padding: 28px;
+      box-shadow: 0 16px 36px rgba(79,76,79,0.08);
+    }
+
     .form-group { margin-bottom: 24px; }
     .form-group label {
       display: block;
@@ -1027,31 +1361,32 @@
     .form-group textarea,
     .form-group select {
       width: 100%;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.1);
+      background: #ffffff;
+      border: 1px solid rgba(79,76,79,0.26);
       color: var(--white);
       padding: 14px 18px;
       font-family: 'Montserrat', sans-serif;
       font-size: 0.82rem;
       font-weight: 300;
       outline: none;
-      transition: border-color 0.3s, background 0.3s;
+      transition: border-color 0.3s, background 0.3s, box-shadow 0.3s;
       cursor: none;
       appearance: none;
       -webkit-appearance: none;
     }
-    .form-group select option { background: #1a1a1a; color: var(--white); }
+    .form-group select option { background: #ffffff; color: var(--white); }
     .form-group input:focus,
     .form-group textarea:focus,
     .form-group select:focus {
       border-color: var(--gold);
-      background: rgba(201,168,76,0.04);
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(145,162,127,0.18);
     }
     .form-group textarea { height: 130px; resize: none; }
     .attachment-input-hidden { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
     .attachment-dropzone {
-      border: 1px dashed rgba(201,168,76,0.45);
-      background: rgba(255,255,255,0.02);
+      border: 1px dashed rgba(79,76,79,0.36);
+      background: #ffffff;
       padding: 14px;
       transition: border-color 0.25s, background 0.25s;
       cursor: none;
@@ -1059,7 +1394,7 @@
     .attachment-dropzone:hover,
     .attachment-dropzone.is-dragover {
       border-color: var(--gold);
-      background: rgba(201,168,76,0.08);
+      background: rgba(145,162,127,0.08);
     }
     .attachment-dropzone-title {
       font-size: 0.68rem;
@@ -1082,7 +1417,7 @@
     .attachment-pick-btn {
       margin-top: 12px;
       background: transparent;
-      border: 1px solid rgba(245,240,232,0.32);
+      border: 1px solid rgba(79,76,79,0.28);
       color: var(--white);
       padding: 8px 14px;
       font-family: 'Montserrat', sans-serif;
@@ -1171,7 +1506,7 @@
       letter-spacing: 0.24em;
       text-transform: uppercase;
       cursor: none;
-      border: 1px solid rgba(201,168,76,0.35);
+      border: 1px solid rgba(145,162,127,0.35);
     }
     .admin-login-btn {
       background: var(--gold);
@@ -1205,7 +1540,7 @@
     .map-overlay {
       position: absolute; top: 50%; left: 60px;
       transform: translateY(-50%);
-      background: rgba(8,8,8,0.92);
+      background: rgba(255,255,255,0.94);
       backdrop-filter: blur(16px);
       border: 1px solid rgba(201,168,76,0.25);
       padding: 28px 36px;
@@ -1225,7 +1560,7 @@
     footer {
       background: var(--black);
       padding: 60px 60px 36px;
-      border-top: 1px solid rgba(201,168,76,0.1);
+      border-top: 1px solid rgba(145,162,127,0.1);
     }
     .footer-top {
       display: flex; justify-content: space-between; align-items: flex-start;
@@ -1258,7 +1593,7 @@
       padding-top: 28px;
       border-top: 1px solid rgba(255,255,255,0.06);
     }
-    .footer-copy { font-size: 0.68rem; color: rgba(245,240,232,0.3); }
+    .footer-copy { font-size: 0.68rem; color: rgba(79,76,79,0.58); }
     .footer-socials {
       display: flex; gap: 16px;
     }
@@ -1289,68 +1624,252 @@
     .whatsapp-fab svg { width: 28px; height: 28px; fill: white; }
 
     /* ── RESPONSIVE ── */
+    @media (min-width: 1280px) {
+      nav { padding-left: 34px; padding-right: 34px; }
+      nav.scrolled { padding-left: 34px; padding-right: 34px; }
+      #hero { padding-left: 34px; padding-right: 34px; }
+      section { padding-left: 34px; padding-right: 34px; }
+
+      .hero-layout { width: min(1460px, 100%); }
+      .about-grid,
+      .units-spotlight-head,
+      .units-spotlight-grid,
+      .portfolio-more-cta,
+      .catalog-header,
+      .catalog-grid,
+      .features-grid,
+      .gallery-intro,
+      .gallery-categories,
+      .contact-inner {
+        max-width: 1500px;
+      }
+
+      .process-steps { max-width: 1280px; }
+      .folder-lightbox-dialog { width: min(1320px, 100%); }
+    }
+
     @media (max-width: 1100px) {
       nav { padding: 12px 36px; }
       nav.scrolled { padding: 8px 36px; }
-      .nav-logo img { height: 102px; margin: -18px 0; }
+      .nav-logo img { height: 140px; margin: -28px 0; }
       section { padding: 90px 36px; }
       .about-grid { grid-template-columns: 1fr; gap: 60px; }
       .about-img-wrap img { height: 400px; }
       .about-stat { right: 0; }
+      .units-spotlight-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .catalog-grid { grid-template-columns: repeat(2, 1fr); }
       .catalog-item.featured { grid-row: span 1; aspect-ratio: 3/4; }
       .features-grid { grid-template-columns: repeat(2, 1fr); }
       .process-steps { grid-template-columns: repeat(2,1fr); gap: 50px 30px; }
       .process-steps::before { display: none; }
       .contact-inner { grid-template-columns: 1fr; gap: 60px; }
-      .gallery-grid { grid-template-columns: repeat(2,1fr); }
+      .gallery-grid {
+        grid-template-columns: repeat(4, 1fr);
+        grid-auto-rows: 160px;
+        gap: 8px;
+      }
+      /* Tablet mosaic — 5-card rhythm so spans never exceed 4 cols */
+      .gallery-grid > .gallery-img,
+      .gallery-grid > .gallery-img:nth-child(7n+1),
+      .gallery-grid > .gallery-img:nth-child(7n+2),
+      .gallery-grid > .gallery-img:nth-child(7n+5),
+      .gallery-grid > .gallery-img:nth-child(7n+7) { grid-column: span 1; grid-row: span 2; }
+      .gallery-grid > .gallery-img:nth-child(5n+1) { grid-column: span 2; grid-row: span 3; }
+      .gallery-grid > .gallery-img:nth-child(5n+5) { grid-column: span 2; grid-row: span 2; }
       .folder-groups { grid-template-columns: 1fr; }
+
+      /* Swipeable rows - same grid pattern as units-spotlight-row */
+      #gallery .gallery-categories,
+      #visualisations .gallery-categories {
+        min-width: 0 !important;
+        max-width: 100% !important;
+      }
+      #gallery .gallery-category,
+      #visualisations .gallery-category {
+        border: 0 !important;
+        background: transparent !important;
+        padding: 0 !important;
+        overflow: visible !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+      }
+      #gallery .gallery-grid,
+      #visualisations .gallery-grid {
+        display: grid !important;
+        grid-template-columns: none !important;
+        grid-template-rows: 1fr !important;
+        grid-auto-flow: column !important;
+        grid-auto-columns: minmax(260px, 82vw) !important;
+        gap: 12px !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        padding-bottom: 6px !important;
+        scroll-snap-type: x mandatory !important;
+        touch-action: pan-x !important;
+        overscroll-behavior-x: contain !important;
+        -webkit-overflow-scrolling: touch !important;
+        scrollbar-width: none !important;
+      }
+      #gallery .gallery-grid::-webkit-scrollbar,
+      #visualisations .gallery-grid::-webkit-scrollbar { display: none !important; }
+      #gallery .gallery-grid .gallery-img,
+      #visualisations .gallery-grid .gallery-img {
+        min-width: 0 !important;
+        scroll-snap-align: start;
+        scroll-snap-stop: always;
+      }
+      #gallery .gallery-grid .gallery-img img,
+      #visualisations .gallery-grid .gallery-img img {
+        min-height: auto !important;
+        height: 220px !important;
+      }
+      #gallery .gallery-grid .gallery-img:nth-child(n+4),
+      #visualisations .gallery-grid .gallery-img:nth-child(n+4) {
+        display: block !important;
+      }
+      /* Force reveal cards visible inside horizontal scrollers (IO won't fire for off-screen-x items) */
+      #gallery .gallery-grid .gallery-img.reveal,
+      #visualisations .gallery-grid .gallery-img.reveal {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+      }
     }
 
     @media (max-width: 768px) {
       nav { padding: 8px 16px; }
       nav.scrolled { padding: 6px 16px; }
-      .nav-logo img { height: 78px; margin: -12px 0; }
+      .nav-logo img { height: 100px; margin: -16px 0; }
       .nav-links, .nav-cta { display: none; }
       .hamburger { display: flex; }
-      .mobile-menu a { font-size: clamp(1.7rem, 8vw, 2.4rem); }
       section { padding: 64px 20px; }
       #hero {
         height: auto;
         min-height: 100svh;
-        align-items: center;
+        align-items: end;
         padding: 112px 20px 52px;
       }
-      .hero-content { max-width: 100%; }
+      .hero-layout {
+        grid-template-columns: 1fr;
+        width: 100%;
+        gap: 14px;
+      }
+      .hero-content {
+        max-width: 100%;
+        padding: 20px 16px 18px;
+      }
       .hero-tag { margin-bottom: 18px; }
-      .hero-h1 { font-size: clamp(2rem, 9vw, 3rem); margin-bottom: 16px; }
+      .hero-h1 {
+        font-size: clamp(2rem, 9vw, 3rem);
+        margin-bottom: 16px;
+        line-height: 1.1;
+      }
       .hero-sub { max-width: 100%; font-size: 0.82rem; line-height: 1.7; margin-bottom: 28px; }
-      .hero-btns { width: 100%; gap: 12px; }
+      .hero-btns { width: 100%; gap: 10px; }
       .btn-primary, .btn-ghost {
         width: 100%;
         text-align: center;
         padding: 13px 18px;
         letter-spacing: 0.18em;
+        min-width: 0;
+      }
+      .hero-side {
+        padding: 16px;
+      }
+      .hero-side-value {
+        font-size: 1.1rem;
       }
       .hero-scroll { display: none; }
-      .catalog-grid { grid-template-columns: 1fr; }
-      .catalog-overlay { padding: 20px; }
-      .catalog-name { font-size: 1.15rem; }
+      .units-spotlight-head { margin-bottom: 20px; }
+      .units-spotlight-grid {
+        gap: 12px;
+      }
+      .units-spotlight-row {
+        width: 100%;
+        max-width: none;
+        grid-template-columns: none;
+        grid-auto-flow: column;
+        grid-auto-columns: calc((100vw - 52px) / 2);
+        gap: 12px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding-bottom: 6px;
+        scroll-snap-type: x mandatory;
+        touch-action: pan-x;
+        overscroll-behavior-x: contain;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
+      .units-spotlight-row::-webkit-scrollbar {
+        display: none;
+      }
+      .units-spotlight-row .units-spotlight-card {
+        min-width: 0;
+        scroll-snap-align: start;
+        scroll-snap-stop: always;
+      }
+      .catalog-grid {
+        grid-template-columns: none;
+        grid-template-rows: 1fr;
+        grid-auto-flow: column;
+        grid-auto-columns: minmax(260px, 82vw);
+        gap: 12px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding-bottom: 6px;
+        scroll-snap-type: x mandatory;
+        touch-action: pan-x;
+        overscroll-behavior-x: contain;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
+      .catalog-grid::-webkit-scrollbar {
+        display: none;
+      }
+      .catalog-item,
+      .catalog-item.featured {
+        grid-row: auto;
+        aspect-ratio: 3/4;
+        min-width: 0;
+        scroll-snap-align: start;
+        scroll-snap-stop: always;
+      }
+      .catalog-overlay { padding: 16px; }
+      .catalog-name {
+        font-size: 1.02rem;
+        line-height: 1.28;
+      }
       .catalog-desc {
-        max-height: 140px;
+        margin-top: 10px;
+        line-height: 1.55;
+        display: -webkit-box;
+        line-clamp: 2;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        max-height: none;
         opacity: 1;
       }
       .catalog-link {
         max-height: 40px;
         opacity: 1;
+        margin-top: 12px;
       }
       .catalog-link .arrow { width: 24px; }
       .features-grid { grid-template-columns: 1fr; }
       .feature-card { padding: 36px 24px; }
       .process-steps { grid-template-columns: 1fr; }
       .process-step { padding: 0 6px; }
-      .gallery-grid { grid-template-columns: 1fr 1fr; }
-      .gallery-category { padding: 20px; }
+      #gallery .gallery-category-head,
+      #visualisations .gallery-category-head {
+        margin-bottom: 12px;
+        padding-bottom: 0;
+        border-bottom: 0;
+      }
+      #gallery .gallery-grid,
+      #visualisations .gallery-grid {
+        grid-auto-columns: minmax(240px, 78vw) !important;
+      }
       .gallery-caption { font-size: 0.58rem; letter-spacing: 0.12em; }
       .folder-thumb img, .folder-more { min-height: 145px; }
       .folder-lightbox-dialog { padding: 10px; }
@@ -1389,7 +1908,10 @@
       .footer-top { grid-template-columns: 1fr; }
       .footer-logo { grid-column: auto; }
       .footer-links ul { grid-template-columns: 1fr 1fr; }
-      .gallery-grid { grid-template-columns: 1fr; }
+      #gallery .gallery-grid,
+      #visualisations .gallery-grid {
+        grid-auto-columns: minmax(220px, 80vw) !important;
+      }
       .folder-thumb-grid { grid-template-columns: 1fr; }
       .section-label { letter-spacing: 0.3em; }
       .section-title { font-size: clamp(1.7rem, 9vw, 2.2rem); }
@@ -1431,8 +1953,9 @@
   </a>
   <ul class="nav-links">
     <li><a href="#about">About</a></li>
+    <li><a href="/units" target="_top">Units</a></li>
     <li><a href="#catalog">Catalog</a></li>
-    <li><a href="/planner">Planner</a></li>
+    <li><a href="/planner" target="_top">Planner</a></li>
     <li><a href="#features">Features</a></li>
     <li><a href="#gallery">Gallery</a></li>
     <li><a href="#contact">Contact</a></li>
@@ -1444,29 +1967,53 @@
 </nav>
 
 <!-- MOBILE MENU -->
+<div class="mobile-menu-backdrop" id="mobileMenuBackdrop"></div>
 <div class="mobile-menu" id="mobileMenu">
   <a href="#about" class="mobile-nav-link">About</a>
+  <a href="/units" class="mobile-nav-link" target="_top">Units</a>
   <a href="#catalog" class="mobile-nav-link">Catalog</a>
-  <a href="/planner" class="mobile-nav-link">Planner</a>
+  <a href="/planner" class="mobile-nav-link" target="_top">Planner</a>
   <a href="#features" class="mobile-nav-link">Features</a>
   <a href="#gallery" class="mobile-nav-link">Gallery</a>
   <a href="#contact" class="mobile-nav-link">Contact</a>
+  <a href="https://wa.me/27608306956" target="_blank" class="mobile-cta">Enquire Now</a>
 </div>
 
 <!-- HERO -->
 <section id="hero">
   <div class="hero-bg">
-    <img src="images/show7.jpg" alt="Urban Box Living — Homes, Offices and Recreational Spaces"
+    <img src="images/show7.jpg" alt="Urban Box Living - Homes, Offices and Recreational Spaces"
          onerror="this.style.opacity='0'"/>
   </div>
-  <div class="hero-content">
-    <div class="hero-tag">South Africa's Premier Container Living</div>
-    <h1 class="hero-h1">Redefining Space.<br><em>One Container</em><br>at a Time.</h1>
-    <p class="hero-sub">Ready-made container solutions and custom builds on request, delivered across South Africa. From homes to office spaces and recreational builds, every unit is designed to perform and impress.</p>
-    <div class="hero-btns">
-      <a href="/planner" class="btn-primary">Start Your Build</a>
-      <a href="#catalog" class="btn-ghost">View Catalog</a>
+  <div class="hero-layout">
+    <div class="hero-content">
+      <div class="hero-tag">South Africa's Premier Container Living</div>
+      <h1 class="hero-h1">Redefining Space.<br><em>One Container</em><br>at a Time.</h1>
+      <p class="hero-sub">From ready-made units to custom-planned builds, Urban Box Living delivers modern structures that are fast to deploy, built for durability, and designed for professional environments.</p>
+      <div class="hero-btns">
+        <a href="/units" class="btn-primary" target="_top">Browse Ready-Made Units</a>
+        <a href="/planner" class="btn-ghost" target="_top">Start Your Custom Build</a>
+        <a href="#catalog" class="btn-ghost">View Portfolio Catalog</a>
+      </div>
     </div>
+    <aside class="hero-side" aria-label="Urban Box service highlights">
+      <div class="hero-side-head">Service Snapshot</div>
+      <ul class="hero-side-list">
+        <li>
+          <span class="hero-side-label">Delivery Reach</span>
+          <strong class="hero-side-value">Nationwide</strong>
+        </li>
+        <li>
+          <span class="hero-side-label">Build Options</span>
+          <strong class="hero-side-value">Ready + Custom</strong>
+        </li>
+        <li>
+          <span class="hero-side-label">Use Cases</span>
+          <strong class="hero-side-value">Homes | Offices | Leisure</strong>
+        </li>
+      </ul>
+      <p class="hero-side-note">Structured consultation, clear pricing pathways, and practical layouts designed for real-world operations.</p>
+    </aside>
   </div>
   <div class="hero-scroll">
     <div class="scroll-line"></div>
@@ -1504,6 +2051,239 @@
   </div>
 </div>
 
+<!-- READY-MADE UNITS SPOTLIGHT -->
+<section id="units-spotlight">
+  <div class="units-spotlight-head">
+    <div>
+      <div class="section-label reveal">Storefront Listings</div>
+      <h2 class="section-title reveal reveal-delay-1">Shop Ready-Made<br><em>Units Online</em></h2>
+    </div>
+    <p class="reveal reveal-delay-2">Browse ecommerce-style listings for homes, offices, cabins, pools and utility units. Open any listing for specs, image gallery, and checkout flow.</p>
+  </div>
+
+  <div class="units-spotlight-grid">
+    <div class="units-spotlight-row">
+    <article class="units-spotlight-card reveal reveal-delay-1">
+      <img src="images/catalog-2.jpeg" alt="Compact ready-made home" onerror="this.style.background='#222'"/>
+      <div class="units-spotlight-copy">
+        <span class="units-spotlight-kicker">Popular Home</span>
+        <h3 class="units-spotlight-title">Compact Home Units</h3>
+        <p>Fast-deploy living units suited for rental, backyard homes and private sites.</p>
+        <span class="units-spotlight-price">From R195,000</span>
+        <div class="units-spotlight-actions">
+          <a href="/units" target="_top" class="units-spotlight-link">View Listing <span>→</span></a>
+        </div>
+      </div>
+    </article>
+
+    <article class="units-spotlight-card reveal reveal-delay-2">
+      <img src="images/catalog-11.jpeg" alt="Double module family unit" onerror="this.style.background='#1f1f1f'"/>
+      <div class="units-spotlight-copy">
+        <span class="units-spotlight-kicker">Family</span>
+        <h3 class="units-spotlight-title">Double Module Homes</h3>
+        <p>Larger two-module layouts with improved comfort, space planning and finishes.</p>
+        <span class="units-spotlight-price">From R345,000</span>
+        <div class="units-spotlight-actions">
+          <a href="/units" target="_top" class="units-spotlight-link">Browse Homes <span>→</span></a>
+        </div>
+      </div>
+    </article>
+
+    <article class="units-spotlight-card reveal reveal-delay-3">
+      <img src="images/show9.jpg" alt="Ready-made office and utility units" onerror="this.style.background='#202020'"/>
+      <div class="units-spotlight-copy">
+        <span class="units-spotlight-kicker">Business</span>
+        <h3 class="units-spotlight-title">Office And Utility Units</h3>
+        <p>Site offices, guard houses and utility builds ready to support operations quickly.</p>
+        <span class="units-spotlight-price">From R120,000</span>
+        <div class="units-spotlight-actions">
+          <a href="/units" target="_top" class="units-spotlight-link">See All Units <span>→</span></a>
+        </div>
+      </div>
+    </article>
+
+    <article class="units-spotlight-card reveal reveal-delay-4">
+      <img src="images/catalog-8.jpeg" alt="Executive home listing" onerror="this.style.background='#212121'"/>
+      <div class="units-spotlight-copy">
+        <span class="units-spotlight-kicker">Executive</span>
+        <h3 class="units-spotlight-title">Executive Home Units</h3>
+        <p>Premium finishes and elevated design language for high-end residential use.</p>
+        <span class="units-spotlight-price">From R420,000</span>
+        <div class="units-spotlight-actions">
+          <a href="/units" target="_top" class="units-spotlight-link">View Unit <span>→</span></a>
+        </div>
+      </div>
+    </article>
+
+    <article class="units-spotlight-card reveal reveal-delay-1">
+      <img src="images/catalog-10.jpeg" alt="Off-grid cabin listing" onerror="this.style.background='#1c1c1c'"/>
+      <div class="units-spotlight-copy">
+        <span class="units-spotlight-kicker">Off-Grid</span>
+        <h3 class="units-spotlight-title">Cabins And Remote Units</h3>
+        <p>Optimized for remote sites, optional solar readiness, and compact utility flow.</p>
+        <span class="units-spotlight-price">From R260,000</span>
+        <div class="units-spotlight-actions">
+          <a href="/units" target="_top" class="units-spotlight-link">Explore Cabins <span>→</span></a>
+        </div>
+      </div>
+    </article>
+
+    <article class="units-spotlight-card reveal reveal-delay-2">
+      <img src="images/show7.jpg" alt="Pool and leisure listing" onerror="this.style.background='#1b1b1b'"/>
+      <div class="units-spotlight-copy">
+        <span class="units-spotlight-kicker">Leisure</span>
+        <h3 class="units-spotlight-title">Pools And Lifestyle Units</h3>
+        <p>Container pool concepts and leisure builds designed for hospitality and home sites.</p>
+        <span class="units-spotlight-price">From R230,000</span>
+        <div class="units-spotlight-actions">
+          <a href="/units" target="_top" class="units-spotlight-link">View Lifestyle <span>→</span></a>
+        </div>
+      </div>
+    </article>
+
+    <article class="units-spotlight-card reveal reveal-delay-3">
+      <img src="images/catalog-12.jpeg" alt="Utility and service listing" onerror="this.style.background='#1f1f1f'"/>
+      <div class="units-spotlight-copy">
+        <span class="units-spotlight-kicker">Utility</span>
+        <h3 class="units-spotlight-title">Toilets And Service Pods</h3>
+        <p>Portable sanitation and utility pods for events, sites, and short-term deployment.</p>
+        <span class="units-spotlight-price">From R80,000</span>
+        <div class="units-spotlight-actions">
+          <a href="/units" target="_top" class="units-spotlight-link">View Utility <span>→</span></a>
+        </div>
+      </div>
+    </article>
+
+    <article class="units-spotlight-card reveal reveal-delay-4">
+      <img src="images/catalog-9.jpeg" alt="Custom request listing" onerror="this.style.background='#181818'"/>
+      <div class="units-spotlight-copy">
+        <span class="units-spotlight-kicker">Custom Request</span>
+        <h3 class="units-spotlight-title">Custom Configurations</h3>
+        <p>Need a specific layout? Start from a ready unit and configure custom delivery options.</p>
+        <span class="units-spotlight-price">Tailored Pricing</span>
+        <div class="units-spotlight-actions">
+          <a href="/units" target="_top" class="units-spotlight-link">Start Custom <span>→</span></a>
+        </div>
+      </div>
+    </article>
+
+    </div>
+
+    <div class="units-spotlight-row">
+
+    <article class="units-spotlight-card reveal reveal-delay-1">
+      <img src="images/catalog-3.jpeg" alt="Bathroom utility listing" onerror="this.style.background='#1d1d1d'"/>
+      <div class="units-spotlight-copy">
+        <span class="units-spotlight-kicker">Sanitation</span>
+        <h3 class="units-spotlight-title">Bathroom Pod Units</h3>
+        <p>Ready bathroom-focused units for private plots, rentals and site support needs.</p>
+        <span class="units-spotlight-price">From R95,000</span>
+        <div class="units-spotlight-actions">
+          <a href="/units" target="_top" class="units-spotlight-link">View Bathrooms <span>→</span></a>
+        </div>
+      </div>
+    </article>
+
+    <article class="units-spotlight-card reveal reveal-delay-2">
+      <img src="images/catalog-4.jpeg" alt="Interior finish listing" onerror="this.style.background='#1a1a1a'"/>
+      <div class="units-spotlight-copy">
+        <span class="units-spotlight-kicker">Interior Ready</span>
+        <h3 class="units-spotlight-title">Furnished Interior Units</h3>
+        <p>Pre-finished interiors with fitted cabinetry, practical flow and quick handover readiness.</p>
+        <span class="units-spotlight-price">From R210,000</span>
+        <div class="units-spotlight-actions">
+          <a href="/units" target="_top" class="units-spotlight-link">Explore Interiors <span>→</span></a>
+        </div>
+      </div>
+    </article>
+
+    <article class="units-spotlight-card reveal reveal-delay-3">
+      <img src="images/catalog-5.jpeg" alt="Custom build listing" onerror="this.style.background='#222'"/>
+      <div class="units-spotlight-copy">
+        <span class="units-spotlight-kicker">Build To Order</span>
+        <h3 class="units-spotlight-title">Custom Base Models</h3>
+        <p>Start from a proven base model, then configure rooms, finishes and extras to fit your site.</p>
+        <span class="units-spotlight-price">From R240,000</span>
+        <div class="units-spotlight-actions">
+          <a href="/units" target="_top" class="units-spotlight-link">Configure Model <span>→</span></a>
+        </div>
+      </div>
+    </article>
+
+    <article class="units-spotlight-card reveal reveal-delay-4">
+      <img src="images/catalog-12.jpeg" alt="Commercial deployment listing" onerror="this.style.background='#1b1b1b'"/>
+      <div class="units-spotlight-copy">
+        <span class="units-spotlight-kicker">Commercial</span>
+        <h3 class="units-spotlight-title">Business Deployment Packs</h3>
+        <p>Bundle-ready office and support units for projects that need fast operational deployment.</p>
+        <span class="units-spotlight-price">From R160,000</span>
+        <div class="units-spotlight-actions">
+          <a href="/units" target="_top" class="units-spotlight-link">See Packs <span>→</span></a>
+        </div>
+      </div>
+    </article>
+
+    <article class="units-spotlight-card reveal reveal-delay-1">
+      <img src="images/catalog-6.jpeg" alt="20ft studio home" onerror="this.style.background='#1b1b1b'"/>
+      <div class="units-spotlight-copy">
+        <span class="units-spotlight-kicker">Starter</span>
+        <h3 class="units-spotlight-title">20ft Studio Home</h3>
+        <p>Single-container open-plan studio with bathroom - ideal first-home or rental income unit.</p>
+        <span class="units-spotlight-price">From R165,000</span>
+        <div class="units-spotlight-actions">
+          <a href="/units" target="_top" class="units-spotlight-link">View Studio <span>→</span></a>
+        </div>
+      </div>
+    </article>
+
+    <article class="units-spotlight-card reveal reveal-delay-2">
+      <img src="images/catalog-7.jpeg" alt="Site office unit" onerror="this.style.background='#1e1e1e'"/>
+      <div class="units-spotlight-copy">
+        <span class="units-spotlight-kicker">Site Ready</span>
+        <h3 class="units-spotlight-title">Portable Site Office</h3>
+        <p>Compact admin unit with reception, manager office and kitchenette - moves with your project.</p>
+        <span class="units-spotlight-price">From R130,000</span>
+        <div class="units-spotlight-actions">
+          <a href="/units" target="_top" class="units-spotlight-link">View Office <span>→</span></a>
+        </div>
+      </div>
+    </article>
+
+    <article class="units-spotlight-card reveal reveal-delay-3">
+      <img src="images/show3.jpg" alt="Luxury residence container build" onerror="this.style.background='#191919'"/>
+      <div class="units-spotlight-copy">
+        <span class="units-spotlight-kicker">Luxury</span>
+        <h3 class="units-spotlight-title">Luxury Residence Unit</h3>
+        <p>High-specification residential build with premium joinery, lighting, and curated finishes throughout.</p>
+        <span class="units-spotlight-price">From R650,000</span>
+        <div class="units-spotlight-actions">
+          <a href="/units" target="_top" class="units-spotlight-link">View Luxury <span>→</span></a>
+        </div>
+      </div>
+    </article>
+
+    <article class="units-spotlight-card reveal reveal-delay-4">
+      <img src="images/show5.jpg" alt="Double-stack container home" onerror="this.style.background='#1c1c1c'"/>
+      <div class="units-spotlight-copy">
+        <span class="units-spotlight-kicker">Multi-Level</span>
+        <h3 class="units-spotlight-title">Double-Stack Home</h3>
+        <p>Two-container stacked layout maximising footprint, ideal for sloped or compact sites.</p>
+        <span class="units-spotlight-price">From R480,000</span>
+        <div class="units-spotlight-actions">
+          <a href="/units" target="_top" class="units-spotlight-link">View Unit <span>→</span></a>
+        </div>
+      </div>
+    </article>
+
+    </div>
+  </div>
+
+  <div class="portfolio-more-cta reveal reveal-delay-2">
+    <p>Browse the complete catalogue of ready-made units - homes, offices, cabins, pools and more.</p>
+    <a href="/units" target="_top" class="btn-primary">Shop All Units &rarr;</a>
+  </div>
+</section>
+
 <!-- ABOUT -->
 <section id="about">
   <div class="about-grid">
@@ -1519,7 +2299,7 @@
       <div class="section-label">Our Story</div>
       <h2 class="section-title">Crafted with<br><em>Purpose & Precision</em></h2>
       <div class="divider"></div>
-      <p class="section-body">Urban Box Living was born from a vision to make quality, stylish spaces accessible to every South African. We transform industrial shipping containers into fully furnished homes, office spaces, and recreational units — blending modern design with sustainable construction.</p>
+      <p class="section-body">Urban Box Living was born from a vision to make quality, stylish spaces accessible to every South African. We transform industrial shipping containers into fully furnished homes, office spaces, and recreational units - blending modern design with sustainable construction.</p>
       <p class="section-body" style="margin-top:18px;">From compact 20ft studios to modular office suites and lifestyle builds, every unit is crafted to the highest standard, reflecting our commitment to performance, comfort, and durability.</p>
       <a href="#catalog" class="btn-primary" style="margin-top:40px; display:inline-block;">Explore Our Spaces</a>
     </div>
@@ -1533,7 +2313,7 @@
       <div class="section-label reveal">Our Collection</div>
       <h2 class="section-title reveal reveal-delay-1">Spaces for<br><em>Every Vision</em></h2>
     </div>
-    <p class="section-body reveal reveal-delay-2" style="max-width:360px; text-align:right;">Choose from ready-made units or request a custom build. We tailor layout, finishes, and delivery for residential, office, or recreational use.</p>
+    <p class="section-body reveal reveal-delay-2" style="max-width:360px; text-align:right;">A curated preview of our portfolio. Explore the full catalog for all layouts, categories and completed projects.</p>
   </div>
 
   <div class="catalog-grid">
@@ -1588,7 +2368,7 @@
       <div class="catalog-overlay">
         <span class="catalog-tag">Custom</span>
         <div class="catalog-name">Custom Urban<br>Home</div>
-        <div class="catalog-desc">Your vision, our craft. Fully custom builds to your specifications — size, layout, and finishes.</div>
+        <div class="catalog-desc">Your vision, our craft. Fully custom builds to your specifications - size, layout, and finishes.</div>
         <a href="/planner?fromCatalog=1&project=home&design=Custom%20on%20Request" class="catalog-link">Plan This Design <span class="arrow"></span></a>
       </div>
     </div>
@@ -1685,6 +2465,11 @@
       </div>
     </div>
   </div>
+
+  <div class="portfolio-more-cta reveal reveal-delay-2">
+    <p>Showing a curated selection. The full catalog includes all custom builds and completed projects.</p>
+    <a href="/portfolio/catalog-full.html" target="_top" class="btn-primary">Explore Full Catalog &rarr;</a>
+  </div>
 </section>
 
 <!-- FEATURES -->
@@ -1699,7 +2484,7 @@
         <svg viewBox="0 0 24 24"><path d="M4 20h16"></path><path d="M6 20V8l6-4 6 4v12"></path><path d="M9 20v-4h6v4"></path><path d="M10 10h.01M14 10h.01"></path></svg>
       </span>
       <div class="feature-title">Premium Build Quality</div>
-      <p class="feature-body">Every container is structurally reinforced, insulated, and finished to residential standards — built to withstand South African weather.</p>
+      <p class="feature-body">Every container is structurally reinforced, insulated, and finished to residential standards - built to withstand South African weather.</p>
     </div>
     <div class="feature-card">
       <span class="feature-icon" aria-hidden="true">
@@ -1720,7 +2505,7 @@
         <svg viewBox="0 0 24 24"><path d="M4 20l4.5-1 9-9-3.5-3.5-9 9z"></path><path d="M13.8 6.7l3.5 3.5"></path><path d="M3 21h5"></path></svg>
       </span>
       <div class="feature-title">Custom Design</div>
-      <p class="feature-body">Work with our design team to configure your ideal space — layout, finishes, branding, and special features tailored to your use case.</p>
+      <p class="feature-body">Work with our design team to configure your ideal space - layout, finishes, branding, and special features tailored to your use case.</p>
     </div>
   </div>
 </section>
@@ -1870,12 +2655,192 @@
           <div class="gallery-caption">Coastal Retreat Unit</div>
         </div>
         <div class="gallery-img reveal reveal-delay-3">
-          <img src="gallery/Tesselaarsdal-600x600.png" alt="Lifestyle container project located in Tesselaarsdal" onerror="this.style.background='#111'"/>
-          <div class="gallery-caption">Tesselaarsdal Lifestyle Unit</div>
+          <img src="projects/tesselaarsdal/Completed-Front.jpeg" alt="Tesselaarsdal completed front exterior" onerror="this.style.background='#111'"/>
+          <div class="gallery-caption">Tesselaarsdal — Completed Front</div>
         </div>
         <div class="gallery-img reveal reveal-delay-2">
           <img src="gallery/Wiesenhof-600x600.png" alt="Container lifestyle development at Wiesenhof" onerror="this.style.background='#1a1a1a'"/>
           <div class="gallery-caption">Wiesenhof Lifestyle Build</div>
+        </div>
+        <div class="gallery-img reveal">
+          <img src="projects/wiesenhof/IMG_3001.jpg" alt="Wiesenhof premium container office exterior" onerror="this.style.background='#1a1a1a'"/>
+          <div class="gallery-caption">Wiesenhof — Office Exterior</div>
+        </div>
+        <div class="gallery-img reveal reveal-delay-1">
+          <img src="projects/wiesenhof/IMG_3004.jpg" alt="Wiesenhof container office facade detail" onerror="this.style.background='#222'"/>
+          <div class="gallery-caption">Wiesenhof — Facade Detail</div>
+        </div>
+        <div class="gallery-img reveal reveal-delay-2">
+          <img src="projects/wiesenhof/IMG_3027.jpg" alt="Wiesenhof container office side elevation" onerror="this.style.background='#1d1d1d'"/>
+          <div class="gallery-caption">Wiesenhof — Side Elevation</div>
+        </div>
+        <div class="gallery-img reveal reveal-delay-3">
+          <img src="projects/wiesenhof/IMG_3041.jpg" alt="Wiesenhof completed container office on site" onerror="this.style.background='#111'"/>
+          <div class="gallery-caption">Wiesenhof — Completed On Site</div>
+        </div>
+        <div class="gallery-img reveal">
+          <img src="projects/wiesenhof/IMG_3135.jpg" alt="Wiesenhof container office interior workspace" onerror="this.style.background='#1a1a1a'"/>
+          <div class="gallery-caption">Wiesenhof — Interior Workspace</div>
+        </div>
+        <div class="gallery-img reveal reveal-delay-1">
+          <img src="projects/wiesenhof/IMG_3136.jpg" alt="Wiesenhof office interior fittings" onerror="this.style.background='#222'"/>
+          <div class="gallery-caption">Wiesenhof — Interior Fittings</div>
+        </div>
+        <div class="gallery-img reveal reveal-delay-2">
+          <img src="projects/wiesenhof/IMG_3137.jpg" alt="Wiesenhof office interior view" onerror="this.style.background='#1d1d1d'"/>
+          <div class="gallery-caption">Wiesenhof — Interior View</div>
+        </div>
+        <div class="gallery-img reveal reveal-delay-3">
+          <img src="projects/wiesenhof/IMG_3138.jpg" alt="Wiesenhof office furnished interior" onerror="this.style.background='#111'"/>
+          <div class="gallery-caption">Wiesenhof — Furnished Interior</div>
+        </div>
+        <div class="gallery-img reveal">
+          <img src="projects/wiesenhof/2ea9b799-c41a-47b0-96af-73161324f8d2.jpg" alt="Wiesenhof office build progress" onerror="this.style.background='#1a1a1a'"/>
+          <div class="gallery-caption">Wiesenhof — Build Progress</div>
+        </div>
+        <div class="gallery-img reveal reveal-delay-1">
+          <img src="projects/wiesenhof/a70e42e9-1735-4751-befa-82d8ba5da659.jpg" alt="Wiesenhof office final delivery" onerror="this.style.background='#222'"/>
+          <div class="gallery-caption">Wiesenhof — Final Delivery</div>
+        </div>
+        <div class="gallery-img reveal">
+          <img src="projects/tesselaarsdal/Container-Delivery.jpeg" alt="Tesselaarsdal container delivery on site" onerror="this.style.background='#1a1a1a'"/>
+          <div class="gallery-caption">Tesselaarsdal — Container Delivery</div>
+        </div>
+        <div class="gallery-img reveal reveal-delay-1">
+          <img src="projects/tesselaarsdal/Crane-Placement.jpeg" alt="Tesselaarsdal crane placement of container" onerror="this.style.background='#222'"/>
+          <div class="gallery-caption">Tesselaarsdal — Crane Placement</div>
+        </div>
+        <div class="gallery-img reveal reveal-delay-2">
+          <img src="projects/tesselaarsdal/Livingroom.jpeg" alt="Tesselaarsdal living room interior" onerror="this.style.background='#1d1d1d'"/>
+          <div class="gallery-caption">Tesselaarsdal — Living Room</div>
+        </div>
+        <div class="gallery-img reveal reveal-delay-3">
+          <img src="projects/tesselaarsdal/Kitchen-3.jpeg" alt="Tesselaarsdal kitchen interior" onerror="this.style.background='#111'"/>
+          <div class="gallery-caption">Tesselaarsdal — Kitchen</div>
+        </div>
+        <div class="gallery-img reveal">
+          <img src="projects/tesselaarsdal/Bedroom.jpeg" alt="Tesselaarsdal bedroom interior" onerror="this.style.background='#1a1a1a'"/>
+          <div class="gallery-caption">Tesselaarsdal — Bedroom</div>
+        </div>
+        <div class="gallery-img reveal reveal-delay-1">
+          <img src="projects/tesselaarsdal/Bathroom.jpeg" alt="Tesselaarsdal bathroom interior" onerror="this.style.background='#222'"/>
+          <div class="gallery-caption">Tesselaarsdal — Bathroom</div>
+        </div>
+        <div class="gallery-img reveal">
+          <img src="projects/klein-karoo/complete.jpg" alt="Completed Klein Karoo container home exterior" onerror="this.style.background='#1a1a1a'"/>
+          <div class="gallery-caption">Klein Karoo Retreat — Exterior</div>
+        </div>
+        <div class="gallery-img reveal reveal-delay-1">
+          <img src="projects/klein-karoo/Deck-V.jpg" alt="Klein Karoo container home deck and view" onerror="this.style.background='#222'"/>
+          <div class="gallery-caption">Klein Karoo — Deck &amp; View</div>
+        </div>
+        <div class="gallery-img reveal reveal-delay-2">
+          <img src="projects/klein-karoo/View-1.jpg" alt="Klein Karoo project landscape view" onerror="this.style.background='#1d1d1d'"/>
+          <div class="gallery-caption">Klein Karoo — Landscape</div>
+        </div>
+        <div class="gallery-img reveal reveal-delay-3">
+          <img src="projects/klein-karoo/Living-1.jpg" alt="Klein Karoo interior living space" onerror="this.style.background='#111'"/>
+          <div class="gallery-caption">Klein Karoo — Living Space</div>
+        </div>
+        <div class="gallery-img reveal reveal-delay-1">
+          <img src="projects/klein-karoo/Kitchen-2-1.jpg" alt="Klein Karoo fitted kitchen interior" onerror="this.style.background='#1a1a1a'"/>
+          <div class="gallery-caption">Klein Karoo — Kitchen</div>
+        </div>
+        <div class="gallery-img reveal reveal-delay-2">
+          <img src="projects/klein-karoo/Bedroom.jpg" alt="Klein Karoo bedroom interior" onerror="this.style.background='#1d1d1d'"/>
+          <div class="gallery-caption">Klein Karoo — Bedroom</div>
+        </div>
+        <div class="gallery-img reveal reveal-delay-3">
+          <img src="projects/dairy-den/Final-Side.jpg" alt="Dairy Den completed exterior side view" onerror="this.style.background='#1a1a1a'"/>
+          <div class="gallery-caption">Dairy Den — Exterior</div>
+        </div>
+        <div class="gallery-img reveal">
+          <img src="projects/dairy-den/Front-1-1.jpg" alt="Dairy Den front entry" onerror="this.style.background='#222'"/>
+          <div class="gallery-caption">Dairy Den — Front</div>
+        </div>
+        <div class="gallery-img reveal reveal-delay-1">
+          <img src="projects/dairy-den/Entrance.jpg" alt="Dairy Den entrance approach" onerror="this.style.background='#1d1d1d'"/>
+          <div class="gallery-caption">Dairy Den — Entrance</div>
+        </div>
+        <div class="gallery-img reveal reveal-delay-2">
+          <img src="projects/dairy-den/Final-Inside.jpg" alt="Dairy Den finished interior" onerror="this.style.background='#111'"/>
+          <div class="gallery-caption">Dairy Den — Interior</div>
+        </div>
+        <div class="gallery-img reveal reveal-delay-3">
+          <img src="projects/dairy-den/Side-S.jpg" alt="Dairy Den side perspective" onerror="this.style.background='#1a1a1a'"/>
+          <div class="gallery-caption">Dairy Den — Side View</div>
+        </div>
+        <div class="gallery-img reveal">
+          <img src="projects/bettys-bay/Bettys-Bay-1.jpeg" alt="Betty's Bay container home exterior" onerror="this.style.background='#1a1a1a'"/>
+          <div class="gallery-caption">Betty’s Bay — Exterior</div>
+        </div>
+        <div class="gallery-img reveal reveal-delay-1">
+          <img src="projects/bettys-bay/Bettys-Bay-2.jpeg" alt="Betty's Bay project view two" onerror="this.style.background='#222'"/>
+          <div class="gallery-caption">Betty’s Bay — View II</div>
+        </div>
+        <div class="gallery-img reveal reveal-delay-2">
+          <img src="projects/bettys-bay/Bettys-Bay-3.jpeg" alt="Betty's Bay project view three" onerror="this.style.background='#1d1d1d'"/>
+          <div class="gallery-caption">Betty’s Bay — View III</div>
+        </div>
+        <div class="gallery-img reveal reveal-delay-3">
+          <img src="projects/bettys-bay/Bettys-Bay-4.jpeg" alt="Betty's Bay project view four" onerror="this.style.background='#111'"/>
+          <div class="gallery-caption">Betty’s Bay — View IV</div>
+        </div>
+        <div class="gallery-img reveal reveal-delay-1">
+          <img src="projects/bettys-bay/Bettys-Bay-5.jpeg" alt="Betty's Bay project view five" onerror="this.style.background='#1a1a1a'"/>
+          <div class="gallery-caption">Betty’s Bay — View V</div>
+        </div>
+        <div class="gallery-img reveal reveal-delay-2">
+          <img src="projects/bettys-bay/Bettys-Bay-6.jpeg" alt="Betty's Bay project view six" onerror="this.style.background='#1d1d1d'"/>
+          <div class="gallery-caption">Betty’s Bay — View VI</div>
+        </div>
+        <div class="gallery-img reveal reveal-delay-3">
+          <img src="projects/brits/Brits.png" alt="Brits container home exterior" onerror="this.style.background='#1a1a1a'"/>
+          <div class="gallery-caption">Brits — Exterior</div>
+        </div>
+        <div class="gallery-img reveal">
+          <img src="projects/brits/Front-1.jpg" alt="Brits front facade" onerror="this.style.background='#222'"/>
+          <div class="gallery-caption">Brits — Front</div>
+        </div>
+        <div class="gallery-img reveal reveal-delay-1">
+          <img src="projects/brits/Front-Fold-Down-dECK.jpg" alt="Brits fold-down deck" onerror="this.style.background='#1d1d1d'"/>
+          <div class="gallery-caption">Brits — Fold-Down Deck</div>
+        </div>
+        <div class="gallery-img reveal reveal-delay-2">
+          <img src="projects/brits/Kitchen-1-1.jpg" alt="Brits kitchen interior" onerror="this.style.background='#111'"/>
+          <div class="gallery-caption">Brits — Kitchen</div>
+        </div>
+        <div class="gallery-img reveal reveal-delay-3">
+          <img src="projects/brits/Bedroom-1.jpg" alt="Brits bedroom interior" onerror="this.style.background='#1a1a1a'"/>
+          <div class="gallery-caption">Brits — Bedroom</div>
+        </div>
+        <div class="gallery-img reveal">
+          <img src="projects/brits/Hall.jpg" alt="Brits hallway interior" onerror="this.style.background='#1d1d1d'"/>
+          <div class="gallery-caption">Brits — Hall</div>
+        </div>
+        <div class="gallery-img reveal reveal-delay-1">
+          <img src="projects/grootbraak-mossel-bay/Grootbraak-Mossel-Bay1.jpeg" alt="Grootbraak Mossel Bay container project exterior" onerror="this.style.background='#1a1a1a'"/>
+          <div class="gallery-caption">Grootbraak Mossel Bay — Exterior</div>
+        </div>
+        <div class="gallery-img reveal reveal-delay-2">
+          <img src="projects/grootbraak-mossel-bay/Grootbraak-Mossel-Bay2.jpeg" alt="Grootbraak Mossel Bay project view two" onerror="this.style.background='#222'"/>
+          <div class="gallery-caption">Grootbraak Mossel Bay — View II</div>
+        </div>
+        <div class="gallery-img reveal reveal-delay-3">
+          <img src="projects/grootbraak-mossel-bay/Grootbraak-Mossel-Bay4.jpeg" alt="Grootbraak Mossel Bay project view four" onerror="this.style.background='#1d1d1d'"/>
+          <div class="gallery-caption">Grootbraak Mossel Bay — View IV</div>
+        </div>
+        <div class="gallery-img reveal">
+          <img src="projects/grootbraak-mossel-bay/Grootbraak-Mossel-Bay6.jpeg" alt="Grootbraak Mossel Bay project view six" onerror="this.style.background='#111'"/>
+          <div class="gallery-caption">Grootbraak Mossel Bay — View VI</div>
+        </div>
+        <div class="gallery-img reveal reveal-delay-1">
+          <img src="projects/grootbraak-mossel-bay/Grootbraak-Mossel-Bay8.jpeg" alt="Grootbraak Mossel Bay project view eight" onerror="this.style.background='#1a1a1a'"/>
+          <div class="gallery-caption">Grootbraak Mossel Bay — View VIII</div>
+        </div>
+        <div class="gallery-img reveal reveal-delay-2">
+          <img src="projects/grootbraak-mossel-bay/Grootbraak-Mossel-Bay10.jpeg" alt="Grootbraak Mossel Bay project view ten" onerror="this.style.background='#1d1d1d'"/>
+          <div class="gallery-caption">Grootbraak Mossel Bay — View X</div>
         </div>
       </div>
     </div>
@@ -1941,6 +2906,11 @@
       <div class="folder-groups" id="folderGroups"></div>
     </div>
   </div>
+
+  <div class="portfolio-more-cta reveal reveal-delay-2">
+    <p>This is a curated preview. The full gallery includes project photos, interiors, and site progress.</p>
+    <a href="/portfolio/gallery-full.html" target="_top" class="btn-primary">View Full Portfolio &rarr;</a>
+  </div>
 </section>
 
 <!-- VISUALISATIONS -->
@@ -1948,7 +2918,7 @@
   <div class="gallery-intro">
     <div class="section-label reveal">Design Vision</div>
     <h2 class="section-title reveal reveal-delay-1">Renders & <em>Concept Art</em></h2>
-    <p class="section-body reveal reveal-delay-2" style="max-width:760px;">3D renders, architectural illustrations, and AI-assisted design concepts — visualising possibilities across residential living, premium interiors, and commercial container spaces.</p>
+    <p class="section-body reveal reveal-delay-2" style="max-width:760px;">3D renders, architectural illustrations, and AI-assisted design concepts - visualising possibilities across residential living, premium interiors, and commercial container spaces.</p>
   </div>
   <div class="gallery-categories">
 
@@ -2095,6 +3065,10 @@
     </div>
 
   </div>
+
+  <div class="portfolio-more-cta reveal reveal-delay-2">
+    <a href="/portfolio/concepts-full.html" target="_top" class="btn-primary">Explore More Concept Projects</a>
+  </div>
 </section>
 
 <!-- PROCESS -->
@@ -2122,7 +3096,7 @@
     <div class="process-step reveal reveal-delay-3">
       <div class="step-num">04</div>
       <div class="step-title">Delivery & Install</div>
-      <p class="step-body">Your unit is delivered and installed on-site — ready for immediate use.</p>
+      <p class="step-body">Your unit is delivered and installed on-site - ready for immediate use.</p>
     </div>
   </div>
 </section>
@@ -2131,8 +3105,8 @@
 <section id="testimonial">
   <div class="testimonial-inner reveal">
     <span class="quote-mark">"</span>
-    <p class="quote-text">I just received my container home this morning — my wife is going to love this so much. Beautiful job! It looks small on the outside but is incredibly spacious inside.</p>
-    <div class="quote-author">— Verified Urban Box Living Customer</div>
+    <p class="quote-text">I just received my container home this morning - my wife is going to love this so much. Beautiful job! It looks small on the outside but is incredibly spacious inside.</p>
+    <div class="quote-author">- Verified Urban Box Living Customer</div>
   </div>
 </section>
 
@@ -2416,19 +3390,28 @@
   // ── HAMBURGER ──
   const hamburger = document.getElementById('hamburger');
   const mobileMenu = document.getElementById('mobileMenu');
+  const mobileMenuBackdrop = document.getElementById('mobileMenuBackdrop');
+
+  function closeMobileMenu() {
+    hamburger.classList.remove('open');
+    mobileMenu.classList.remove('open');
+    if (mobileMenuBackdrop) mobileMenuBackdrop.classList.remove('open');
+    document.body.style.overflow = '';
+  }
 
   hamburger.addEventListener('click', () => {
     hamburger.classList.toggle('open');
     mobileMenu.classList.toggle('open');
+    if (mobileMenuBackdrop) mobileMenuBackdrop.classList.toggle('open');
     document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
   });
 
-  document.querySelectorAll('.mobile-nav-link').forEach(link => {
-    link.addEventListener('click', () => {
-      hamburger.classList.remove('open');
-      mobileMenu.classList.remove('open');
-      document.body.style.overflow = '';
-    });
+  if (mobileMenuBackdrop) {
+    mobileMenuBackdrop.addEventListener('click', closeMobileMenu);
+  }
+
+  document.querySelectorAll('.mobile-nav-link, .mobile-menu .mobile-cta').forEach(link => {
+    link.addEventListener('click', closeMobileMenu);
   });
 
   // ── FOLDER GALLERY (UNIT / PROJECT / REC) ──
@@ -2745,7 +3728,7 @@
     }
 
     sessionStorage.setItem(DASHBOARD_AUTH_KEY, 'granted');
-    window.location.href = 'enquiries-dashboard.html';
+    window.top.location.href = '/admin';
   }
 
   renderFolderCollections();
@@ -2818,17 +3801,39 @@
   });
 
   // ── SCROLL REVEAL ──
-  const reveals = document.querySelectorAll('.reveal');
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.add('visible');
-        observer.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.12 });
+  const revealTargets = [
+    '#about .about-img-wrap',
+    '#about .about-grid > .reveal.reveal-delay-2',
+    '#gallery .gallery-intro .section-label',
+    '#gallery .gallery-intro .section-title',
+    '#gallery .gallery-intro .section-body',
+    '#contact .section-label',
+    '#contact .section-title'
+  ];
 
-  reveals.forEach(r => observer.observe(r));
+  const reveals = [];
+  revealTargets.forEach((selector) => {
+    document.querySelectorAll(selector).forEach((el) => {
+      if (!el.classList.contains('reveal') || el.classList.contains('reveal-scroll')) return;
+      el.classList.add('reveal-scroll');
+      reveals.push(el);
+    });
+  });
+
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    reveals.forEach(r => observer.observe(r));
+  } else {
+    reveals.forEach(el => el.classList.add('visible'));
+  }
 
   // ── FORM SUBMIT ──
   const SUPABASE_PROJECT_URL = 'https://pzmphwkeailqpeteiexc.supabase.co';
@@ -3421,6 +4426,8 @@
       setTimeout(() => scrollToHash(e.data.scrollTo), 100);
     }
   });
+
+
 </script>
   <script src="assets/content-protection.js"></script>
 </body>

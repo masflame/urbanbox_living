@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Urban Box Living - Enquiries</title>
+  <style>
+    :root {
+      --bg: #0c0e14;
+      --surface-0: #111319;
+      --surface-1: #181b24;
+      --border: rgba(255,255,255,0.08);
+      --text-primary: #e8eaf0;
+      --text-secondary: #8b90a0;
+      --accent: #5865f2;
+      --ok: #22d3a8;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "DM Sans", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+      min-height: 100vh;
+      padding: 24px;
+    }
+    .topbar {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .title { font-size: 22px; font-weight: 700; }
+    .btn {
+      margin-left: auto;
+      background: var(--surface-1);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      border-radius: 8px;
+      padding: 9px 12px;
+      cursor: pointer;
+      text-decoration: none;
+      font-size: 13px;
+    }
+    .btn:hover { border-color: var(--accent); }
+    .panel {
+      background: var(--surface-0);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    table { width: 100%; border-collapse: collapse; }
+    th, td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th { color: var(--text-secondary); font-weight: 600; letter-spacing: 0.03em; text-transform: uppercase; font-size: 11px; }
+    tr:hover td { background: rgba(255,255,255,0.02); }
+    .muted { color: var(--text-secondary); }
+    .ok { color: var(--ok); }
+    .error { color: #f87171; padding: 14px; }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="title">Enquiries</div>
+    <a class="btn" href="enquiries-dashboard.html">Open Dashboard</a>
+    <a class="btn" href="analytics.html">Go To Analytics</a>
+  </div>
+
+  <div class="panel">
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Project</th>
+          <th>Submitted</th>
+        </tr>
+      </thead>
+      <tbody id="rows">
+        <tr><td class="muted" colspan="5">Loading enquiries...</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    (function () {
+      const PROJECT_URL = "https://pzmphwkeailqpeteiexc.supabase.co";
+      const KEY = "sb_publishable_xjjSHPFIuek8uf1bmSbyuQ_8rED0Lys";
+      const supabase = window.supabase.createClient(PROJECT_URL, KEY);
+      const rows = document.getElementById("rows");
+
+      function esc(v) {
+        return String(v || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\"/g, "&quot;").replace(/'/g, "&#39;");
+      }
+
+      async function load() {
+        const { data, error } = await supabase
+          .from("enquiries")
+          .select("first_name,last_name,email,phone,project_type,created_at")
+          .order("created_at", { ascending: false })
+          .limit(250);
+
+        if (error) {
+          rows.innerHTML = '<tr><td colspan="5" class="error">Failed to load enquiries: ' + esc(error.message) + '</td></tr>';
+          return;
+        }
+
+        if (!data || !data.length) {
+          rows.innerHTML = '<tr><td colspan="5" class="muted">No enquiries found.</td></tr>';
+          return;
+        }
+
+        rows.innerHTML = data.map(function (item) {
+          const name = ((item.first_name || "") + " " + (item.last_name || "")).trim() || "Unnamed";
+          const date = item.created_at ? new Date(item.created_at).toLocaleString() : "-";
+          return '<tr>' +
+            '<td>' + esc(name) + '</td>' +
+            '<td>' + esc(item.email || "-") + '</td>' +
+            '<td>' + esc(item.phone || "-") + '</td>' +
+            '<td>' + esc(item.project_type || "General") + '</td>' +
+            '<td class="muted">' + esc(date) + '</td>' +
+          '</tr>';
+        }).join("");
+      }
+
+      load();
+    })();
+  </script>
+  <script src="assets/content-protection.js"></script>
+</body>
+</html>

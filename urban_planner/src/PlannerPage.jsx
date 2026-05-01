@@ -1,7 +1,9 @@
-import { useEffect, useState } from 'react'
+﻿import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { jsPDF } from 'jspdf'
 import galleryConfig from './data/design-gallery.json'
+import AppShell from './components/AppShell'
+import QuantityStepper from './components/QuantityStepper'
 import './App.css'
 
 const projectTypes = [
@@ -151,6 +153,10 @@ const initialForm = {
   finishLevel: 'premium',
   budget: '450000',
   paymentPlan: 'flexible',
+  windowPlacement: false,
+  doorOrientation: false,
+  interiorPalette: false,
+  socketPlanning: false,
   plumbing: true,
   solar: false,
   insulation: true,
@@ -196,14 +202,22 @@ function estimateProject(form) {
   const deckingCost = form.decking ? 26000 * units : 0
   const roomComplexityCost = Math.max(0, rooms - units) * 12000
   const customPlanCost = form.customPlan ? 18000 : 0
+  const addOnTotal = plumbingCost + insulationCost + solarCost + deckingCost + customPlanCost
 
   const structureCost = Math.round(baseSizeCost * units * projectMultiplier)
   const subtotal = structureCost + terrainCost + accessCost + fitOutCost + plumbingCost + solarCost + insulationCost + deckingCost + roomComplexityCost + customPlanCost
   const contingency = Math.round(subtotal * 0.06)
   const estimatedPrice = subtotal + contingency
 
-  const buildWeeks = 4 + units * 2 + (form.finishLevel === 'luxury' ? 2 : form.finishLevel === 'premium' ? 1 : 0) + (form.solar ? 1 : 0) + (form.customPlan ? 1 : 0)
-  const installDays = 2 + units + (form.terrain === 'sloped' ? 2 : form.terrain === 'rural' ? 1 : 0) + (form.access === 'restricted' ? 2 : form.access === 'moderate' ? 1 : 0)
+  const buildMaxWeeks = 4 + units * 2 + (form.finishLevel === 'luxury' ? 2 : form.finishLevel === 'premium' ? 1 : 0) + (form.solar ? 1 : 0) + (form.customPlan ? 1 : 0)
+  // Optimistic floor: ~2 weeks below worst case for a single unit, scaled with complexity.
+  const buildMinWeeks = Math.max(3, buildMaxWeeks - 2 - (form.finishLevel === 'luxury' ? 1 : 0))
+  const installMaxDays = 2 + units + (form.terrain === 'sloped' ? 2 : form.terrain === 'rural' ? 1 : 0) + (form.access === 'restricted' ? 2 : form.access === 'moderate' ? 1 : 0)
+  const installMinDays = Math.max(1, installMaxDays - 2)
+  const buildLabel = buildMinWeeks === buildMaxWeeks ? `${buildMaxWeeks} weeks` : `${buildMinWeeks}-${buildMaxWeeks} weeks`
+  const installLabel = installMinDays === installMaxDays
+    ? `${installMaxDays} ${installMaxDays === 1 ? 'day' : 'days'}`
+    : `${installMinDays}-${installMaxDays} days`
 
   const budgetValue = Number(form.budget) || 0
   const fitRatio = budgetValue ? estimatedPrice / budgetValue : 1
@@ -284,14 +298,31 @@ function estimateProject(form) {
     `Finish level: ${finishLevels[form.finishLevel].label}`,
     `Payment option: ${paymentPlans.find((item) => item.id === paymentPlan)?.label ?? 'Standard Plan'}`,
     `Budget band: ${budgetBands.find((item) => item.value === form.budget)?.label ?? 'Not specified'}`,
+    `Free customizations: ${[
+      form.windowPlacement ? 'Window placement' : null,
+      form.doorOrientation ? 'Door orientation' : null,
+      form.interiorPalette ? 'Interior palette' : null,
+      form.socketPlanning ? 'Socket planning' : null,
+    ]
+      .filter(Boolean)
+      .join(', ') || 'None selected'}`,
+    `Add-ons: ${[
+      form.plumbing ? `Plumbing pack (${currency.format(plumbingCost)})` : null,
+      form.insulation ? `Insulation (${currency.format(insulationCost)})` : null,
+      form.solar ? `Solar readiness (${currency.format(solarCost)})` : null,
+      form.decking ? `Decking / entry platform (${currency.format(deckingCost)})` : null,
+      form.customPlan ? `Custom concept plan (${currency.format(customPlanCost)})` : null,
+    ]
+      .filter(Boolean)
+      .join(', ') || 'None selected'}`,
     `Solar: ${form.solar ? 'Yes' : 'No'}`,
     `Insulation: ${form.insulation ? 'Yes' : 'No'}`,
     `Decking: ${form.decking ? 'Yes' : 'No'}`,
     `Custom concept plan requested: ${form.customPlan ? 'Yes' : 'No'}`,
     '',
     `Estimated investment: ${currency.format(estimatedPrice)}`,
-    `Estimated production: ${buildWeeks} weeks`,
-    `Estimated installation: ${installDays} days`,
+    `Estimated production: ${buildLabel}`,
+    `Estimated installation: ${installLabel}`,
     `Feasibility signal: ${feasibility}`,
     paymentPlan === 'finance' ? `Estimated financing: ${financeScenarios.map((item) => `${item.months} months from ${currency.format(item.monthly)}/month`).join(' | ')}` : null,
     '',
@@ -306,8 +337,12 @@ function estimateProject(form) {
     template,
     estimatedPrice,
     contingency,
-    buildWeeks,
-    installDays,
+    buildMinWeeks,
+    buildMaxWeeks,
+    installMinDays,
+    installMaxDays,
+    buildLabel,
+    installLabel,
     feasibility,
     recommendation: recommendationMap[form.projectType],
     milestones,
@@ -315,6 +350,7 @@ function estimateProject(form) {
     paymentPlan,
     paymentPlanLabel: selectedPlan.label,
     financeScenarios,
+    addOnTotal,
     brief,
   }
 }
@@ -338,6 +374,19 @@ function buildMarkdown(form, estimate) {
     `- Terrain: ${form.terrain}`,
     `- Access: ${form.access}`,
     '',
+    '## Free Customizations',
+    `- Window placement preferences: ${form.windowPlacement ? 'Yes' : 'No'}`,
+    `- Door swing and entry orientation: ${form.doorOrientation ? 'Yes' : 'No'}`,
+    `- Interior colour and trim direction: ${form.interiorPalette ? 'Yes' : 'No'}`,
+    `- Socket and switch planning notes: ${form.socketPlanning ? 'Yes' : 'No'}`,
+    '',
+    '## Add-ons (Price Increasing)',
+    `- Plumbing pack: ${form.plumbing ? 'Yes' : 'No'}`,
+    `- Insulation: ${form.insulation ? 'Yes' : 'No'}`,
+    `- Solar readiness: ${form.solar ? 'Yes' : 'No'}`,
+    `- Decking / entry platform: ${form.decking ? 'Yes' : 'No'}`,
+    `- Custom concept plan: ${form.customPlan ? 'Yes' : 'No'}`,
+    '',
     '## Configuration',
     `- Container size: ${form.unitSize}`,
     `- Units: ${form.units}`,
@@ -346,16 +395,11 @@ function buildMarkdown(form, estimate) {
     `- Finish level: ${finishLevels[form.finishLevel].label}`,
     `- Payment option: ${estimate.paymentPlanLabel}`,
     `- Budget band: ${budgetBands.find((item) => item.value === form.budget)?.label ?? 'Not specified'}`,
-    `- Plumbing: ${form.plumbing ? 'Yes' : 'No'}`,
-    `- Insulation: ${form.insulation ? 'Yes' : 'No'}`,
-    `- Solar: ${form.solar ? 'Yes' : 'No'}`,
-    `- Decking: ${form.decking ? 'Yes' : 'No'}`,
-    `- Custom plan: ${form.customPlan ? 'Yes' : 'No'}`,
     '',
     '## Estimate',
     `- Estimated investment: ${currency.format(estimate.estimatedPrice)}`,
-    `- Build timeline: ${estimate.buildWeeks} weeks`,
-    `- Installation: ${estimate.installDays} days`,
+    `- Build timeline: ${estimate.buildLabel}`,
+    `- Installation: ${estimate.installLabel}`,
     `- Feasibility: ${estimate.feasibility}`,
     `- Contingency: ${currency.format(estimate.contingency)}`,
     '',
@@ -474,7 +518,7 @@ async function downloadPdf(form, estimate) {
     doc.text(label, LEFT + 6, y)
     doc.setFont('helvetica', 'normal')
     doc.setTextColor(...DARK)
-    doc.text(String(value ?? '—'), LEFT + 180, y)
+    doc.text(String(value ?? '-'), LEFT + 180, y)
     y += 17
   }
 
@@ -523,7 +567,7 @@ async function downloadPdf(form, estimate) {
   doc.setFont('helvetica', 'normal')
   doc.setFontSize(8)
   doc.setTextColor(...MGREY)
-  doc.text(`Build: ${estimate.buildWeeks} weeks  |  Installation: ${estimate.installDays} days  |  Feasibility: ${estimate.feasibility}`, RIGHT - 4, y + 22, { align: 'right' })
+  doc.text(`Build: ${estimate.buildLabel}  |  Installation: ${estimate.installLabel}  |  Feasibility: ${estimate.feasibility}`, RIGHT - 4, y + 22, { align: 'right' })
   y += 48
 
   // payment table header
@@ -632,6 +676,15 @@ function App() {
   }, [])
 
   const estimate = estimateProject(form)
+  const plannerUnits = Math.max(1, Number(form.units) || 1)
+  const plannerBathrooms = Math.max(0, Number(form.bathrooms) || 0)
+  const addOnCosts = {
+    plumbing: Math.max(1, plannerBathrooms) * 22000,
+    insulation: 18000 * plannerUnits,
+    solar: 85000 + Math.max(0, plannerUnits - 1) * 25000,
+    decking: 26000 * plannerUnits,
+    customPlan: 18000,
+  }
   const currentTemplates = templatesByProject[form.projectType] ?? []
   const designGalleryImages = form.selectedDesign ? getDesignGallery(form.selectedDesign) : []
   const selectedImageCount = (form.selectedGalleryImages || []).length
@@ -770,7 +823,7 @@ function App() {
     const summary = [
       `Urban Planner summary`,
       `Estimated investment: ${currency.format(estimate.estimatedPrice)}`,
-      `Timeline: ${estimate.buildWeeks} weeks build, ${estimate.installDays} days installation`,
+      `Timeline: ${estimate.buildLabel} build, ${estimate.installLabel} installation`,
       `Feasibility: ${estimate.feasibility}`,
       `Preferred design: ${form.selectedDesign || 'Not selected'}`,
       `Custom plan file: ${form.customPlanFileName || 'Not uploaded'}`,
@@ -798,25 +851,11 @@ function App() {
   }
 
   return (
-    <div className="planner-page">
-      <header className="planner-nav">
-        <a href="/" className="planner-nav-logo">Urban Box Living</a>
-        <nav className="planner-nav-links" aria-label="Planner and main site links">
-          <a href="/#about">About</a>
-          <a href="/#catalog">Catalog</a>
-          <a href="/#gallery">Gallery</a>
-          <a href="/#contact">Contact</a>
-          <a href="/planner" className="planner-nav-current">Planner</a>
-        </nav>
-        <a href="/#contact" className="planner-nav-cta">Need Help?</a>
-      </header>
-
-      <header className="planner-header">
-        <span className="planner-header-label">Urban Planner</span>
-        <h1>Configure your project in five guided steps.</h1>
-        <p>Pick a design, shortlist images, estimate budget and timeline, then move directly to enquiry with your brief.</p>
-      </header>
-
+    <AppShell
+      accentLabel="Urban Planner"
+      heading="Configure your project in five guided steps."
+    >
+      <div className="planner-page planner-page-shell">
       <div className="step-indicator" aria-label="planner steps">
         {steps.map((label, index) => {
           const number = index + 1
@@ -1012,8 +1051,35 @@ function App() {
         {step === 3 && (
           <section className="panel">
             <div className="panel-head">
-              <h2>3. Configure the module build</h2>
+              <h2>3. Customizations and configuration</h2>
             </div>
+
+            <div className="planner-section-block">
+              <h3 className="planner-subhead">Free customizations</h3>
+              <p className="field-note">These selections do not increase your estimate and help the design team tailor placement details.</p>
+
+              <div className="toggle-grid">
+                <label className="toggle-card">
+                  <input type="checkbox" checked={form.windowPlacement} onChange={(event) => updateField('windowPlacement', event.target.checked)} />
+                  <span>Window placement preferences</span>
+                </label>
+                <label className="toggle-card">
+                  <input type="checkbox" checked={form.doorOrientation} onChange={(event) => updateField('doorOrientation', event.target.checked)} />
+                  <span>Door swing and entry orientation</span>
+                </label>
+                <label className="toggle-card">
+                  <input type="checkbox" checked={form.interiorPalette} onChange={(event) => updateField('interiorPalette', event.target.checked)} />
+                  <span>Interior colour and trim direction</span>
+                </label>
+                <label className="toggle-card">
+                  <input type="checkbox" checked={form.socketPlanning} onChange={(event) => updateField('socketPlanning', event.target.checked)} />
+                  <span>Socket and switch planning notes</span>
+                </label>
+              </div>
+            </div>
+
+            <div className="planner-section-block">
+              <h3 className="planner-subhead">Configurations</h3>
 
             <div className="field-grid three">
               <div className="form-group">
@@ -1027,28 +1093,39 @@ function App() {
 
               <div className="form-group">
                 <label>Number of units</label>
-                <input type="number" min="1" max="6" value={form.units} onChange={(event) => updateField('units', event.target.value)} />
+                <QuantityStepper
+                  value={Number(form.units) || 1}
+                  onChange={(n) => updateField('units', String(n))}
+                  min={1}
+                  max={6}
+                  ariaLabel="Number of units"
+                />
               </div>
 
               <div className="form-group">
                 <label>Rooms / spaces</label>
-                <input type="number" min="1" max="12" value={form.rooms} onChange={(event) => updateField('rooms', event.target.value)} />
+                <QuantityStepper
+                  value={Number(form.rooms) || 1}
+                  onChange={(n) => updateField('rooms', String(n))}
+                  min={1}
+                  max={12}
+                  ariaLabel="Rooms or spaces"
+                />
               </div>
             </div>
 
             <div className="field-grid two">
               <div className="form-group">
                 <label>Bathrooms / wet points</label>
-                <input type="number" min="0" max="6" value={form.bathrooms} onChange={(event) => updateField('bathrooms', event.target.value)} />
+                <QuantityStepper
+                  value={Number(form.bathrooms) || 0}
+                  onChange={(n) => updateField('bathrooms', String(n))}
+                  min={0}
+                  max={6}
+                  ariaLabel="Bathrooms or wet points"
+                />
               </div>
-
-              <div className="form-group">
-                <label>Custom concept plan</label>
-                <select value={form.customPlan ? 'yes' : 'no'} onChange={(event) => updateField('customPlan', event.target.value === 'yes')}>
-                  <option value="no">No</option>
-                  <option value="yes">Yes</option>
-                </select>
-              </div>
+            </div>
             </div>
           </section>
         )}
@@ -1090,11 +1167,14 @@ function App() {
             </div>
 
             <div className="toggle-grid">
-              <label className="toggle-card"><input type="checkbox" checked={form.plumbing} onChange={(event) => updateField('plumbing', event.target.checked)} /><span>Plumbing pack</span></label>
-              <label className="toggle-card"><input type="checkbox" checked={form.insulation} onChange={(event) => updateField('insulation', event.target.checked)} /><span>Insulation</span></label>
-              <label className="toggle-card"><input type="checkbox" checked={form.solar} onChange={(event) => updateField('solar', event.target.checked)} /><span>Solar readiness</span></label>
-              <label className="toggle-card"><input type="checkbox" checked={form.decking} onChange={(event) => updateField('decking', event.target.checked)} /><span>Decking / entry platform</span></label>
+              <label className="toggle-card"><input type="checkbox" checked={form.plumbing} onChange={(event) => updateField('plumbing', event.target.checked)} /><span>Plumbing pack (+{currency.format(addOnCosts.plumbing)})</span></label>
+              <label className="toggle-card"><input type="checkbox" checked={form.insulation} onChange={(event) => updateField('insulation', event.target.checked)} /><span>Insulation (+{currency.format(addOnCosts.insulation)})</span></label>
+              <label className="toggle-card"><input type="checkbox" checked={form.solar} onChange={(event) => updateField('solar', event.target.checked)} /><span>Solar readiness (+{currency.format(addOnCosts.solar)})</span></label>
+              <label className="toggle-card"><input type="checkbox" checked={form.decking} onChange={(event) => updateField('decking', event.target.checked)} /><span>Decking / entry platform (+{currency.format(addOnCosts.decking)})</span></label>
+              <label className="toggle-card"><input type="checkbox" checked={form.customPlan} onChange={(event) => updateField('customPlan', event.target.checked)} /><span>Custom concept plan (+{currency.format(addOnCosts.customPlan)})</span></label>
             </div>
+
+            <small className="field-note">Selected add-ons are included in the estimated investment shown in the review step.</small>
 
             <div className="form-group">
               <label>Client notes (optional)</label>
@@ -1116,13 +1196,18 @@ function App() {
               </article>
 
               <article className="result-card">
+                <span>Add-ons uplift</span>
+                <h3>{currency.format(estimate.addOnTotal)}</h3>
+              </article>
+
+              <article className="result-card">
                 <span>Production timeline</span>
-                <h3>{estimate.buildWeeks} weeks</h3>
+                <h3>{estimate.buildLabel}</h3>
               </article>
 
               <article className="result-card">
                 <span>Installation</span>
-                <h3>{estimate.installDays} days</h3>
+                <h3>{estimate.installLabel}</h3>
               </article>
 
               <article className="result-card">
@@ -1181,7 +1266,8 @@ function App() {
           )}
         </div>
       </footer>
-    </div>
+      </div>
+    </AppShell>
   )
 }
 

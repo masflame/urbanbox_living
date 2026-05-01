@@ -1,0 +1,23 @@
+[
+  {
+    "platform": "urbanbox",
+    "product_name": "Sophisticated Modern Micro-Home with Designer Deck & Braai",
+    "product_name_hint": "Modern Charcoal Micro-Home",
+    "product_group_key": "modern-charcoal-micro-home",
+    "relationship_group_id": "urbanbox:modern-charcoal-micro-home",
+    "unit_slug": "modern-charcoal-micro-home",
+    "local_path": "src/assets/Units/UnitsX/modern-charcoal-micro-home/0f5678d9-d522-4053-b7d3-e7b10cd686b9.jpeg",
+    "asset_filename": "0f5678d9-d522-4053-b7d3-e7b10cd686b9.jpeg",
+    "unit_size": "6m High Cube (~14m²)",
+    "unit_size_sqm": "14",
+    "manufacturing_time": "8 - 12 weeks",
+    "price": "ZAR 450000",
+    "price_amount": "450000",
+    "primary_description": "Experience luxury minimalist living in this masterfully converted 6m High-Cube container home. Designed for the modern South African lifestyle, this unit perfectly balances rugged industrial durability with high-end architectural finishes. The interior features an open-plan studio layout with premium laminate flooring, LED lighting, and full thermal insulation for year-round comfort. The living space extends effortlessly onto a sprawling timber deck, headlined by a magnificent built-in masonry fireplace—perfect for entertaining against a scenic backdrop.",
+    "product_description": "6m High Cube container home with charcoal vertical-slat cladding, large black-framed aluminium folding/stacker doors, premium laminate floors, full thermal insulation, integrated electrical DB board and plumbing. Outdoor living headlined by an elevated timber deck with custom brick masonry braai/fireplace.",
+    "unit_features": "Size: 6m HC (~14m²) | Deck: 12-18m² timber | Construction: Steel container shell with vertical timber/composite cladding in charcoal/midnight rust-proof finish | Doors: Black-framed aluminium folding/stacker | Insulation: Full-shell thermal (spray foam / specialised boards) with internal drywall | Outdoor: Elevated hardwood deck with integrated stairs and custom brick masonry braai/fireplace | Includes: Full electrical DB board, integrated plumbing, designer aluminium apertures",
+    "included_items": "Steel container shell | Vertical timber/composite cladding | Black-framed aluminium folding doors | Premium laminate flooring | Full thermal insulation | LED lighting | Electrical DB board | Integrated plumbing | Elevated timber deck | Custom brick masonry braai/fireplace",
+    "optional_extras": "Solar / off-grid kit | Greywater recycling | Bespoke interior cabinetry | Outdoor pergola extension | Roof-mounted skylights",
+    "excluded_items": "Land | Major site preparation | Municipal connection fees | Transport | Base/foundation"
+  }
+]

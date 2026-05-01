@@ -10,16 +10,16 @@
 
   <style>
     :root {
-      --gold: #C9A84C;
-      --gold-light: #E8C97A;
-      --gold-dark: #8A6820;
-      --black: #080808;
-      --dark: #111111;
-      --dark-2: #1A1A1A;
-      --dark-3: #222222;
-      --white: #F5F0E8;
-      --white-dim: rgba(245,240,232,0.7);
-      --white-faint: rgba(245,240,232,0.15);
+      --gold: #91a27f;
+      --gold-light: #9dae8b;
+      --gold-dark: #6b7d64;
+      --black: #ffffff;
+      --dark: #fff9ef;
+      --dark-2: #4f4c4f;
+      --dark-3: #ede8df;
+      --white: #4f4c4f;
+      --white-dim: rgba(79,76,79,0.7);
+      --white-faint: rgba(79,76,79,0.15);
       --transition: cubic-bezier(0.76, 0, 0.24, 1);
     }
 
@@ -63,7 +63,7 @@
     }
     .cursor-ring {
       width: 36px; height: 36px;
-      border: 1px solid rgba(201,168,76,0.5);
+      border: 1px solid rgba(145,162,127,0.5);
       border-radius: 50%;
       position: fixed; top: 0; left: 0;
       pointer-events: none;
@@ -137,9 +137,9 @@
     }
     nav.scrolled {
       padding: 10px 60px;
-      background: rgba(8,8,8,0.92);
+      background: rgba(255,249,239,0.92);
       backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(201,168,76,0.1);
+      border-bottom: 1px solid rgba(145,162,127,0.1);
     }
     .nav-logo {
       display: flex; align-items: center; gap: 12px;
@@ -211,7 +211,7 @@
     .mobile-menu {
       display: none;
       position: fixed; inset: 0;
-      background: rgba(8,8,8,0.97);
+      background: rgba(255,249,239,0.97);
       backdrop-filter: blur(24px);
       z-index: 999;
       flex-direction: column; align-items: center; justify-content: center;
@@ -257,9 +257,9 @@
       position: absolute; inset: 0;
       background: linear-gradient(
         to top,
-        rgba(8,8,8,0.95) 0%,
-        rgba(8,8,8,0.4) 50%,
-        rgba(8,8,8,0.2) 100%
+        rgba(255,249,239,0.95) 0%,
+        rgba(255,249,239,0.4) 50%,
+        rgba(255,249,239,0.2) 100%
       );
     }
     .hero-content {
@@ -272,7 +272,7 @@
       letter-spacing: 0.45em;
       text-transform: uppercase;
       color: var(--gold);
-      border: 1px solid rgba(201,168,76,0.35);
+      border: 1px solid rgba(145,162,127,0.35);
       padding: 6px 18px;
       margin-bottom: 28px;
       opacity: 0;
@@ -320,7 +320,7 @@
     .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); }
     .btn-ghost {
       background: transparent;
-      border: 1px solid rgba(245,240,232,0.3);
+      border: 1px solid rgba(79,76,79,0.3);
       color: var(--white);
       padding: 15px 38px;
       font-family: 'Montserrat', sans-serif;
@@ -417,7 +417,12 @@
       transform: translateY(40px);
       transition: opacity 0.9s var(--transition), transform 0.9s var(--transition);
     }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal:not(.reveal-scroll) {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+    .reveal.reveal-scroll.visible { opacity: 1; transform: translateY(0); }
     .reveal-delay-1 { transition-delay: 0.1s; }
     .reveal-delay-2 { transition-delay: 0.2s; }
     .reveal-delay-3 { transition-delay: 0.3s; }
@@ -447,7 +452,7 @@
       position: absolute;
       top: -20px; left: -20px;
       right: 20px; bottom: 20px;
-      border: 1px solid rgba(201,168,76,0.3);
+      border: 1px solid rgba(145,162,127,0.3);
       z-index: 0;
       pointer-events: none;
     }
@@ -512,11 +517,11 @@
       position: absolute; inset: 0;
       display: flex; flex-direction: column; justify-content: flex-end;
       padding: 36px 32px;
-      background: linear-gradient(to top, rgba(8,8,8,0.9) 0%, transparent 60%);
+      background: linear-gradient(to top, rgba(255,249,239,0.9) 0%, transparent 60%);
       transition: background 0.5s;
     }
     .catalog-item:hover .catalog-overlay {
-      background: linear-gradient(to top, rgba(8,8,8,0.95) 0%, rgba(8,8,8,0.3) 100%);
+      background: linear-gradient(to top, rgba(255,249,239,0.95) 0%, rgba(255,249,239,0.3) 100%);
     }
     .catalog-tag {
       font-size: 0.55rem; letter-spacing: 0.4em; text-transform: uppercase;
@@ -577,7 +582,7 @@
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 1px;
-      background: rgba(201,168,76,0.1);
+      background: rgba(145,162,127,0.1);
     }
     .feature-card {
       background: var(--dark-2);
@@ -637,7 +642,7 @@
       gap: 44px;
     }
     .gallery-category {
-      border: 1px solid rgba(201,168,76,0.12);
+      border: 1px solid rgba(145,162,127,0.12);
       background: rgba(255,255,255,0.015);
       padding: 28px;
     }
@@ -695,7 +700,7 @@
       letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--white);
-      background: linear-gradient(to top, rgba(8,8,8,0.92), rgba(8,8,8,0));
+      background: linear-gradient(to top, rgba(255,249,239,0.92), rgba(255,249,239,0));
     }
     .gallery-plan-link {
       position: absolute;
@@ -706,8 +711,8 @@
       text-transform: uppercase;
       color: var(--gold);
       text-decoration: none;
-      border: 1px solid rgba(201,168,76,0.45);
-      background: rgba(8,8,8,0.68);
+      border: 1px solid rgba(145,162,127,0.45);
+      background: rgba(255,249,239,0.68);
       padding: 7px 10px;
       transition: background 0.3s, color 0.3s, border-color 0.3s;
     }
@@ -723,7 +728,7 @@
       gap: 20px;
     }
     .folder-card {
-      border: 1px solid rgba(201,168,76,0.18);
+      border: 1px solid rgba(145,162,127,0.18);
       background: rgba(255,255,255,0.02);
       padding: 18px;
     }
@@ -766,8 +771,8 @@
       min-height: 170px;
     }
     .folder-more {
-      border: 1px dashed rgba(201,168,76,0.35);
-      background: linear-gradient(135deg, rgba(201,168,76,0.08), rgba(255,255,255,0.03));
+      border: 1px dashed rgba(145,162,127,0.35);
+      background: linear-gradient(135deg, rgba(145,162,127,0.08), rgba(255,255,255,0.03));
       min-height: 170px;
       display: flex;
       align-items: center;
@@ -779,7 +784,7 @@
     }
     .folder-open {
       margin-top: 12px;
-      border: 1px solid rgba(201,168,76,0.45);
+      border: 1px solid rgba(145,162,127,0.45);
       background: transparent;
       color: var(--gold);
       width: 100%;
@@ -810,7 +815,7 @@
     .folder-lightbox-dialog {
       width: min(1120px, 100%);
       max-height: 100%;
-      border: 1px solid rgba(201,168,76,0.28);
+      border: 1px solid rgba(145,162,127,0.28);
       background: rgba(12,12,12,0.96);
       padding: 14px;
       display: grid;
@@ -864,8 +869,8 @@
       transform: translateY(-50%);
       width: 40px;
       height: 40px;
-      border: 1px solid rgba(201,168,76,0.45);
-      background: rgba(8,8,8,0.7);
+      border: 1px solid rgba(145,162,127,0.45);
+      background: rgba(255,249,239,0.7);
       color: var(--gold);
       font-size: 1.2rem;
       cursor: none;
@@ -987,7 +992,7 @@
     }
     .contact-icon {
       width: 42px; height: 42px;
-      border: 1px solid rgba(201,168,76,0.4);
+      border: 1px solid rgba(145,162,127,0.4);
       display: flex; align-items: center; justify-content: center;
       color: var(--gold);
       flex-shrink: 0;
@@ -1040,17 +1045,17 @@
       appearance: none;
       -webkit-appearance: none;
     }
-    .form-group select option { background: #1a1a1a; color: var(--white); }
+    .form-group select option { background: #4f4c4f; color: var(--white); }
     .form-group input:focus,
     .form-group textarea:focus,
     .form-group select:focus {
       border-color: var(--gold);
-      background: rgba(201,168,76,0.04);
+      background: rgba(145,162,127,0.04);
     }
     .form-group textarea { height: 130px; resize: none; }
     .attachment-input-hidden { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
     .attachment-dropzone {
-      border: 1px dashed rgba(201,168,76,0.45);
+      border: 1px dashed rgba(145,162,127,0.45);
       background: rgba(255,255,255,0.02);
       padding: 14px;
       transition: border-color 0.25s, background 0.25s;
@@ -1059,7 +1064,7 @@
     .attachment-dropzone:hover,
     .attachment-dropzone.is-dragover {
       border-color: var(--gold);
-      background: rgba(201,168,76,0.08);
+      background: rgba(145,162,127,0.08);
     }
     .attachment-dropzone-title {
       font-size: 0.68rem;
@@ -1082,7 +1087,7 @@
     .attachment-pick-btn {
       margin-top: 12px;
       background: transparent;
-      border: 1px solid rgba(245,240,232,0.32);
+      border: 1px solid rgba(79,76,79,0.32);
       color: var(--white);
       padding: 8px 14px;
       font-family: 'Montserrat', sans-serif;
@@ -1124,7 +1129,7 @@
       position: relative;
       width: min(440px, 100%);
       background: linear-gradient(180deg, rgba(18,18,18,0.98), rgba(10,10,10,0.98));
-      border: 1px solid rgba(201,168,76,0.22);
+      border: 1px solid rgba(145,162,127,0.22);
       box-shadow: 0 30px 80px rgba(0,0,0,0.5);
       padding: 30px;
     }
@@ -1171,7 +1176,7 @@
       letter-spacing: 0.24em;
       text-transform: uppercase;
       cursor: none;
-      border: 1px solid rgba(201,168,76,0.35);
+      border: 1px solid rgba(145,162,127,0.35);
     }
     .admin-login-btn {
       background: var(--gold);
@@ -1205,9 +1210,9 @@
     .map-overlay {
       position: absolute; top: 50%; left: 60px;
       transform: translateY(-50%);
-      background: rgba(8,8,8,0.92);
+      background: rgba(255,249,239,0.92);
       backdrop-filter: blur(16px);
-      border: 1px solid rgba(201,168,76,0.25);
+      border: 1px solid rgba(145,162,127,0.25);
       padding: 28px 36px;
     }
     .map-overlay-name {
@@ -1225,7 +1230,7 @@
     footer {
       background: var(--black);
       padding: 60px 60px 36px;
-      border-top: 1px solid rgba(201,168,76,0.1);
+      border-top: 1px solid rgba(145,162,127,0.1);
     }
     .footer-top {
       display: flex; justify-content: space-between; align-items: flex-start;
@@ -1258,7 +1263,7 @@
       padding-top: 28px;
       border-top: 1px solid rgba(255,255,255,0.06);
     }
-    .footer-copy { font-size: 0.68rem; color: rgba(245,240,232,0.3); }
+    .footer-copy { font-size: 0.68rem; color: rgba(79,76,79,0.3); }
     .footer-socials {
       display: flex; gap: 16px;
     }
@@ -1363,8 +1368,20 @@
       .form-group input, .form-group textarea, .form-group select { padding: 13px 14px; }
       .submit-btn { letter-spacing: 0.2em; }
       footer { padding: 50px 24px 30px; }
-      .footer-top { flex-direction: column; }
+      .footer-top {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 22px 18px;
+      }
+      .footer-logo { grid-column: 1 / -1; }
       .footer-logo img { height: 72px; }
+      .footer-links ul {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px 14px;
+      }
+      .footer-links ul li { margin-bottom: 0; }
+      .footer-links ul a { display: block; }
       .footer-copy { width: 100%; text-align: center; }
       .footer-socials { width: 100%; justify-content: center; }
       .map-wrap { height: 320px; }
@@ -1374,6 +1391,9 @@
     }
 
     @media (max-width: 520px) {
+      .footer-top { grid-template-columns: 1fr; }
+      .footer-logo { grid-column: auto; }
+      .footer-links ul { grid-template-columns: 1fr 1fr; }
       .gallery-grid { grid-template-columns: 1fr; }
       .folder-thumb-grid { grid-template-columns: 1fr; }
       .section-label { letter-spacing: 0.3em; }
@@ -1417,7 +1437,8 @@
   <ul class="nav-links">
     <li><a href="#about">About</a></li>
     <li><a href="#catalog">Catalog</a></li>
-    <li><a href="urban_planner/index.html">Planner</a></li>
+    <li><a href="/planner" target="_top">Planner</a></li>
+    <li><a href="/admin" target="_top">Admin</a></li>
     <li><a href="#features">Features</a></li>
     <li><a href="#gallery">Gallery</a></li>
     <li><a href="#contact">Contact</a></li>
@@ -1432,7 +1453,8 @@
 <div class="mobile-menu" id="mobileMenu">
   <a href="#about" class="mobile-nav-link">About</a>
   <a href="#catalog" class="mobile-nav-link">Catalog</a>
-  <a href="urban_planner/index.html" class="mobile-nav-link">Planner</a>
+  <a href="/planner" class="mobile-nav-link" target="_top">Planner</a>
+  <a href="/admin" class="mobile-nav-link" target="_top">Admin</a>
   <a href="#features" class="mobile-nav-link">Features</a>
   <a href="#gallery" class="mobile-nav-link">Gallery</a>
   <a href="#contact" class="mobile-nav-link">Contact</a>
@@ -1449,7 +1471,7 @@
     <h1 class="hero-h1">Redefining Space.<br><em>One Container</em><br>at a Time.</h1>
     <p class="hero-sub">Ready-made container solutions and custom builds on request, delivered across South Africa. From homes to office spaces and recreational builds, every unit is designed to perform and impress.</p>
     <div class="hero-btns">
-      <a href="urban_planner/index.html" class="btn-primary">Start Your Build</a>
+      <a href="/planner" class="btn-primary">Start Your Build</a>
       <a href="#catalog" class="btn-ghost">View Catalog</a>
     </div>
   </div>
@@ -1494,7 +1516,7 @@
   <div class="about-grid">
     <div class="about-img-wrap reveal">
       <img src="images/show4.jpg" alt="Urban Box Living Workshop"
-           onerror="this.src=''; this.style.background='#1a1a1a'; this.style.minHeight='480px'"/>
+           onerror="this.src=''; this.style.background='#4f4c4f'; this.style.minHeight='480px'"/>
       <div class="about-stat">
         <span class="about-stat-num">500+</span>
         <span class="about-stat-label">Projects Delivered</span>
@@ -1525,7 +1547,7 @@
     <!-- Featured -->
     <!-- <div class="catalog-item featured reveal">
       <img src="unit3/customized-40ft-shipping-container-made-into-luxurious-1-bedroom3-768x560.jpg" alt="1-Bedroom Container Home"
-           onerror="this.style.background='#1a1a1a'"/>
+           onerror="this.style.background='#4f4c4f'"/>
       <div class="catalog-overlay">
         <span class="catalog-tag">Signature</span>
         <div class="catalog-name">1-Bedroom<br>Container Home</div>
@@ -1541,7 +1563,7 @@
         <span class="catalog-tag">Compact</span>
         <div class="catalog-name">20ft Studio Home</div>
         <div class="catalog-desc">Perfectly proportioned for single occupancy or as a garden flat. Efficient, modern and complete.</div>
-        <a href="urban_planner/index.html?fromCatalog=1&project=home&design=20ft%20Studio%20Home" class="catalog-link">Plan This Design <span class="arrow"></span></a>
+        <a href="/planner?fromCatalog=1&project=home&design=20ft%20Studio%20Home" class="catalog-link">Plan This Design <span class="arrow"></span></a>
       </div>
     </div>
 
@@ -1552,18 +1574,18 @@
         <span class="catalog-tag">Bathroom</span>
         <div class="catalog-name">Shower</div>
         <div class="catalog-desc">Modern shower area with clean finishes, quality fixtures, and practical layout for daily comfort in container living.</div>
-        <a href="urban_planner/index.html?fromCatalog=1&project=home&design=Shower" class="catalog-link">Plan This Design <span class="arrow"></span></a>
+        <a href="/planner?fromCatalog=1&project=home&design=Shower" class="catalog-link">Plan This Design <span class="arrow"></span></a>
       </div>
     </div>
 
     <div class="catalog-item reveal reveal-delay-1">
       <img src="images/catalog-4.jpeg" alt="Beautiful Container Kitchen"
-           onerror="this.style.background='#1a1a1a'"/>
+           onerror="this.style.background='#4f4c4f'"/>
       <div class="catalog-overlay">
          <span class="catalog-tag">Bathroom</span>
         <div class="catalog-name">Beautiful Furnished<br>Bathroom</div>
         <div class="catalog-desc">Bathroom vanity setup featuring integrated basin, mirror, and storage cabinetry with a polished, space-efficient finish.</div>
-        <a href="urban_planner/index.html?fromCatalog=1&project=home&design=Beautiful%20Furnished%20Bathroom" class="catalog-link">Plan This Design <span class="arrow"></span></a>
+        <a href="/planner?fromCatalog=1&project=home&design=Beautiful%20Furnished%20Bathroom" class="catalog-link">Plan This Design <span class="arrow"></span></a>
       </div>
     </div>
 
@@ -1574,18 +1596,18 @@
         <span class="catalog-tag">Custom</span>
         <div class="catalog-name">Custom Urban<br>Home</div>
         <div class="catalog-desc">Your vision, our craft. Fully custom builds to your specifications — size, layout, and finishes.</div>
-        <a href="urban_planner/index.html?fromCatalog=1&project=home&design=Custom%20on%20Request" class="catalog-link">Plan This Design <span class="arrow"></span></a>
+        <a href="/planner?fromCatalog=1&project=home&design=Custom%20on%20Request" class="catalog-link">Plan This Design <span class="arrow"></span></a>
       </div>
     </div>
 
     <div class="catalog-item reveal reveal-delay-3">
       <img src="unit4/Luxury-40ft-expandable-container-barndominium-prefabricated-with-easy-folding-sandwich-panels-14-768x950.jpg" alt="Luxury Container Home"
-           onerror="this.style.background='#1a1a1a'"/>
+           onerror="this.style.background='#4f4c4f'"/>
       <div class="catalog-overlay">
         <span class="catalog-tag">Luxury</span>
         <div class="catalog-name">Luxury Container<br>Residence</div>
         <div class="catalog-desc">A premium finish home with high-end interior styling and refined open-plan flow.</div>
-        <a href="urban_planner/index.html?fromCatalog=1&project=home&design=Luxury%20Container%20Residence" class="catalog-link">Plan This Design <span class="arrow"></span></a>
+        <a href="/planner?fromCatalog=1&project=home&design=Luxury%20Container%20Residence" class="catalog-link">Plan This Design <span class="arrow"></span></a>
       </div>
     </div>
 
@@ -1596,7 +1618,7 @@
         <span class="catalog-tag">Family</span>
         <div class="catalog-name">Modern Family<br>Container Home</div>
         <div class="catalog-desc">Expanded living space designed for growing families with practical storage and comfort.</div>
-        <a href="urban_planner/index.html?fromCatalog=1&project=home&design=Modern%20Family%20Container%20Home" class="catalog-link">Plan This Design <span class="arrow"></span></a>
+        <a href="/planner?fromCatalog=1&project=home&design=Modern%20Family%20Container%20Home" class="catalog-link">Plan This Design <span class="arrow"></span></a>
       </div>
     </div>
 
@@ -1607,7 +1629,7 @@
         <span class="catalog-tag">Executive</span>
         <div class="catalog-name">Executive<br>Container Home</div>
         <div class="catalog-desc">Smart, elegant, and built for elevated living with standout finishes throughout.</div>
-        <a href="urban_planner/index.html?fromCatalog=1&project=home&design=Executive%20Container%20Home" class="catalog-link">Plan This Design <span class="arrow"></span></a>
+        <a href="/planner?fromCatalog=1&project=home&design=Executive%20Container%20Home" class="catalog-link">Plan This Design <span class="arrow"></span></a>
       </div>
     </div>
 
@@ -1618,20 +1640,20 @@
         <span class="catalog-tag">Contemporary</span>
         <div class="catalog-name">Contemporary<br>Container Build</div>
         <div class="catalog-desc">Clean lines and modern finishes in a versatile design suitable for urban and rural plots.</div>
-        <a href="urban_planner/index.html?fromCatalog=1&project=home&design=Contemporary%20Container%20Build" class="catalog-link">Plan This Design <span class="arrow"></span></a>
+        <a href="/planner?fromCatalog=1&project=home&design=Contemporary%20Container%20Build" class="catalog-link">Plan This Design <span class="arrow"></span></a>
       </div>
     </div>
 
     <div class="catalog-item reveal reveal-delay-3">
       <img src="images/catalog-10.jpeg" alt="Designer Container Home"
-           onerror="this.style.background='#1a1a1a'"/>
+           onerror="this.style.background='#4f4c4f'"/>
       <div class="catalog-overlay">
         <!-- <span class="catalog-tag">Remote</span>
         <div class="catalog-name">Remote<br>Container Home</div> -->
          <span class="catalog-tag">Off-Grid</span>
         <div class="catalog-name">Off-Grid<br>Container Home</div>
         <div class="catalog-desc">A bold, design-forward home concept with curated interiors and balanced natural light.</div>
-        <a href="urban_planner/index.html?fromCatalog=1&project=cabin&design=Off-Grid%20Container%20Home" class="catalog-link">Plan This Design <span class="arrow"></span></a>
+        <a href="/planner?fromCatalog=1&project=cabin&design=Off-Grid%20Container%20Home" class="catalog-link">Plan This Design <span class="arrow"></span></a>
       </div>
     </div>
 
@@ -1642,7 +1664,7 @@
         <span class="catalog-tag">Double Unit</span>
         <div class="catalog-name">Double Unit<br>Container Home</div>
         <div class="catalog-desc">Wider internal layout by combining units for added bedrooms, lounge space, and utility rooms.</div>
-        <a href="urban_planner/index.html?fromCatalog=1&project=home&design=Double%20Unit%20Container%20Home" class="catalog-link">Plan This Design <span class="arrow"></span></a>
+        <a href="/planner?fromCatalog=1&project=home&design=Double%20Unit%20Container%20Home" class="catalog-link">Plan This Design <span class="arrow"></span></a>
       </div>
     </div>
 
@@ -1655,18 +1677,18 @@
         <span class="catalog-tag">Double Unit</span>
         <div class="catalog-name">Double Unit<br>Container Home</div>
         <div class="catalog-desc">Ideal for remote sites with optional solar integration and durable weather-ready finishes.</div>
-        <a href="urban_planner/index.html?fromCatalog=1&project=cabin&design=Off-Grid%20Container%20Home" class="catalog-link">Plan This Design <span class="arrow"></span></a>
+        <a href="/planner?fromCatalog=1&project=cabin&design=Off-Grid%20Container%20Home" class="catalog-link">Plan This Design <span class="arrow"></span></a>
       </div>
     </div>
 
     <div class="catalog-item reveal reveal-delay-1">
       <img src="project2/40-FT-Ready-Made-Villa-Design-Container-House-2.jpg" alt="Flagship Container Home"
-           onerror="this.style.background='#1a1a1a'"/>
+           onerror="this.style.background='#4f4c4f'"/>
       <div class="catalog-overlay">
         <span class="catalog-tag">Flagship</span>
         <div class="catalog-name">Flagship<br>Container Home</div>
         <div class="catalog-desc">Our signature top-tier concept showcasing the full Urban Box Living quality standard.</div>
-        <a href="urban_planner/index.html?fromCatalog=1&project=home&design=Flagship%20Container%20Home" class="catalog-link">Plan This Design <span class="arrow"></span></a>
+        <a href="/planner?fromCatalog=1&project=home&design=Flagship%20Container%20Home" class="catalog-link">Plan This Design <span class="arrow"></span></a>
       </div>
     </div>
   </div>
@@ -1725,7 +1747,7 @@
       </div>
       <div class="gallery-grid">
         <div class="gallery-img reveal">
-          <img src="gallery/show4.jpg" alt="Contemporary single-family container residence exterior" onerror="this.style.background='#1a1a1a'"/>
+          <img src="gallery/show4.jpg" alt="Contemporary single-family container residence exterior" onerror="this.style.background='#4f4c4f'"/>
           <div class="gallery-caption">Contemporary Residential Unit</div>
         </div>
         <div class="gallery-img reveal reveal-delay-1">
@@ -1741,7 +1763,7 @@
           <div class="gallery-caption">Indoor-Outdoor Living Unit</div>
         </div>
         <div class="gallery-img reveal reveal-delay-2">
-          <img src="images/catalog-11.jpeg" alt="Fitted kitchen and interior finish inside a residential unit" onerror="this.style.background='#1a1a1a'"/>
+          <img src="images/catalog-11.jpeg" alt="Fitted kitchen and interior finish inside a residential unit" onerror="this.style.background='#4f4c4f'"/>
           <div class="gallery-caption">Fitted Kitchen Interior</div>
         </div>
       </div>
@@ -1758,7 +1780,7 @@
           <div class="gallery-caption">Office Interior View</div>
         </div>
         <div class="gallery-img reveal reveal-delay-1">
-          <img src="office/20220827_143243-1-768x364.jpg" alt="Office space interior view" onerror="this.style.background='#1a1a1a'"/>
+          <img src="office/20220827_143243-1-768x364.jpg" alt="Office space interior view" onerror="this.style.background='#4f4c4f'"/>
           <div class="gallery-caption">Office Interior View</div>
         </div>
         <div class="gallery-img reveal reveal-delay-2">
@@ -1766,7 +1788,7 @@
           <div class="gallery-caption">Entry Perspective</div>
         </div>
         <div class="gallery-img reveal reveal-delay-3">
-          <img src="office/20220827_143509-1-768x364.jpg" alt="Office unit with exterior details" onerror="this.style.background='#1a1a1a'"/>
+          <img src="office/20220827_143509-1-768x364.jpg" alt="Office unit with exterior details" onerror="this.style.background='#4f4c4f'"/>
           <div class="gallery-caption">Exterior Detail Shot</div>
         </div>
         <div class="gallery-img reveal reveal-delay-2">
@@ -1778,7 +1800,7 @@
           <div class="gallery-caption">Finished Office Unit</div>
         </div>
         <div class="gallery-img reveal reveal-delay-2">
-          <img src="office/583046954_1276832727793538_2619019976089460586_n.jpg" alt="Office container design in operation" onerror="this.style.background='#1a1a1a'"/>
+          <img src="office/583046954_1276832727793538_2619019976089460586_n.jpg" alt="Office container design in operation" onerror="this.style.background='#4f4c4f'"/>
           <div class="gallery-caption">Operational Office Space</div>
         </div>
         <div class="gallery-img reveal reveal-delay-3">
@@ -1786,7 +1808,7 @@
           <div class="gallery-caption">6m Office Front View</div>
         </div>
         <div class="gallery-img reveal">
-          <img src="office/6m-office-container-basin-scaled.jpg" alt="Office basin and utility area" onerror="this.style.background='#1a1a1a'"/>
+          <img src="office/6m-office-container-basin-scaled.jpg" alt="Office basin and utility area" onerror="this.style.background='#4f4c4f'"/>
           <div class="gallery-caption">Utility Basin Area</div>
         </div>
         <div class="gallery-img reveal reveal-delay-1">
@@ -1798,7 +1820,7 @@
           <div class="gallery-caption">Closed and Secured Unit</div>
         </div>
         <div class="gallery-img reveal reveal-delay-3">
-          <img src="office/6m-office-container-closed-empty2-scaled.jpg" alt="Closed office container from rear angle" onerror="this.style.background='#1a1a1a'"/>
+          <img src="office/6m-office-container-closed-empty2-scaled.jpg" alt="Closed office container from rear angle" onerror="this.style.background='#4f4c4f'"/>
           <div class="gallery-caption">Rear Exterior Angle</div>
         </div>
         <div class="gallery-img reveal">
@@ -1810,7 +1832,7 @@
           <div class="gallery-caption">Interior Open Layout</div>
         </div>
         <div class="gallery-img reveal reveal-delay-2">
-          <img src="office/6m-office-container-interior-empty2-scaled.jpg" alt="Alternate empty office interior" onerror="this.style.background='#1a1a1a'"/>
+          <img src="office/6m-office-container-interior-empty2-scaled.jpg" alt="Alternate empty office interior" onerror="this.style.background='#4f4c4f'"/>
           <div class="gallery-caption">Interior Alternate View</div>
         </div>
         <div class="gallery-img reveal reveal-delay-3">
@@ -1818,7 +1840,7 @@
           <div class="gallery-caption">Standard 6m Office Model</div>
         </div>
         <div class="gallery-img reveal">
-          <img src="office/6m-office-container2-scaled.jpg" alt="6m office container secondary angle" onerror="this.style.background='#1a1a1a'"/>
+          <img src="office/6m-office-container2-scaled.jpg" alt="6m office container secondary angle" onerror="this.style.background='#4f4c4f'"/>
           <div class="gallery-caption">6m Office Secondary View</div>
         </div>
         <div class="gallery-img reveal reveal-delay-1">
@@ -1843,7 +1865,7 @@
       </div>
       <div class="gallery-grid">
         <div class="gallery-img reveal">
-          <img src="gallery/Brits-600x600.png" alt="Lifestyle container project site in Brits" onerror="this.style.background='#1a1a1a'"/>
+          <img src="gallery/Brits-600x600.png" alt="Lifestyle container project site in Brits" onerror="this.style.background='#4f4c4f'"/>
           <div class="gallery-caption">Brits Lifestyle Site</div>
         </div>
         <div class="gallery-img reveal reveal-delay-1">
@@ -1859,7 +1881,7 @@
           <div class="gallery-caption">Tesselaarsdal Lifestyle Unit</div>
         </div>
         <div class="gallery-img reveal reveal-delay-2">
-          <img src="gallery/Wiesenhof-600x600.png" alt="Container lifestyle development at Wiesenhof" onerror="this.style.background='#1a1a1a'"/>
+          <img src="gallery/Wiesenhof-600x600.png" alt="Container lifestyle development at Wiesenhof" onerror="this.style.background='#4f4c4f'"/>
           <div class="gallery-caption">Wiesenhof Lifestyle Build</div>
         </div>
       </div>
@@ -1872,7 +1894,7 @@
       </div>
       <div class="gallery-grid">
         <div class="gallery-img reveal">
-          <img src="gallery/Grootbraak-Mossel-Bay-600x600.png" alt="On-site crane installation of modular container unit" onerror="this.style.background='#1a1a1a'"/>
+          <img src="gallery/Grootbraak-Mossel-Bay-600x600.png" alt="On-site crane installation of modular container unit" onerror="this.style.background='#4f4c4f'"/>
           <div class="gallery-caption">On-Site Crane Installation</div>
         </div>
         <div class="gallery-img reveal reveal-delay-1">
@@ -1888,7 +1910,7 @@
           <div class="gallery-caption">Aerial Progress 0036</div>
         </div>
         <div class="gallery-img reveal reveal-delay-2">
-          <img src="gallery/DJI_0038.jpg" alt="Aerial project overview showing modular layout phase 0038" onerror="this.style.background='#1a1a1a'"/>
+          <img src="gallery/DJI_0038.jpg" alt="Aerial project overview showing modular layout phase 0038" onerror="this.style.background='#4f4c4f'"/>
           <div class="gallery-caption">Aerial Progress 0038</div>
         </div>
         <div class="gallery-img reveal reveal-delay-1">
@@ -1896,7 +1918,7 @@
           <div class="gallery-caption">Aerial Progress 0041</div>
         </div>
         <div class="gallery-img reveal reveal-delay-2">
-          <img src="gallery/DJI_0047.jpg" alt="Aerial project overview showing modular layout phase 0047" onerror="this.style.background='#1a1a1a'"/>
+          <img src="gallery/DJI_0047.jpg" alt="Aerial project overview showing modular layout phase 0047" onerror="this.style.background='#4f4c4f'"/>
           <div class="gallery-caption">Aerial Progress 0047</div>
         </div>
         <div class="gallery-img reveal reveal-delay-3">
@@ -1908,7 +1930,7 @@
           <div class="gallery-caption">Aerial Progress 0056</div>
         </div>
         <div class="gallery-img reveal reveal-delay-1">
-          <img src="gallery/DJI_0057.jpg" alt="Aerial project overview showing modular layout phase 0057" onerror="this.style.background='#1a1a1a'"/>
+          <img src="gallery/DJI_0057.jpg" alt="Aerial project overview showing modular layout phase 0057" onerror="this.style.background='#4f4c4f'"/>
           <div class="gallery-caption">Aerial Progress 0057</div>
         </div>
         <div class="gallery-img reveal reveal-delay-2">
@@ -1946,7 +1968,7 @@
       <div class="gallery-grid">
 
         <div class="gallery-img reveal">
-          <img src="gallery2/3d-render-house-model_933329-4523.jpg" alt="3D render of a contemporary container residence" onerror="this.style.background='#1a1a1a'"/>
+          <img src="gallery2/3d-render-house-model_933329-4523.jpg" alt="3D render of a contemporary container residence" onerror="this.style.background='#4f4c4f'"/>
           <div class="gallery-caption">Container Residence – Concept Render</div>
           <span class="concept-note">Render</span>
         </div>
@@ -1970,7 +1992,7 @@
         </div>
 
         <div class="gallery-img reveal">
-          <img src="gallery2/house-black-cargo-container_174639-825.jpg" alt="Single-storey black cargo container home concept" onerror="this.style.background='#1a1a1a'"/>
+          <img src="gallery2/house-black-cargo-container_174639-825.jpg" alt="Single-storey black cargo container home concept" onerror="this.style.background='#4f4c4f'"/>
           <div class="gallery-caption">Single-Storey Container Home – Concept</div>
           <span class="concept-note">Illustration</span>
         </div> -->
@@ -1994,7 +2016,7 @@
         </div>
 
         <div class="gallery-img reveal">
-          <img src="gallery2/modern-container-home-with-outdoor-seating-balcony_555015-39.jpg" alt="Modern container home with outdoor seating and balcony" onerror="this.style.background='#1a1a1a'"/>
+          <img src="gallery2/modern-container-home-with-outdoor-seating-balcony_555015-39.jpg" alt="Modern container home with outdoor seating and balcony" onerror="this.style.background='#4f4c4f'"/>
           <div class="gallery-caption">Container Home with Outdoor Balcony</div>
           <span class="concept-note">Illustration</span>
         </div>
@@ -2030,7 +2052,7 @@
       <div class="gallery-grid" style="grid-template-columns: repeat(2,1fr);">
 
         <div class="gallery-img reveal">
-          <img src="gallery2/large-luxury-modern-bright-interiors-living-room-mockup-illustration-3d-rendering-computer-digitally-generated-image_653967-22139.jpg" alt="Luxury modern bright living room interior – 3D illustration and rendering" onerror="this.style.background='#1a1a1a'"/>
+          <img src="gallery2/large-luxury-modern-bright-interiors-living-room-mockup-illustration-3d-rendering-computer-digitally-generated-image_653967-22139.jpg" alt="Luxury modern bright living room interior – 3D illustration and rendering" onerror="this.style.background='#4f4c4f'"/>
           <div class="gallery-caption">Luxury Living Room – 3D Interior Illustration</div>
           <span class="concept-note">3D Render</span>
         </div>
@@ -2053,7 +2075,7 @@
       <div class="gallery-grid">
 
         <!-- <div class="gallery-img reveal">
-          <img src="gallery2/2-storey-container-cafe-restaurant-3d-illustration_555015-7.jpg" alt="Two-storey container café and restaurant – 3D illustration" onerror="this.style.background='#1a1a1a'"/>
+          <img src="gallery2/2-storey-container-cafe-restaurant-3d-illustration_555015-7.jpg" alt="Two-storey container café and restaurant – 3D illustration" onerror="this.style.background='#4f4c4f'"/>
           <div class="gallery-caption">Two-Storey Container Café & Restaurant</div>
           <span class="concept-note">3D Illustration</span>
         </div> -->
@@ -2622,7 +2644,7 @@
         thumb.dataset.groupId = group.id;
         thumb.dataset.imageIndex = String(imageIndex);
         thumb.innerHTML = `
-          <img src="${group.folder}/${fileName}" alt="${group.title} image ${imageIndex + 1}" onerror="this.style.background='#1a1a1a'"/>
+          <img src="${group.folder}/${fileName}" alt="${group.title} image ${imageIndex + 1}" onerror="this.style.background='#4f4c4f'"/>
           <div class="gallery-caption">${getReadableImageName(fileName)}</div>
         `;
         grid.appendChild(thumb);
@@ -2730,7 +2752,7 @@
     }
 
     sessionStorage.setItem(DASHBOARD_AUTH_KEY, 'granted');
-    window.location.href = 'enquiries-dashboard.html';
+    window.top.location.href = '/admin';
   }
 
   renderFolderCollections();
@@ -2803,27 +2825,51 @@
   });
 
   // ── SCROLL REVEAL ──
-  const reveals = document.querySelectorAll('.reveal');
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.add('visible');
-        observer.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.12 });
+  const revealTargets = [
+    '#about .about-img-wrap',
+    '#about .about-grid > .reveal.reveal-delay-2',
+    '#gallery .gallery-intro .section-label',
+    '#gallery .gallery-intro .section-title',
+    '#gallery .gallery-intro .section-body',
+    '#contact .section-label',
+    '#contact .section-title'
+  ];
 
-  reveals.forEach(r => observer.observe(r));
+  const reveals = [];
+  revealTargets.forEach((selector) => {
+    document.querySelectorAll(selector).forEach((el) => {
+      if (!el.classList.contains('reveal') || el.classList.contains('reveal-scroll')) return;
+      el.classList.add('reveal-scroll');
+      reveals.push(el);
+    });
+  });
+
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    reveals.forEach(r => observer.observe(r));
+  } else {
+    reveals.forEach(el => el.classList.add('visible'));
+  }
 
   // ── FORM SUBMIT ──
   const SUPABASE_PROJECT_URL = 'https://pzmphwkeailqpeteiexc.supabase.co';
   const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_xjjSHPFIuek8uf1bmSbyuQ_8rED0Lys';
   const SUPABASE_ENQUIRIES_TABLE = 'enquiries';
-  const SUPABASE_ATTACHMENTS_BUCKET = 'enquiry-attachments';
+  const SUPABASE_ENQUIRY_ATTACHMENTS_TABLE = 'urbanbox_enquiry_attachments';
+  const SUPABASE_ATTACHMENTS_BUCKET = 'enquiry_files';
   const ENQUIRY_MIN_FILL_MS = 2500;
   const ENQUIRY_RATE_LIMIT_MS = 15000;
   const ENQUIRY_LAST_SUBMIT_KEY = 'ubl_last_enquiry_submit_at';
   const PLANNER_BRIEF_STORAGE_KEY = 'urbanPlannerBrief';
+  const PLANNER_PAYLOAD_STORAGE_KEY = 'urbanPlannerPayload';
   const enquiryFormLoadedAt = Date.now();
   const DASHBOARD_AUTH_KEY = 'ubl_dashboard_auth';
   const DASHBOARD_USERNAME = 'nyofu@admin';
@@ -2832,6 +2878,7 @@
     window.supabase && typeof window.supabase.createClient === 'function'
       ? window.supabase.createClient(SUPABASE_PROJECT_URL, SUPABASE_PUBLISHABLE_KEY)
       : null;
+  let plannerPayloadState = null;
 
   function sanitizeText(value, maxLen) {
     const cleaned = (value || '')
@@ -2861,6 +2908,90 @@
       .replace(/[^a-zA-Z0-9._-]/g, '-')
       .replace(/-+/g, '-')
       .slice(0, 120);
+  }
+
+  function createEnquiryRef() {
+    const randomPart = Math.random().toString(36).slice(2, 8);
+    return `enq-${Date.now()}-${randomPart}`;
+  }
+
+  function isImagePath(value) {
+    return /\.(jpg|jpeg|png|webp|gif)$/i.test(value || '');
+  }
+
+  async function uploadAttachmentFile(enquiryRef, file) {
+    if (!file) return null;
+    const fileName = toSafeFileName(file.name);
+    const filePath = `enquiries/${enquiryRef}/attachments/${Date.now()}-${fileName}`;
+
+    const { error: uploadError } = await supabaseClient
+      .storage
+      .from(SUPABASE_ATTACHMENTS_BUCKET)
+      .upload(filePath, file, { upsert: false });
+
+    if (uploadError) throw uploadError;
+
+    const { data: publicData } = supabaseClient
+      .storage
+      .from(SUPABASE_ATTACHMENTS_BUCKET)
+      .getPublicUrl(filePath);
+
+    return publicData && publicData.publicUrl ? {
+      label: file.name,
+      url: publicData.publicUrl,
+      type: 'attachment',
+      storagePath: filePath,
+      mimeType: file.type || null,
+    } : null;
+  }
+
+  async function uploadPlannerSelectedImages(enquiryRef, selectedImages) {
+    if (!Array.isArray(selectedImages) || !selectedImages.length) return [];
+
+    const uniqueImages = Array.from(new Set(selectedImages)).slice(0, 6);
+    const uploaded = [];
+
+    for (let i = 0; i < uniqueImages.length; i += 1) {
+      const imagePath = uniqueImages[i];
+      if (!isImagePath(imagePath)) continue;
+
+      const response = await fetch(imagePath);
+      if (!response.ok) {
+        throw new Error(`Could not read planner image: ${imagePath}`);
+      }
+
+      const blob = await response.blob();
+      const extension = (imagePath.split('.').pop() || 'jpg').toLowerCase();
+      const safeBase = toSafeFileName((imagePath.split('/').pop() || `planner-image-${i + 1}.${extension}`));
+      const filePath = `enquiries/${enquiryRef}/planner-images/${String(i + 1).padStart(2, '0')}-${safeBase}`;
+
+      const { error: uploadError } = await supabaseClient
+        .storage
+        .from(SUPABASE_ATTACHMENTS_BUCKET)
+        .upload(filePath, blob, {
+          upsert: false,
+          contentType: blob.type || `image/${extension === 'jpg' ? 'jpeg' : extension}`,
+        });
+
+      if (uploadError) throw uploadError;
+
+      const { data: publicData } = supabaseClient
+        .storage
+        .from(SUPABASE_ATTACHMENTS_BUCKET)
+        .getPublicUrl(filePath);
+
+      if (publicData && publicData.publicUrl) {
+        uploaded.push({
+          label: safeBase,
+          url: publicData.publicUrl,
+          type: 'planner-image',
+          storagePath: filePath,
+          mimeType: blob.type || `image/${extension === 'jpg' ? 'jpeg' : extension}`,
+        });
+      }
+    }
+
+    return uploaded;
   }
 
   function updateAttachmentUi(file) {
@@ -2934,6 +3065,11 @@
     const params = new URLSearchParams(window.location.search);
     const fromPlanner = params.get('fromPlanner') === '1';
     const plannerBrief = localStorage.getItem(PLANNER_BRIEF_STORAGE_KEY);
+    try {
+      plannerPayloadState = JSON.parse(localStorage.getItem(PLANNER_PAYLOAD_STORAGE_KEY) || 'null');
+    } catch (error) {
+      plannerPayloadState = null;
+    }
     if (!fromPlanner && !plannerBrief) return;
 
     const fnameEl = document.getElementById('fname');
@@ -2957,9 +3093,13 @@
 
     if (messageEl && plannerBrief && !messageEl.value.trim()) {
       const design = sanitizeText(params.get('design') || '', 120);
+      const selectedCount = plannerPayloadState && Array.isArray(plannerPayloadState.selectedGalleryImages)
+        ? plannerPayloadState.selectedGalleryImages.length
+        : 0;
       const plannerIntro = [
         'Urban Planner lead summary:',
         design ? `Preferred design: ${design}` : null,
+        selectedCount ? `Selected planner images: ${selectedCount}` : null,
         '',
         plannerBrief,
         '',
@@ -2971,8 +3111,6 @@
     if (transferNoteEl) {
       transferNoteEl.style.display = 'block';
     }
-
-    localStorage.removeItem(PLANNER_BRIEF_STORAGE_KEY);
   }
 
   function inferGalleryPlannerTarget(captionText, categoryTitle) {
@@ -3038,7 +3176,7 @@
       const link = document.createElement('a');
       link.className = 'gallery-plan-link';
       link.textContent = 'Open in Planner';
-      link.href = `urban_planner/index.html?fromGallery=1&project=${encodeURIComponent(target.project)}&design=${encodeURIComponent(target.design)}`;
+      link.href = `/planner?fromGallery=1&project=${encodeURIComponent(target.project)}&design=${encodeURIComponent(target.design)}`;
       link.setAttribute('aria-label', `Open ${captionText} in planner`);
 
       card.appendChild(link);
@@ -3148,44 +3286,52 @@
       return;
     }
 
-    let messageForSubmit = message;
-
-    if (attachmentFile) {
-      const fileName = toSafeFileName(attachmentFile.name);
-      const filePath = `enquiries/${Date.now()}-${fileName}`;
-      const { error: uploadError } = await supabaseClient
-        .storage
-        .from(SUPABASE_ATTACHMENTS_BUCKET)
-        .upload(filePath, attachmentFile, { upsert: false });
-
-      if (uploadError) {
-        errorEl.textContent = `Attachment upload failed: ${uploadError.message}`;
-        errorEl.style.display = 'block';
-        return;
-      }
-
-      const { data: publicData } = supabaseClient
-        .storage
-        .from(SUPABASE_ATTACHMENTS_BUCKET)
-        .getPublicUrl(filePath);
-
-      if (publicData && publicData.publicUrl) {
-        messageForSubmit = `${message}\n\nAttachment: ${publicData.publicUrl}`;
-      }
-    }
-
-    const payload = {
-      first_name: fname,
-      last_name: lname,
-      email: email,
-      phone: phone,
-      project_type: interest || 'General enquiry',
-      message: messageForSubmit
-    };
-
     try {
       submitBtn.disabled = true;
       submitBtn.textContent = 'Sending...';
+
+      const enquiryRef = createEnquiryRef();
+      let messageForSubmit = message;
+      const uploadedItems = [];
+
+      if (attachmentFile) {
+        const uploadedAttachment = await uploadAttachmentFile(enquiryRef, attachmentFile);
+        if (uploadedAttachment) {
+          uploadedItems.push(uploadedAttachment);
+        }
+      }
+
+      const selectedPlannerImages = plannerPayloadState && Array.isArray(plannerPayloadState.selectedGalleryImages)
+        ? plannerPayloadState.selectedGalleryImages
+        : [];
+
+      const uploadedPlannerImages = await uploadPlannerSelectedImages(enquiryRef, selectedPlannerImages);
+      uploadedItems.push(...uploadedPlannerImages);
+
+      const attachmentLines = uploadedItems
+        .map((item) => `- ${item.type === 'planner-image' ? 'Planner image' : 'Attachment'} (${item.label}): ${item.url}`);
+
+      if (attachmentLines.length) {
+        messageForSubmit = [
+          message,
+          '',
+          `Enquiry reference: ${enquiryRef}`,
+          'Uploaded files:',
+          ...attachmentLines,
+        ].join('\n');
+      }
+
+      const payload = {
+        first_name: fname,
+        last_name: lname,
+        email: email,
+        phone: phone,
+        project_type: interest || 'General enquiry',
+        message: messageForSubmit,
+        enquiry_ref: enquiryRef,
+        planner_payload: plannerPayloadState || null,
+        planner_image_count: uploadedPlannerImages.length,
+      };
 
       const { error } = await supabaseClient
         .from(SUPABASE_ENQUIRIES_TABLE)
@@ -3193,6 +3339,26 @@
 
       if (error) {
         throw error;
+      }
+
+      if (uploadedItems.length) {
+        const attachmentRows = uploadedItems.map((item) => ({
+          enquiry_ref: enquiryRef,
+          attachment_role: item.type,
+          bucket_id: SUPABASE_ATTACHMENTS_BUCKET,
+          storage_path: item.storagePath || null,
+          public_url: item.url,
+          file_name: item.label,
+          mime_type: item.mimeType || null,
+        }));
+
+        const { error: attachmentInsertError } = await supabaseClient
+          .from(SUPABASE_ENQUIRY_ATTACHMENTS_TABLE)
+          .insert(attachmentRows);
+
+        if (attachmentInsertError) {
+          throw attachmentInsertError;
+        }
       }
 
       document.getElementById('fname').value = '';
@@ -3205,6 +3371,9 @@
       updateAttachmentUi(null);
       document.getElementById('website').value = '';
       localStorage.setItem(ENQUIRY_LAST_SUBMIT_KEY, String(Date.now()));
+      localStorage.removeItem(PLANNER_BRIEF_STORAGE_KEY);
+      localStorage.removeItem(PLANNER_PAYLOAD_STORAGE_KEY);
+      plannerPayloadState = null;
 
       successEl.style.display = 'block';
       setTimeout(() => {
@@ -3263,7 +3432,28 @@
 
   const statEl = document.querySelector('.about-stat-num');
   if (statEl) statObs.observe(statEl);
+
+  // ── SCROLL TO HASH on load (works when loaded inside iframe with hash) ──
+  function scrollToHash(id) {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  if (window.location.hash) {
+    const id = window.location.hash.replace('#', '');
+    // slight delay to let page render
+    setTimeout(() => scrollToHash(id), 200);
+  }
+
+  // ── POSTMESSAGE from parent React app ──
+  window.addEventListener('message', (e) => {
+    if (e.data && e.data.scrollTo) {
+      setTimeout(() => scrollToHash(e.data.scrollTo), 100);
+    }
+  });
+
+
 </script>
   <script src="assets/content-protection.js"></script>
 </body>
 </html>
+

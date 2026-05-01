@@ -1,0 +1,23 @@
+[
+  {
+    "platform": "urbanbox",
+    "product_name": "Modern Modular Living – Versatile 1 or 2 Bedroom Container Homes",
+    "product_name_hint": "Flexible 1/2-Bedroom Modular Home",
+    "product_group_key": "flexible-1-2-bedroom-modular",
+    "relationship_group_id": "urbanbox:flexible-1-2-bedroom-modular",
+    "unit_slug": "flexible-1-2-bedroom-modular",
+    "local_path": "src/assets/Units/UnitsZZ/flexible-1-2-bedroom-modular/1-bedroom.jpg",
+    "asset_filename": "1-bedroom.jpg",
+    "unit_size": "30m² (1-Bed) or 60m² (2-Bed)",
+    "unit_size_sqm": "30",
+    "manufacturing_time": "10 - 16 weeks",
+    "price": "ZAR 495000",
+    "price_amount": "495000",
+    "primary_description": "Discover the perfect blend of efficiency and contemporary design. These precision-engineered container homes offer a turnkey solution for stylish, sustainable living. Whether you're looking for a sleek 1-bedroom studio or a spacious 2-bedroom family retreat, our units are designed to maximise every square metre. The exterior maintains a clean, industrial aesthetic with a durable protective coating, while the interior is transformed into a warm, inviting home with high-quality laminate flooring and modern cabinetry.",
+    "product_description": "SABS-compliant modular container home available in two layouts: a 30m² 1-bedroom studio (single 12m HC container) or a 60m² 2-bedroom family unit (joined twin-container or wide-format modular). Both layouts feature open-plan living, fitted kitchens, central wet-block bathrooms, and large sliding doors for natural light.",
+    "unit_features": "Layouts: 30m² 1-Bedroom Studio (single 12m HC) or 60m² 2-Bedroom Family Unit (twin-container) | 1-Bed: open-plan kitchen/living, L-shaped kitchenette, walk-in shower wet-block, private double bedroom | 2-Bed: central open-plan lounge/dining, full-sized kitchen, two double bedrooms at opposite ends, full family bathroom | Pricing from ~R7,000/m² | SABS-compliant insulation and safety standards | High-quality laminate flooring | Modern cabinetry | Large sliding doors",
+    "included_items": "Steel container shell with protective coating | High-quality laminate flooring | Modern cabinetry | Fitted kitchen | Bathroom with walk-in shower | Sliding glass doors | SABS-compliant insulation | SA-spec electrical wiring | Plumbing rough-in",
+    "optional_extras": "Outdoor deck | Solar / off-grid kit | Premium appliance package | Air conditioning | Custom paint finishes | Bedroom configuration upgrades",
+    "excluded_items": "Land | Site preparation | Municipal connection fees | Transport | Foundations"
+  }
+]

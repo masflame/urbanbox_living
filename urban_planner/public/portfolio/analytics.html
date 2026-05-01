@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Urban Box Living - Analytics</title>
+  <style>
+    :root {
+      --bg: #F7F9FC;
+      --surface-0: #FFFFFF;
+      --surface-1: #E4E7EB;
+      --border: #CBD2D9;
+      --text-primary: #1F2933;
+      --text-secondary: #52606D;
+      --accent: #2CB1BC;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "DM Sans", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+      min-height: 100vh;
+      padding: 24px;
+    }
+    .topbar { display: flex; gap: 12px; align-items: center; margin-bottom: 16px; }
+    .title { font-size: 22px; font-weight: 700; }
+    .btn {
+      margin-left: auto;
+      background: var(--surface-1);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      border-radius: 8px;
+      padding: 9px 12px;
+      cursor: pointer;
+      text-decoration: none;
+      font-size: 13px;
+    }
+    .btn + .btn { margin-left: 0; }
+    .btn:hover { border-color: var(--accent); }
+    .grid { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 12px; margin-bottom: 16px; }
+    .card {
+      background: var(--surface-0);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+    }
+    .label { color: var(--text-secondary); font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
+    .value { font-size: 30px; font-weight: 700; line-height: 1; }
+    .panel {
+      background: var(--surface-0);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+    }
+    .row { display: grid; grid-template-columns: 160px 1fr 42px; gap: 10px; align-items: center; margin-bottom: 9px; }
+    .name { color: var(--text-secondary); font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .track { height: 8px; background: var(--surface-1); border-radius: 999px; overflow: hidden; }
+    .fill { height: 100%; background: linear-gradient(90deg, var(--accent), #1992A0); }
+    .count { text-align: right; color: var(--text-secondary); font-size: 12px; }
+    .error { color: #C53030; }
+    @media (max-width: 960px) { .grid { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="title">Analytics</div>
+    <a class="btn" href="enquiries-dashboard.html">Open Dashboard</a>
+    <a class="btn" href="enquiries.html">Go To Enquiries</a>
+  </div>
+
+  <div class="grid">
+    <div class="card"><div class="label">Total Enquiries</div><div class="value" id="total">-</div></div>
+    <div class="card"><div class="label">Unread</div><div class="value" id="unread">-</div></div>
+    <div class="card"><div class="label">Last 7 Days</div><div class="value" id="weekly">-</div></div>
+    <div class="card"><div class="label">Today</div><div class="value" id="today">-</div></div>
+  </div>
+
+  <div class="panel">
+    <div class="label">Project Type Breakdown</div>
+    <div id="breakdown"></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    (function () {
+      const PROJECT_URL = "https://pzmphwkeailqpeteiexc.supabase.co";
+      const KEY = "sb_publishable_xjjSHPFIuek8uf1bmSbyuQ_8rED0Lys";
+      const READ_STATE_KEY = "ubl_enquiry_read_state_v1";
+      const supabase = window.supabase.createClient(PROJECT_URL, KEY);
+
+      function getCreatedAt(item) { return item.created_at || item.createdat || ""; }
+      function enquiryKey(item) { return [getCreatedAt(item), item.email || "", item.first_name || "", item.last_name || ""].join("|"); }
+      function getReadState() { try { return JSON.parse(localStorage.getItem(READ_STATE_KEY) || "{}"); } catch { return {}; } }
+      function isRead(item) { return Boolean(getReadState()[enquiryKey(item)]); }
+      function esc(v) {
+        return String(v || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\"/g, "&quot;").replace(/'/g, "&#39;");
+      }
+
+      async function load() {
+        const { data, error } = await supabase
+          .from("enquiries")
+          .select("first_name,last_name,email,project_type,created_at")
+          .order("created_at", { ascending: false })
+          .limit(2500);
+
+        if (error) {
+          document.getElementById("breakdown").innerHTML = '<div class="error">Failed to load analytics: ' + esc(error.message) + '</div>';
+          return;
+        }
+
+        const items = data || [];
+        const now = new Date();
+        const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        const weekStart = new Date(now);
+        weekStart.setDate(now.getDate() - 7);
+
+        const unread = items.filter(function (i) { return !isRead(i); }).length;
+        const today = items.filter(function (i) { return getCreatedAt(i) && new Date(getCreatedAt(i)) >= todayStart; }).length;
+        const weekly = items.filter(function (i) { return getCreatedAt(i) && new Date(getCreatedAt(i)) >= weekStart; }).length;
+
+        document.getElementById("total").textContent = String(items.length);
+        document.getElementById("unread").textContent = String(unread);
+        document.getElementById("weekly").textContent = String(weekly);
+        document.getElementById("today").textContent = String(today);
+
+        const counts = {};
+        items.forEach(function (i) {
+          const key = i.project_type || "General";
+          counts[key] = (counts[key] || 0) + 1;
+        });
+        const sorted = Object.entries(counts).sort(function (a, b) { return b[1] - a[1]; });
+        const max = sorted.length ? sorted[0][1] : 1;
+
+        document.getElementById("breakdown").innerHTML = sorted.length
+          ? sorted.map(function (entry) {
+              const label = entry[0];
+              const count = entry[1];
+              const width = Math.max(4, Math.round((count / max) * 100));
+              return '<div class="row">' +
+                '<div class="name">' + esc(label) + '</div>' +
+                '<div class="track"><div class="fill" style="width:' + width + '%"></div></div>' +
+                '<div class="count">' + count + '</div>' +
+              '</div>';
+            }).join("")
+          : '<div class="name">No data available.</div>';
+      }
+
+      load();
+    })();
+  </script>
+  <script src="assets/content-protection.js"></script>
+</body>
+</html>
