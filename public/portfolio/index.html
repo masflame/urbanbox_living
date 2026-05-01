@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -50,7 +50,7 @@
       }
     }
 
-    /* ── CUSTOM CURSOR ── */
+    /* -- CUSTOM CURSOR -- */
     .cursor {
       width: 10px; height: 10px;
       background: var(--gold);
@@ -74,12 +74,12 @@
     .cursor.hovering { width: 6px; height: 6px; background: var(--gold-light); }
     .cursor-ring.hovering { width: 56px; height: 56px; opacity: 0.4; }
 
-    /* ── SCROLLBAR ── */
+    /* -- SCROLLBAR -- */
     ::-webkit-scrollbar { width: 3px; }
     ::-webkit-scrollbar-track { background: var(--black); }
     ::-webkit-scrollbar-thumb { background: var(--gold-dark); }
 
-    /* ── LOADER ── */
+    /* -- LOADER -- */
     #loader {
       position: fixed; inset: 0;
       background: var(--black);
@@ -127,7 +127,7 @@
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* ── NAV ── */
+    /* -- NAV -- */
     nav {
       position: fixed; top: 0; left: 0; right: 0;
       z-index: 1000;
@@ -277,7 +277,7 @@
       justify-content: space-between;
     }
     .mobile-menu a::after {
-      content: '→';
+      content: '?';
       font-family: 'Montserrat', sans-serif;
       font-size: 0.85rem;
       color: var(--gold);
@@ -331,7 +331,7 @@
       pointer-events: auto;
     }
 
-    /* ── HERO ── */
+    /* -- HERO -- */
     #hero {
       min-height: 100vh;
       min-height: 760px;
@@ -527,7 +527,7 @@
       50% { opacity: 1; transform: scaleY(1.2); }
     }
 
-    /* ── MARQUEE ── */
+    /* -- MARQUEE -- */
     .marquee-wrap {
       overflow: hidden;
       background: var(--gold);
@@ -553,7 +553,7 @@
       to { transform: translateX(-50%); }
     }
 
-    /* ── SECTIONS COMMON ── */
+    /* -- SECTIONS COMMON -- */
     section { padding: 120px 60px; position: relative; }
     .section-label {
       font-size: 0.6rem;
@@ -601,7 +601,7 @@
     .reveal-delay-4 { transition-delay: 0.4s; }
     .reveal-delay-5 { transition-delay: 0.5s; }
 
-    /* ── ABOUT ── */
+    /* -- ABOUT -- */
     #about { background: var(--dark); }
     .about-grid {
       display: grid;
@@ -652,7 +652,7 @@
       display: block;
     }
 
-    /* ── READY-MADE UNITS SPOTLIGHT ── */
+    /* -- READY-MADE UNITS SPOTLIGHT -- */
     #units-spotlight {
       background: linear-gradient(180deg, #ffffff 0%, #ffffff 100%);
       border-top: 1px solid rgba(145,162,127,0.16);
@@ -793,7 +793,7 @@
       display: none;
     }
 
-    /* ── CATALOG ── */
+    /* -- CATALOG -- */
     #catalog { background: var(--black); }
     .catalog-header {
       max-width: 1300px; margin: 0 auto 70px;
@@ -889,7 +889,7 @@
     .catalog-item:hover .catalog-link { max-height: 40px; opacity: 1; }
     .catalog-item:hover .catalog-link .arrow { width: 30px; }
 
-    /* ── FEATURES ── */
+    /* -- FEATURES -- */
     #features { background: var(--dark-2); }
     .features-grid {
       max-width: 1300px; margin: 60px auto 0;
@@ -944,7 +944,7 @@
       line-height: 1.8;
     }
 
-    /* ── GALLERY ── */
+    /* -- GALLERY -- */
     #gallery { background: var(--black); padding-bottom: 0; }
     .gallery-intro {
       max-width: 1300px; margin: 0 auto 60px;
@@ -989,7 +989,7 @@
       grid-auto-flow: dense;
       gap: 6px;
     }
-    /* Editorial mosaic — varied spans repeating every 7 cards for rhythm */
+    /* Editorial mosaic � varied spans repeating every 7 cards for rhythm */
     .gallery-grid > .gallery-img { grid-column: span 2; grid-row: span 2; }
     .gallery-grid > .gallery-img:nth-child(7n+1) { grid-column: span 3; grid-row: span 3; } /* hero */
     .gallery-grid > .gallery-img:nth-child(7n+2) { grid-column: span 3; grid-row: span 2; } /* wide */
@@ -1208,7 +1208,7 @@
       padding: 4px 8px 6px;
     }
 
-    /* ── VISUALISATIONS ── */
+    /* -- VISUALISATIONS -- */
     #visualisations { background: var(--dark); padding-bottom: 0; }
     .concept-note {
       font-size: 0.55rem;
@@ -1224,7 +1224,7 @@
       pointer-events: none;
     }
 
-    /* ── PROCESS ── */
+    /* -- PROCESS -- */
     #process { background: var(--dark); }
     .process-steps {
       max-width: 1100px; margin: 70px auto 0;
@@ -1268,7 +1268,7 @@
       line-height: 1.8;
     }
 
-    /* ── TESTIMONIAL ── */
+    /* -- TESTIMONIAL -- */
     #testimonial {
       background: var(--black);
       overflow: hidden;
@@ -1301,7 +1301,7 @@
       color: var(--gold);
     }
 
-    /* ── CONTACT ── */
+    /* -- CONTACT -- */
     #contact { background: var(--dark); }
     .contact-inner {
       max-width: 1300px; margin: 0 auto;
@@ -1525,7 +1525,7 @@
       letter-spacing: 0.06em;
     }
 
-    /* ── MAP ── */
+    /* -- MAP -- */
     #map-section { padding: 0; }
     .map-wrap {
       width: 100%; height: 400px;
@@ -1556,7 +1556,7 @@
       line-height: 1.6;
     }
 
-    /* ── FOOTER ── */
+    /* -- FOOTER -- */
     footer {
       background: var(--black);
       padding: 60px 60px 36px;
@@ -1607,7 +1607,7 @@
     }
     .footer-socials a:hover { border-color: var(--gold); color: var(--gold); }
 
-    /* ── WHATSAPP FAB ── */
+    /* -- WHATSAPP FAB -- */
     .whatsapp-fab {
       position: fixed; bottom: 36px; right: 36px;
       width: 58px; height: 58px;
@@ -1623,7 +1623,7 @@
     .whatsapp-fab:hover { transform: scale(1.1); box-shadow: 0 8px 32px rgba(37,211,102,0.5); }
     .whatsapp-fab svg { width: 28px; height: 28px; fill: white; }
 
-    /* ── RESPONSIVE ── */
+    /* -- RESPONSIVE -- */
     @media (min-width: 1280px) {
       nav { padding-left: 34px; padding-right: 34px; }
       nav.scrolled { padding-left: 34px; padding-right: 34px; }
@@ -1668,7 +1668,7 @@
         grid-auto-rows: 160px;
         gap: 8px;
       }
-      /* Tablet mosaic — 5-card rhythm so spans never exceed 4 cols */
+      /* Tablet mosaic � 5-card rhythm so spans never exceed 4 cols */
       .gallery-grid > .gallery-img,
       .gallery-grid > .gallery-img:nth-child(7n+1),
       .gallery-grid > .gallery-img:nth-child(7n+2),
@@ -2071,7 +2071,7 @@
         <p>Fast-deploy living units suited for rental, backyard homes and private sites.</p>
         <span class="units-spotlight-price">From R195,000</span>
         <div class="units-spotlight-actions">
-          <a href="/units" target="_top" class="units-spotlight-link">View Listing <span>→</span></a>
+          <a href="/units" target="_top" class="units-spotlight-link">View Listing <span>?</span></a>
         </div>
       </div>
     </article>
@@ -2084,7 +2084,7 @@
         <p>Larger two-module layouts with improved comfort, space planning and finishes.</p>
         <span class="units-spotlight-price">From R345,000</span>
         <div class="units-spotlight-actions">
-          <a href="/units" target="_top" class="units-spotlight-link">Browse Homes <span>→</span></a>
+          <a href="/units" target="_top" class="units-spotlight-link">Browse Homes <span>?</span></a>
         </div>
       </div>
     </article>
@@ -2097,7 +2097,7 @@
         <p>Site offices, guard houses and utility builds ready to support operations quickly.</p>
         <span class="units-spotlight-price">From R120,000</span>
         <div class="units-spotlight-actions">
-          <a href="/units" target="_top" class="units-spotlight-link">See All Units <span>→</span></a>
+          <a href="/units" target="_top" class="units-spotlight-link">See All Units <span>?</span></a>
         </div>
       </div>
     </article>
@@ -2110,7 +2110,7 @@
         <p>Premium finishes and elevated design language for high-end residential use.</p>
         <span class="units-spotlight-price">From R420,000</span>
         <div class="units-spotlight-actions">
-          <a href="/units" target="_top" class="units-spotlight-link">View Unit <span>→</span></a>
+          <a href="/units" target="_top" class="units-spotlight-link">View Unit <span>?</span></a>
         </div>
       </div>
     </article>
@@ -2123,7 +2123,7 @@
         <p>Optimized for remote sites, optional solar readiness, and compact utility flow.</p>
         <span class="units-spotlight-price">From R260,000</span>
         <div class="units-spotlight-actions">
-          <a href="/units" target="_top" class="units-spotlight-link">Explore Cabins <span>→</span></a>
+          <a href="/units" target="_top" class="units-spotlight-link">Explore Cabins <span>?</span></a>
         </div>
       </div>
     </article>
@@ -2136,7 +2136,7 @@
         <p>Container pool concepts and leisure builds designed for hospitality and home sites.</p>
         <span class="units-spotlight-price">From R230,000</span>
         <div class="units-spotlight-actions">
-          <a href="/units" target="_top" class="units-spotlight-link">View Lifestyle <span>→</span></a>
+          <a href="/units" target="_top" class="units-spotlight-link">View Lifestyle <span>?</span></a>
         </div>
       </div>
     </article>
@@ -2149,7 +2149,7 @@
         <p>Portable sanitation and utility pods for events, sites, and short-term deployment.</p>
         <span class="units-spotlight-price">From R80,000</span>
         <div class="units-spotlight-actions">
-          <a href="/units" target="_top" class="units-spotlight-link">View Utility <span>→</span></a>
+          <a href="/units" target="_top" class="units-spotlight-link">View Utility <span>?</span></a>
         </div>
       </div>
     </article>
@@ -2162,7 +2162,7 @@
         <p>Need a specific layout? Start from a ready unit and configure custom delivery options.</p>
         <span class="units-spotlight-price">Tailored Pricing</span>
         <div class="units-spotlight-actions">
-          <a href="/units" target="_top" class="units-spotlight-link">Start Custom <span>→</span></a>
+          <a href="/units" target="_top" class="units-spotlight-link">Start Custom <span>?</span></a>
         </div>
       </div>
     </article>
@@ -2179,7 +2179,7 @@
         <p>Ready bathroom-focused units for private plots, rentals and site support needs.</p>
         <span class="units-spotlight-price">From R95,000</span>
         <div class="units-spotlight-actions">
-          <a href="/units" target="_top" class="units-spotlight-link">View Bathrooms <span>→</span></a>
+          <a href="/units" target="_top" class="units-spotlight-link">View Bathrooms <span>?</span></a>
         </div>
       </div>
     </article>
@@ -2192,7 +2192,7 @@
         <p>Pre-finished interiors with fitted cabinetry, practical flow and quick handover readiness.</p>
         <span class="units-spotlight-price">From R210,000</span>
         <div class="units-spotlight-actions">
-          <a href="/units" target="_top" class="units-spotlight-link">Explore Interiors <span>→</span></a>
+          <a href="/units" target="_top" class="units-spotlight-link">Explore Interiors <span>?</span></a>
         </div>
       </div>
     </article>
@@ -2205,7 +2205,7 @@
         <p>Start from a proven base model, then configure rooms, finishes and extras to fit your site.</p>
         <span class="units-spotlight-price">From R240,000</span>
         <div class="units-spotlight-actions">
-          <a href="/units" target="_top" class="units-spotlight-link">Configure Model <span>→</span></a>
+          <a href="/units" target="_top" class="units-spotlight-link">Configure Model <span>?</span></a>
         </div>
       </div>
     </article>
@@ -2218,7 +2218,7 @@
         <p>Bundle-ready office and support units for projects that need fast operational deployment.</p>
         <span class="units-spotlight-price">From R160,000</span>
         <div class="units-spotlight-actions">
-          <a href="/units" target="_top" class="units-spotlight-link">See Packs <span>→</span></a>
+          <a href="/units" target="_top" class="units-spotlight-link">See Packs <span>?</span></a>
         </div>
       </div>
     </article>
@@ -2231,7 +2231,7 @@
         <p>Single-container open-plan studio with bathroom - ideal first-home or rental income unit.</p>
         <span class="units-spotlight-price">From R165,000</span>
         <div class="units-spotlight-actions">
-          <a href="/units" target="_top" class="units-spotlight-link">View Studio <span>→</span></a>
+          <a href="/units" target="_top" class="units-spotlight-link">View Studio <span>?</span></a>
         </div>
       </div>
     </article>
@@ -2244,7 +2244,7 @@
         <p>Compact admin unit with reception, manager office and kitchenette - moves with your project.</p>
         <span class="units-spotlight-price">From R130,000</span>
         <div class="units-spotlight-actions">
-          <a href="/units" target="_top" class="units-spotlight-link">View Office <span>→</span></a>
+          <a href="/units" target="_top" class="units-spotlight-link">View Office <span>?</span></a>
         </div>
       </div>
     </article>
@@ -2257,7 +2257,7 @@
         <p>High-specification residential build with premium joinery, lighting, and curated finishes throughout.</p>
         <span class="units-spotlight-price">From R650,000</span>
         <div class="units-spotlight-actions">
-          <a href="/units" target="_top" class="units-spotlight-link">View Luxury <span>→</span></a>
+          <a href="/units" target="_top" class="units-spotlight-link">View Luxury <span>?</span></a>
         </div>
       </div>
     </article>
@@ -2270,7 +2270,7 @@
         <p>Two-container stacked layout maximising footprint, ideal for sloped or compact sites.</p>
         <span class="units-spotlight-price">From R480,000</span>
         <div class="units-spotlight-actions">
-          <a href="/units" target="_top" class="units-spotlight-link">View Unit <span>→</span></a>
+          <a href="/units" target="_top" class="units-spotlight-link">View Unit <span>?</span></a>
         </div>
       </div>
     </article>
@@ -2656,7 +2656,7 @@
         </div>
         <div class="gallery-img reveal reveal-delay-3">
           <img src="projects/tesselaarsdal/Completed-Front.jpeg" alt="Tesselaarsdal completed front exterior" onerror="this.style.background='#111'"/>
-          <div class="gallery-caption">Tesselaarsdal — Completed Front</div>
+          <div class="gallery-caption">Tesselaarsdal � Completed Front</div>
         </div>
         <div class="gallery-img reveal reveal-delay-2">
           <img src="gallery/Wiesenhof-600x600.png" alt="Container lifestyle development at Wiesenhof" onerror="this.style.background='#1a1a1a'"/>
@@ -2664,183 +2664,183 @@
         </div>
         <div class="gallery-img reveal">
           <img src="projects/wiesenhof/IMG_3001.jpg" alt="Wiesenhof premium container office exterior" onerror="this.style.background='#1a1a1a'"/>
-          <div class="gallery-caption">Wiesenhof — Office Exterior</div>
+          <div class="gallery-caption">Wiesenhof � Office Exterior</div>
         </div>
         <div class="gallery-img reveal reveal-delay-1">
           <img src="projects/wiesenhof/IMG_3004.jpg" alt="Wiesenhof container office facade detail" onerror="this.style.background='#222'"/>
-          <div class="gallery-caption">Wiesenhof — Facade Detail</div>
+          <div class="gallery-caption">Wiesenhof � Facade Detail</div>
         </div>
         <div class="gallery-img reveal reveal-delay-2">
           <img src="projects/wiesenhof/IMG_3027.jpg" alt="Wiesenhof container office side elevation" onerror="this.style.background='#1d1d1d'"/>
-          <div class="gallery-caption">Wiesenhof — Side Elevation</div>
+          <div class="gallery-caption">Wiesenhof � Side Elevation</div>
         </div>
         <div class="gallery-img reveal reveal-delay-3">
           <img src="projects/wiesenhof/IMG_3041.jpg" alt="Wiesenhof completed container office on site" onerror="this.style.background='#111'"/>
-          <div class="gallery-caption">Wiesenhof — Completed On Site</div>
+          <div class="gallery-caption">Wiesenhof � Completed On Site</div>
         </div>
         <div class="gallery-img reveal">
           <img src="projects/wiesenhof/IMG_3135.jpg" alt="Wiesenhof container office interior workspace" onerror="this.style.background='#1a1a1a'"/>
-          <div class="gallery-caption">Wiesenhof — Interior Workspace</div>
+          <div class="gallery-caption">Wiesenhof � Interior Workspace</div>
         </div>
         <div class="gallery-img reveal reveal-delay-1">
           <img src="projects/wiesenhof/IMG_3136.jpg" alt="Wiesenhof office interior fittings" onerror="this.style.background='#222'"/>
-          <div class="gallery-caption">Wiesenhof — Interior Fittings</div>
+          <div class="gallery-caption">Wiesenhof � Interior Fittings</div>
         </div>
         <div class="gallery-img reveal reveal-delay-2">
           <img src="projects/wiesenhof/IMG_3137.jpg" alt="Wiesenhof office interior view" onerror="this.style.background='#1d1d1d'"/>
-          <div class="gallery-caption">Wiesenhof — Interior View</div>
+          <div class="gallery-caption">Wiesenhof � Interior View</div>
         </div>
         <div class="gallery-img reveal reveal-delay-3">
           <img src="projects/wiesenhof/IMG_3138.jpg" alt="Wiesenhof office furnished interior" onerror="this.style.background='#111'"/>
-          <div class="gallery-caption">Wiesenhof — Furnished Interior</div>
+          <div class="gallery-caption">Wiesenhof � Furnished Interior</div>
         </div>
         <div class="gallery-img reveal">
           <img src="projects/wiesenhof/2ea9b799-c41a-47b0-96af-73161324f8d2.jpg" alt="Wiesenhof office build progress" onerror="this.style.background='#1a1a1a'"/>
-          <div class="gallery-caption">Wiesenhof — Build Progress</div>
+          <div class="gallery-caption">Wiesenhof � Build Progress</div>
         </div>
         <div class="gallery-img reveal reveal-delay-1">
           <img src="projects/wiesenhof/a70e42e9-1735-4751-befa-82d8ba5da659.jpg" alt="Wiesenhof office final delivery" onerror="this.style.background='#222'"/>
-          <div class="gallery-caption">Wiesenhof — Final Delivery</div>
+          <div class="gallery-caption">Wiesenhof � Final Delivery</div>
         </div>
         <div class="gallery-img reveal">
           <img src="projects/tesselaarsdal/Container-Delivery.jpeg" alt="Tesselaarsdal container delivery on site" onerror="this.style.background='#1a1a1a'"/>
-          <div class="gallery-caption">Tesselaarsdal — Container Delivery</div>
+          <div class="gallery-caption">Tesselaarsdal � Container Delivery</div>
         </div>
         <div class="gallery-img reveal reveal-delay-1">
           <img src="projects/tesselaarsdal/Crane-Placement.jpeg" alt="Tesselaarsdal crane placement of container" onerror="this.style.background='#222'"/>
-          <div class="gallery-caption">Tesselaarsdal — Crane Placement</div>
+          <div class="gallery-caption">Tesselaarsdal � Crane Placement</div>
         </div>
         <div class="gallery-img reveal reveal-delay-2">
           <img src="projects/tesselaarsdal/Livingroom.jpeg" alt="Tesselaarsdal living room interior" onerror="this.style.background='#1d1d1d'"/>
-          <div class="gallery-caption">Tesselaarsdal — Living Room</div>
+          <div class="gallery-caption">Tesselaarsdal � Living Room</div>
         </div>
         <div class="gallery-img reveal reveal-delay-3">
           <img src="projects/tesselaarsdal/Kitchen-3.jpeg" alt="Tesselaarsdal kitchen interior" onerror="this.style.background='#111'"/>
-          <div class="gallery-caption">Tesselaarsdal — Kitchen</div>
+          <div class="gallery-caption">Tesselaarsdal � Kitchen</div>
         </div>
         <div class="gallery-img reveal">
           <img src="projects/tesselaarsdal/Bedroom.jpeg" alt="Tesselaarsdal bedroom interior" onerror="this.style.background='#1a1a1a'"/>
-          <div class="gallery-caption">Tesselaarsdal — Bedroom</div>
+          <div class="gallery-caption">Tesselaarsdal � Bedroom</div>
         </div>
         <div class="gallery-img reveal reveal-delay-1">
           <img src="projects/tesselaarsdal/Bathroom.jpeg" alt="Tesselaarsdal bathroom interior" onerror="this.style.background='#222'"/>
-          <div class="gallery-caption">Tesselaarsdal — Bathroom</div>
+          <div class="gallery-caption">Tesselaarsdal � Bathroom</div>
         </div>
         <div class="gallery-img reveal">
           <img src="projects/klein-karoo/complete.jpg" alt="Completed Klein Karoo container home exterior" onerror="this.style.background='#1a1a1a'"/>
-          <div class="gallery-caption">Klein Karoo Retreat — Exterior</div>
+          <div class="gallery-caption">Klein Karoo Retreat � Exterior</div>
         </div>
         <div class="gallery-img reveal reveal-delay-1">
           <img src="projects/klein-karoo/Deck-V.jpg" alt="Klein Karoo container home deck and view" onerror="this.style.background='#222'"/>
-          <div class="gallery-caption">Klein Karoo — Deck &amp; View</div>
+          <div class="gallery-caption">Klein Karoo � Deck &amp; View</div>
         </div>
         <div class="gallery-img reveal reveal-delay-2">
           <img src="projects/klein-karoo/View-1.jpg" alt="Klein Karoo project landscape view" onerror="this.style.background='#1d1d1d'"/>
-          <div class="gallery-caption">Klein Karoo — Landscape</div>
+          <div class="gallery-caption">Klein Karoo � Landscape</div>
         </div>
         <div class="gallery-img reveal reveal-delay-3">
           <img src="projects/klein-karoo/Living-1.jpg" alt="Klein Karoo interior living space" onerror="this.style.background='#111'"/>
-          <div class="gallery-caption">Klein Karoo — Living Space</div>
+          <div class="gallery-caption">Klein Karoo � Living Space</div>
         </div>
         <div class="gallery-img reveal reveal-delay-1">
           <img src="projects/klein-karoo/Kitchen-2-1.jpg" alt="Klein Karoo fitted kitchen interior" onerror="this.style.background='#1a1a1a'"/>
-          <div class="gallery-caption">Klein Karoo — Kitchen</div>
+          <div class="gallery-caption">Klein Karoo � Kitchen</div>
         </div>
         <div class="gallery-img reveal reveal-delay-2">
           <img src="projects/klein-karoo/Bedroom.jpg" alt="Klein Karoo bedroom interior" onerror="this.style.background='#1d1d1d'"/>
-          <div class="gallery-caption">Klein Karoo — Bedroom</div>
+          <div class="gallery-caption">Klein Karoo � Bedroom</div>
         </div>
         <div class="gallery-img reveal reveal-delay-3">
           <img src="projects/dairy-den/Final-Side.jpg" alt="Dairy Den completed exterior side view" onerror="this.style.background='#1a1a1a'"/>
-          <div class="gallery-caption">Dairy Den — Exterior</div>
+          <div class="gallery-caption">Dairy Den � Exterior</div>
         </div>
         <div class="gallery-img reveal">
           <img src="projects/dairy-den/Front-1-1.jpg" alt="Dairy Den front entry" onerror="this.style.background='#222'"/>
-          <div class="gallery-caption">Dairy Den — Front</div>
+          <div class="gallery-caption">Dairy Den � Front</div>
         </div>
         <div class="gallery-img reveal reveal-delay-1">
           <img src="projects/dairy-den/Entrance.jpg" alt="Dairy Den entrance approach" onerror="this.style.background='#1d1d1d'"/>
-          <div class="gallery-caption">Dairy Den — Entrance</div>
+          <div class="gallery-caption">Dairy Den � Entrance</div>
         </div>
         <div class="gallery-img reveal reveal-delay-2">
           <img src="projects/dairy-den/Final-Inside.jpg" alt="Dairy Den finished interior" onerror="this.style.background='#111'"/>
-          <div class="gallery-caption">Dairy Den — Interior</div>
+          <div class="gallery-caption">Dairy Den � Interior</div>
         </div>
         <div class="gallery-img reveal reveal-delay-3">
           <img src="projects/dairy-den/Side-S.jpg" alt="Dairy Den side perspective" onerror="this.style.background='#1a1a1a'"/>
-          <div class="gallery-caption">Dairy Den — Side View</div>
+          <div class="gallery-caption">Dairy Den � Side View</div>
         </div>
         <div class="gallery-img reveal">
           <img src="projects/bettys-bay/Bettys-Bay-1.jpeg" alt="Betty's Bay container home exterior" onerror="this.style.background='#1a1a1a'"/>
-          <div class="gallery-caption">Betty’s Bay — Exterior</div>
+          <div class="gallery-caption">Betty�s Bay � Exterior</div>
         </div>
         <div class="gallery-img reveal reveal-delay-1">
           <img src="projects/bettys-bay/Bettys-Bay-2.jpeg" alt="Betty's Bay project view two" onerror="this.style.background='#222'"/>
-          <div class="gallery-caption">Betty’s Bay — View II</div>
+          <div class="gallery-caption">Betty�s Bay � View II</div>
         </div>
         <div class="gallery-img reveal reveal-delay-2">
           <img src="projects/bettys-bay/Bettys-Bay-3.jpeg" alt="Betty's Bay project view three" onerror="this.style.background='#1d1d1d'"/>
-          <div class="gallery-caption">Betty’s Bay — View III</div>
+          <div class="gallery-caption">Betty�s Bay � View III</div>
         </div>
         <div class="gallery-img reveal reveal-delay-3">
           <img src="projects/bettys-bay/Bettys-Bay-4.jpeg" alt="Betty's Bay project view four" onerror="this.style.background='#111'"/>
-          <div class="gallery-caption">Betty’s Bay — View IV</div>
+          <div class="gallery-caption">Betty�s Bay � View IV</div>
         </div>
         <div class="gallery-img reveal reveal-delay-1">
           <img src="projects/bettys-bay/Bettys-Bay-5.jpeg" alt="Betty's Bay project view five" onerror="this.style.background='#1a1a1a'"/>
-          <div class="gallery-caption">Betty’s Bay — View V</div>
+          <div class="gallery-caption">Betty�s Bay � View V</div>
         </div>
         <div class="gallery-img reveal reveal-delay-2">
           <img src="projects/bettys-bay/Bettys-Bay-6.jpeg" alt="Betty's Bay project view six" onerror="this.style.background='#1d1d1d'"/>
-          <div class="gallery-caption">Betty’s Bay — View VI</div>
+          <div class="gallery-caption">Betty�s Bay � View VI</div>
         </div>
         <div class="gallery-img reveal reveal-delay-3">
           <img src="projects/brits/Brits.png" alt="Brits container home exterior" onerror="this.style.background='#1a1a1a'"/>
-          <div class="gallery-caption">Brits — Exterior</div>
+          <div class="gallery-caption">Brits � Exterior</div>
         </div>
         <div class="gallery-img reveal">
           <img src="projects/brits/Front-1.jpg" alt="Brits front facade" onerror="this.style.background='#222'"/>
-          <div class="gallery-caption">Brits — Front</div>
+          <div class="gallery-caption">Brits � Front</div>
         </div>
         <div class="gallery-img reveal reveal-delay-1">
           <img src="projects/brits/Front-Fold-Down-dECK.jpg" alt="Brits fold-down deck" onerror="this.style.background='#1d1d1d'"/>
-          <div class="gallery-caption">Brits — Fold-Down Deck</div>
+          <div class="gallery-caption">Brits � Fold-Down Deck</div>
         </div>
         <div class="gallery-img reveal reveal-delay-2">
           <img src="projects/brits/Kitchen-1-1.jpg" alt="Brits kitchen interior" onerror="this.style.background='#111'"/>
-          <div class="gallery-caption">Brits — Kitchen</div>
+          <div class="gallery-caption">Brits � Kitchen</div>
         </div>
         <div class="gallery-img reveal reveal-delay-3">
           <img src="projects/brits/Bedroom-1.jpg" alt="Brits bedroom interior" onerror="this.style.background='#1a1a1a'"/>
-          <div class="gallery-caption">Brits — Bedroom</div>
+          <div class="gallery-caption">Brits � Bedroom</div>
         </div>
         <div class="gallery-img reveal">
           <img src="projects/brits/Hall.jpg" alt="Brits hallway interior" onerror="this.style.background='#1d1d1d'"/>
-          <div class="gallery-caption">Brits — Hall</div>
+          <div class="gallery-caption">Brits � Hall</div>
         </div>
         <div class="gallery-img reveal reveal-delay-1">
           <img src="projects/grootbraak-mossel-bay/Grootbraak-Mossel-Bay1.jpeg" alt="Grootbraak Mossel Bay container project exterior" onerror="this.style.background='#1a1a1a'"/>
-          <div class="gallery-caption">Grootbraak Mossel Bay — Exterior</div>
+          <div class="gallery-caption">Grootbraak Mossel Bay � Exterior</div>
         </div>
         <div class="gallery-img reveal reveal-delay-2">
           <img src="projects/grootbraak-mossel-bay/Grootbraak-Mossel-Bay2.jpeg" alt="Grootbraak Mossel Bay project view two" onerror="this.style.background='#222'"/>
-          <div class="gallery-caption">Grootbraak Mossel Bay — View II</div>
+          <div class="gallery-caption">Grootbraak Mossel Bay � View II</div>
         </div>
         <div class="gallery-img reveal reveal-delay-3">
           <img src="projects/grootbraak-mossel-bay/Grootbraak-Mossel-Bay4.jpeg" alt="Grootbraak Mossel Bay project view four" onerror="this.style.background='#1d1d1d'"/>
-          <div class="gallery-caption">Grootbraak Mossel Bay — View IV</div>
+          <div class="gallery-caption">Grootbraak Mossel Bay � View IV</div>
         </div>
         <div class="gallery-img reveal">
           <img src="projects/grootbraak-mossel-bay/Grootbraak-Mossel-Bay6.jpeg" alt="Grootbraak Mossel Bay project view six" onerror="this.style.background='#111'"/>
-          <div class="gallery-caption">Grootbraak Mossel Bay — View VI</div>
+          <div class="gallery-caption">Grootbraak Mossel Bay � View VI</div>
         </div>
         <div class="gallery-img reveal reveal-delay-1">
           <img src="projects/grootbraak-mossel-bay/Grootbraak-Mossel-Bay8.jpeg" alt="Grootbraak Mossel Bay project view eight" onerror="this.style.background='#1a1a1a'"/>
-          <div class="gallery-caption">Grootbraak Mossel Bay — View VIII</div>
+          <div class="gallery-caption">Grootbraak Mossel Bay � View VIII</div>
         </div>
         <div class="gallery-img reveal reveal-delay-2">
           <img src="projects/grootbraak-mossel-bay/Grootbraak-Mossel-Bay10.jpeg" alt="Grootbraak Mossel Bay project view ten" onerror="this.style.background='#1d1d1d'"/>
-          <div class="gallery-caption">Grootbraak Mossel Bay — View X</div>
+          <div class="gallery-caption">Grootbraak Mossel Bay � View X</div>
         </div>
       </div>
     </div>
@@ -2932,49 +2932,49 @@
 
         <div class="gallery-img reveal">
           <img src="gallery2/3d-render-house-model_933329-4523.jpg" alt="3D render of a contemporary container residence" onerror="this.style.background='#1a1a1a'"/>
-          <div class="gallery-caption">Container Residence – Concept Render</div>
+          <div class="gallery-caption">Container Residence � Concept Render</div>
           <span class="concept-note">Render</span>
         </div>
 
         <div class="gallery-img reveal reveal-delay-1">
           <img src="gallery2/3d-render-house-model_933329-4529.jpg" alt="Dual-level container home 3D design model" onerror="this.style.background='#222'"/>
-          <div class="gallery-caption">Dual-Level Container Home – Design Model</div>
+          <div class="gallery-caption">Dual-Level Container Home � Design Model</div>
           <span class="concept-note">Render</span>
         </div>
 
         <div class="gallery-img reveal reveal-delay-2">
           <img src="gallery2/3d-render-house-model_933329-4532.jpg" alt="Modern residential container unit 3D model" onerror="this.style.background='#1d1d1d'"/>
-          <div class="gallery-caption">Modern Residential Unit – 3D Model</div>
+          <div class="gallery-caption">Modern Residential Unit � 3D Model</div>
           <span class="concept-note">Render</span>
         </div>
 
         <!-- <div class="gallery-img reveal reveal-delay-3">
           <img src="gallery2/container-house-isolated-background_258219-611.jpg" alt="Contemporary container home design study on isolated background" onerror="this.style.background='#111'"/>
-          <div class="gallery-caption">Contemporary Container Home – Design Study</div>
+          <div class="gallery-caption">Contemporary Container Home � Design Study</div>
           <span class="concept-note">Render</span>
         </div>
 
         <div class="gallery-img reveal">
           <img src="gallery2/house-black-cargo-container_174639-825.jpg" alt="Single-storey black cargo container home concept" onerror="this.style.background='#1a1a1a'"/>
-          <div class="gallery-caption">Single-Storey Container Home – Concept</div>
+          <div class="gallery-caption">Single-Storey Container Home � Concept</div>
           <span class="concept-note">Illustration</span>
         </div> -->
 
         <div class="gallery-img reveal reveal-delay-1">
           <img src="gallery2/house-black-cargo-container-large-house-out-container-ship-isolated_174639-1540.jpg" alt="Large container residence design render on isolated background" onerror="this.style.background='#222'"/>
-          <div class="gallery-caption">Large Container Residence – Design Render</div>
+          <div class="gallery-caption">Large Container Residence � Design Render</div>
           <span class="concept-note">Illustration</span>
         </div>
 
         <div class="gallery-img reveal reveal-delay-2">
           <img src="gallery2/modern-black-shipping-container-building-with-windows_1043913-5620.jpg" alt="Modern black shipping container building with large windows" onerror="this.style.background='#1d1d1d'"/>
-          <div class="gallery-caption">Black Container Building – Architectural Render</div>
+          <div class="gallery-caption">Black Container Building � Architectural Render</div>
           <span class="concept-note">Render</span>
         </div>
 
         <div class="gallery-img reveal reveal-delay-3">
           <img src="gallery2/house-is-designed-by-architect-has-large-deck-with-view-surrounding-trees_1227606-35301.jpg" alt="Architect-designed container home with large deck surrounded by trees" onerror="this.style.background='#111'"/>
-          <div class="gallery-caption">Architect-Designed Deck Home – Wooded Setting</div>
+          <div class="gallery-caption">Architect-Designed Deck Home � Wooded Setting</div>
           <span class="concept-note">Render</span>
         </div>
 
@@ -2986,19 +2986,19 @@
 
         <div class="gallery-img reveal reveal-delay-1">
           <img src="gallery2/modern-prefabricated-shipping-container-home_555015-205.jpg" alt="Modern prefabricated shipping container home front elevation" onerror="this.style.background='#222'"/>
-          <div class="gallery-caption">Prefabricated Container Home – Front Elevation</div>
+          <div class="gallery-caption">Prefabricated Container Home � Front Elevation</div>
           <span class="concept-note">Illustration</span>
         </div>
 
         <!-- <div class="gallery-img reveal reveal-delay-2">
           <img src="gallery2/modern-shipping-container-home-with-balcony-terrace_555015-42.jpg" alt="Modern shipping container home with balcony and terrace" onerror="this.style.background='#1d1d1d'"/>
-          <div class="gallery-caption">Container Home with Terrace – Design Concept</div>
+          <div class="gallery-caption">Container Home with Terrace � Design Concept</div>
           <span class="concept-note">Illustration</span>
         </div> -->
 
         <div class="gallery-img reveal reveal-delay-3">
           <img src="gallery2/offgrid-container-home-with-minimalist-interior-solar-power_1242877-1723.jpg" alt="Off-grid container home with solar power and minimalist interior" onerror="this.style.background='#111'"/>
-          <div class="gallery-caption">Off-Grid Solar Container – Minimalist Design</div>
+          <div class="gallery-caption">Off-Grid Solar Container � Minimalist Design</div>
           <span class="concept-note">Render</span>
         </div>
 
@@ -3010,19 +3010,19 @@
       <div class="gallery-category-head">
         <!-- <div class="gallery-category-title">Interior Design Concepts</div> -->
          <div class="gallery-category-title">Creative Space Design Concepts</div>
-        <div class="gallery-category-note">3D Illustration · Mockup</div>
+        <div class="gallery-category-note">3D Illustration � Mockup</div>
       </div>
       <div class="gallery-grid" style="grid-template-columns: repeat(2,1fr);">
 
         <div class="gallery-img reveal">
-          <img src="gallery2/large-luxury-modern-bright-interiors-living-room-mockup-illustration-3d-rendering-computer-digitally-generated-image_653967-22139.jpg" alt="Luxury modern bright living room interior – 3D illustration and rendering" onerror="this.style.background='#1a1a1a'"/>
-          <div class="gallery-caption">Luxury Living Room – 3D Interior Illustration</div>
+          <img src="gallery2/large-luxury-modern-bright-interiors-living-room-mockup-illustration-3d-rendering-computer-digitally-generated-image_653967-22139.jpg" alt="Luxury modern bright living room interior � 3D illustration and rendering" onerror="this.style.background='#1a1a1a'"/>
+          <div class="gallery-caption">Luxury Living Room � 3D Interior Illustration</div>
           <span class="concept-note">3D Render</span>
         </div>
 
         <div class="gallery-img reveal reveal-delay-1">
-          <img src="gallery2/large-luxury-modern-bright-interiors-living-room-mockup-illustration-3d-rendering-computer-digitally-generated-image_653967-22200.jpg" alt="Bright modern luxury interior living room – design mockup render" onerror="this.style.background='#222'"/>
-          <div class="gallery-caption">Bright Modern Interior – Design Mockup</div>
+          <img src="gallery2/large-luxury-modern-bright-interiors-living-room-mockup-illustration-3d-rendering-computer-digitally-generated-image_653967-22200.jpg" alt="Bright modern luxury interior living room � design mockup render" onerror="this.style.background='#222'"/>
+          <div class="gallery-caption">Bright Modern Interior � Design Mockup</div>
           <span class="concept-note">3D Render</span>
         </div>
 
@@ -3033,31 +3033,31 @@
     <div class="gallery-category reveal reveal-delay-2">
       <div class="gallery-category-head">
         <div class="gallery-category-title">Commercial & Lifestyle Concepts</div>
-        <div class="gallery-category-note">Café · Office · Hospitality</div>
+        <div class="gallery-category-note">Caf� � Office � Hospitality</div>
       </div>
       <div class="gallery-grid">
 
         <!-- <div class="gallery-img reveal">
-          <img src="gallery2/2-storey-container-cafe-restaurant-3d-illustration_555015-7.jpg" alt="Two-storey container café and restaurant – 3D illustration" onerror="this.style.background='#1a1a1a'"/>
-          <div class="gallery-caption">Two-Storey Container Café & Restaurant</div>
+          <img src="gallery2/2-storey-container-cafe-restaurant-3d-illustration_555015-7.jpg" alt="Two-storey container caf� and restaurant � 3D illustration" onerror="this.style.background='#1a1a1a'"/>
+          <div class="gallery-caption">Two-Storey Container Caf� & Restaurant</div>
           <span class="concept-note">3D Illustration</span>
         </div> -->
 
         <div class="gallery-img reveal reveal-delay-1">
-          <img src="gallery2/house-cafe-black-cargo-container-single-storey-building-with-veranda-out-container_579837-203.jpg" alt="Single-storey black cargo container café with veranda" onerror="this.style.background='#222'"/>
-          <div class="gallery-caption">Container Café with Veranda – Single Storey</div>
+          <img src="gallery2/house-cafe-black-cargo-container-single-storey-building-with-veranda-out-container_579837-203.jpg" alt="Single-storey black cargo container caf� with veranda" onerror="this.style.background='#222'"/>
+          <div class="gallery-caption">Container Caf� with Veranda � Single Storey</div>
           <span class="concept-note">Illustration</span>
         </div>
 
         <!-- <div class="gallery-img reveal reveal-delay-2">
-          <img src="gallery2/modern-container-cafe-with-outdoor-seating_555015-41.jpg" alt="Modern container café with outdoor seating area" onerror="this.style.background='#1d1d1d'"/>
-          <div class="gallery-caption">Modern Container Café – Outdoor Seating Concept</div>
+          <img src="gallery2/modern-container-cafe-with-outdoor-seating_555015-41.jpg" alt="Modern container caf� with outdoor seating area" onerror="this.style.background='#1d1d1d'"/>
+          <div class="gallery-caption">Modern Container Caf� � Outdoor Seating Concept</div>
           <span class="concept-note">Illustration</span>
         </div> -->
 
         <div class="gallery-img reveal reveal-delay-3">
           <img src="gallery2/shipping-container-office-png_937392-4811.jpg" alt="Shipping container office building design render" onerror="this.style.background='#111'"/>
-          <div class="gallery-caption">Container Office Building – Design Render</div>
+          <div class="gallery-caption">Container Office Building � Design Render</div>
           <span class="concept-note">Render</span>
         </div>
 
@@ -3135,7 +3135,7 @@
           </div>
           <div>
             <span class="contact-label">Email</span>
-            <a href="mailto:urbanboxliving@outlook.com" class="contact-value">urbanboxliving@outlook.com</a>
+            <a href="mailto:hello.urbanboxliving@xanziteh.co.za" class="contact-value">hello.urbanboxliving@xanziteh.co.za</a>
           </div>
         </div>
         <div class="contact-item reveal reveal-delay-4">
@@ -3206,7 +3206,7 @@
       </div>
       <button class="submit-btn" id="enquirySubmitBtn" type="button" onclick="handleFormSubmit()">Send Enquiry</button>
       <div id="form-success" style="display:none; margin-top:16px; font-size:0.78rem; color:var(--gold); letter-spacing:0.1em;">
-        ✓ Your enquiry has been sent. We'll be in touch shortly!
+        ? Your enquiry has been sent. We'll be in touch shortly!
       </div>
       <div id="form-error" style="display:none; margin-top:16px; font-size:0.72rem; color:#ff8d8d; letter-spacing:0.07em;">
         We could not submit your enquiry right now. Please try again.
@@ -3255,7 +3255,7 @@
       <h4>Contact</h4>
       <ul>
         <li><a href="https://wa.me/27608306956" target="_blank">060 830 6956</a></li>
-        <li><a href="mailto:urbanboxliving@outlook.com">urbanboxliving@outlook.com</a></li>
+        <li><a href="mailto:hello.urbanboxliving@xanziteh.co.za">hello.urbanboxliving@xanziteh.co.za</a></li>
         <li><a href="#map-section">75 Heerengracht Blvd, Cape Town</a></li>
       </ul>
     </div>
@@ -3270,12 +3270,12 @@
     </div>
   </div>
   <div class="footer-bottom">
-    <div class="footer-copy" id="footerAdminTrigger">© 2025 Urban Box Living. All rights reserved. Cape Town, South Africa.</div>
+    <div class="footer-copy" id="footerAdminTrigger">� 2025 Urban Box Living. All rights reserved. Cape Town, South Africa.</div>
     <div class="footer-socials">
       <a href="https://wa.me/27608306956" target="_blank" title="WhatsApp">
         <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
       </a>
-      <a href="mailto:urbanboxliving@outlook.com" title="Email">
+      <a href="mailto:hello.urbanboxliving@xanziteh.co.za" title="Email">
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
       </a>
       <a href="tel:+27608306956" title="Call">
@@ -3332,7 +3332,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-  // ── LOADER ──
+  // -- LOADER --
   const hideLoader = () => {
     const loader = document.getElementById('loader');
     if (loader) loader.classList.add('hidden');
@@ -3345,7 +3345,7 @@
   // Fallback in case full page load gets delayed by external resources.
   setTimeout(hideLoader, 3500);
 
-  // ── CUSTOM CURSOR ──
+  // -- CUSTOM CURSOR --
   const cursor = document.getElementById('cursor');
   const cursorRing = document.getElementById('cursorRing');
   let mx = 0, my = 0, rx = 0, ry = 0;
@@ -3381,13 +3381,13 @@
   }
   bindHoverStates();
 
-  // ── NAV SCROLL ──
+  // -- NAV SCROLL --
   const nav = document.getElementById('nav');
   window.addEventListener('scroll', () => {
     nav.classList.toggle('scrolled', window.scrollY > 60);
   });
 
-  // ── HAMBURGER ──
+  // -- HAMBURGER --
   const hamburger = document.getElementById('hamburger');
   const mobileMenu = document.getElementById('mobileMenu');
   const mobileMenuBackdrop = document.getElementById('mobileMenuBackdrop');
@@ -3414,7 +3414,7 @@
     link.addEventListener('click', closeMobileMenu);
   });
 
-  // ── FOLDER GALLERY (UNIT / PROJECT / REC) ──
+  // -- FOLDER GALLERY (UNIT / PROJECT / REC) --
   const folderCollections = [
     {
       id: 'unit-1',
@@ -3607,7 +3607,7 @@
 
       const head = document.createElement('div');
       head.className = 'folder-card-head';
-      head.innerHTML = `<div class="folder-card-title">${group.title}</div><div class="folder-card-meta">${group.folder} · ${group.images.length} images</div>`;
+      head.innerHTML = `<div class="folder-card-title">${group.title}</div><div class="folder-card-meta">${group.folder} � ${group.images.length} images</div>`;
       card.appendChild(head);
 
       const grid = document.createElement('div');
@@ -3800,7 +3800,7 @@
     if (event.key === 'ArrowRight') moveFolderLightbox(1);
   });
 
-  // ── SCROLL REVEAL ──
+  // -- SCROLL REVEAL --
   const revealTargets = [
     '#about .about-img-wrap',
     '#about .about-grid > .reveal.reveal-delay-2',
@@ -3835,7 +3835,7 @@
     reveals.forEach(el => el.classList.add('visible'));
   }
 
-  // ── FORM SUBMIT ──
+  // -- FORM SUBMIT --
   const SUPABASE_PROJECT_URL = 'https://pzmphwkeailqpeteiexc.supabase.co';
   const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_xjjSHPFIuek8uf1bmSbyuQ_8rED0Lys';
   const SUPABASE_ENQUIRIES_TABLE = 'enquiries';
@@ -4374,7 +4374,7 @@
   setupAttachmentDropzone();
   setupGalleryPlannerLinks();
 
-  // ── PARALLAX HERO ──
+  // -- PARALLAX HERO --
   window.addEventListener('scroll', () => {
     const hero = document.getElementById('hero');
     const img = hero.querySelector('.hero-bg img');
@@ -4384,7 +4384,7 @@
     }
   });
 
-  // ── SMOOTH NUMBER COUNTER ──
+  // -- SMOOTH NUMBER COUNTER --
   function animateCounter(el, target, duration = 1800) {
     let start = 0;
     const step = timestamp => {
@@ -4409,7 +4409,7 @@
   const statEl = document.querySelector('.about-stat-num');
   if (statEl) statObs.observe(statEl);
 
-  // ── SCROLL TO HASH on load (works when loaded inside iframe with hash) ──
+  // -- SCROLL TO HASH on load (works when loaded inside iframe with hash) --
   function scrollToHash(id) {
     const el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -4420,7 +4420,7 @@
     setTimeout(() => scrollToHash(id), 200);
   }
 
-  // ── POSTMESSAGE from parent React app ──
+  // -- POSTMESSAGE from parent React app --
   window.addEventListener('message', (e) => {
     if (e.data && e.data.scrollTo) {
       setTimeout(() => scrollToHash(e.data.scrollTo), 100);

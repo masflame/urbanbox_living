@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { jsPDF } from 'jspdf'
 import galleryConfig from './data/design-gallery.json'
@@ -432,7 +432,7 @@ async function downloadPdf(form, estimate) {
   const LGREY = [245, 244, 240]
   const MGREY = [210, 208, 200]
 
-  // ── HEADER BAND ──────────────────────────────────────────
+  // -- HEADER BAND ------------------------------------------
   doc.setFillColor(...DARK)
   doc.rect(0, 0, PW, 90, 'F')
 
@@ -450,7 +450,7 @@ async function downloadPdf(form, estimate) {
       reader.readAsDataURL(blob)
     })
     doc.addImage(b64, 'PNG', LEFT, 18, 52, 52)
-  } catch (_) { /* logo failed to load – skip */ }
+  } catch (_) { /* logo failed to load � skip */ }
 
   // company name + tagline
   doc.setTextColor(...GOLD)
@@ -475,7 +475,7 @@ async function downloadPdf(form, estimate) {
   const refNum = `UBL-${Date.now().toString(36).toUpperCase().slice(-6)}`
   doc.text(`Ref: ${refNum}`, RIGHT, 64, { align: 'right' })
 
-  // ── CONTACT BAR ──────────────────────────────────────────
+  // -- CONTACT BAR ------------------------------------------
   doc.setFillColor(...GOLD)
   doc.rect(0, 90, PW, 22, 'F')
   doc.setFont('helvetica', 'normal')
@@ -483,7 +483,7 @@ async function downloadPdf(form, estimate) {
   doc.setTextColor(...DARK)
   const contacts = [
     'Tel: +27 60 830 6956',
-    'Email: urbanboxliving@outlook.com',
+    'Email: hello.urbanboxliving@xanziteh.co.za',
     'Web: urbanboxliving.co.za',
   ]
   const cSpacing = CONTENT_W / contacts.length
@@ -493,7 +493,7 @@ async function downloadPdf(form, estimate) {
 
   let y = 132
 
-  // ── SECTION HELPER ───────────────────────────────────────
+  // -- SECTION HELPER ---------------------------------------
   function sectionTitle(title) {
     doc.setFillColor(...LGREY)
     doc.roundedRect(LEFT, y, CONTENT_W, 20, 3, 3, 'F')
@@ -529,7 +529,7 @@ async function downloadPdf(form, estimate) {
     y += 10
   }
 
-  // ── PROJECT OVERVIEW ─────────────────────────────────────
+  // -- PROJECT OVERVIEW -------------------------------------
   sectionTitle('Project Overview')
   row('Project Type',         projectTypes.find(i => i.id === form.projectType)?.label, false)
   row('Template / Package',   estimate.template?.label ?? 'Custom selection', true)
@@ -538,7 +538,7 @@ async function downloadPdf(form, estimate) {
   row('Custom Plan Attached', form.customPlanFileName || 'Not uploaded', false)
   divider()
 
-  // ── SITE & SPECS ─────────────────────────────────────────
+  // -- SITE & SPECS -----------------------------------------
   sectionTitle('Site & Specifications')
   row('Province',      form.province, false)
   row('Location',      form.location || 'To be confirmed', true)
@@ -550,7 +550,7 @@ async function downloadPdf(form, estimate) {
   row('Payment Option', estimate.paymentPlanLabel, true)
   divider()
 
-  // ── INVESTMENT ESTIMATE ───────────────────────────────────
+  // -- INVESTMENT ESTIMATE -----------------------------------
   sectionTitle('Investment Estimate')
 
   // big price highlight box
@@ -612,7 +612,7 @@ async function downloadPdf(form, estimate) {
   y += 12
   divider()
 
-  // ── CLIENT NOTES ─────────────────────────────────────────
+  // -- CLIENT NOTES -----------------------------------------
   if (form.notes) {
     sectionTitle('Client Notes')
     doc.setFont('helvetica', 'normal')
@@ -624,7 +624,7 @@ async function downloadPdf(form, estimate) {
     divider()
   }
 
-  // ── DISCLAIMER ───────────────────────────────────────────
+  // -- DISCLAIMER -------------------------------------------
   y = Math.max(y, PH - 80)
   doc.setFillColor(...LGREY)
   doc.rect(0, y, PW, PH - y, 'F')
@@ -639,7 +639,7 @@ async function downloadPdf(form, estimate) {
   doc.setFont('helvetica', 'bold')
   doc.setFontSize(7.5)
   doc.setTextColor(...GOLD)
-  doc.text('Urban Box Living (Pty) Ltd  ·  urbanboxliving@outlook.com  ·  +27 60 830 6956', PW / 2, y + 32, { align: 'center' })
+  doc.text('Urban Box Living (Pty) Ltd  �  hello.urbanboxliving@xanziteh.co.za  �  +27 60 830 6956', PW / 2, y + 32, { align: 'center' })
 
   doc.save(`UBL-Project-Brief-${form.projectType}-${refNum}.pdf`)
 }
@@ -693,7 +693,7 @@ function App() {
   const activeLightboxImage = isLightboxOpen ? designGalleryImages[lightboxIndex] : null
   const encodedBrief = estimate ? encodeURIComponent(estimate.brief) : ''
   const whatsappHref = `https://wa.me/27608306956?text=${encodedBrief}`
-  const emailHref = `mailto:urbanboxliving@outlook.com?subject=Urban%20Planner%20Project%20Brief&body=${encodedBrief}`
+  const emailHref = `mailto:hello.urbanboxliving@xanziteh.co.za?subject=Urban%20Planner%20Project%20Brief&body=${encodedBrief}`
 
   function updateField(name, value) {
     if (name === 'selectedDesign') {
@@ -982,14 +982,14 @@ function App() {
               <div className="planner-lightbox" role="dialog" aria-modal="true" onClick={closeGalleryLightbox}>
                 <div className="planner-lightbox-dialog" onClick={(event) => event.stopPropagation()}>
                   <button type="button" className="planner-lightbox-close" onClick={closeGalleryLightbox} aria-label="Close preview">
-                    ×
+                    �
                   </button>
                   <button type="button" className="planner-lightbox-nav planner-lightbox-prev" onClick={() => moveGalleryLightbox(-1)} aria-label="Previous image">
-                    ‹
+                    �
                   </button>
                   <img src={activeLightboxImage} alt={`${form.selectedDesign} preview`} className="planner-lightbox-image" />
                   <button type="button" className="planner-lightbox-nav planner-lightbox-next" onClick={() => moveGalleryLightbox(1)} aria-label="Next image">
-                    ›
+                    �
                   </button>
                   <div className="planner-lightbox-foot">
                     <span>
