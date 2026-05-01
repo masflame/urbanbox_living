@@ -18,14 +18,14 @@ export default function CartPage() {
     <AppShell
       accentLabel="Cart"
       heading="Review selected units"
-      intro="This cart is local to the browser and feeds the mock checkout request."
+      intro="Review your selected units before continuing to secure checkout."
     >
       <section className="content-section cart-layout compact-top">
         <div className="cart-list">
           {items.length === 0 ? (
             <div className="empty-state">
               <h2>Your cart is empty.</h2>
-              <p>Add units from the catalog to continue to mock checkout.</p>
+              <p>Add units from the catalog to continue to checkout.</p>
               <Link to="/units" className="button-primary">
                 Browse units
               </Link>
@@ -66,7 +66,7 @@ export default function CartPage() {
 
         <aside className="summary-panel">
           <span className="page-eyebrow">Summary</span>
-          <h2>Mock order total</h2>
+          <h2>Order total</h2>
           <div className="summary-row">
             <span>Subtotal</span>
             <strong>{formatCurrency(subtotal)}</strong>
@@ -80,7 +80,7 @@ export default function CartPage() {
             <strong>{formatCurrency(subtotal)}</strong>
           </div>
           <Link to="/checkout" className="button-primary">
-            Continue to mock checkout
+            Continue to checkout
           </Link>
         </aside>
       </section>

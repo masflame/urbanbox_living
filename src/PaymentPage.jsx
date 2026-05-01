@@ -246,8 +246,8 @@ export default function PaymentPage() {
     return (
       <AppShell
         accentLabel="Project quote captured"
-        heading="Mock proposal submitted"
-        intro="No payment was taken. This is a storefront proof of flow."
+        heading="Proposal submitted"
+        intro="Your project brief has been submitted. Our team will be in touch shortly."
       >
         <section className="content-section compact-top success-panel">
           <span className="page-eyebrow">Reference</span>

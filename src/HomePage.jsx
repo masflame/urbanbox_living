@@ -47,7 +47,7 @@ export default function HomePage() {
           </h1>
           <p>
             Browse ready-made homes, pools, offices, guard booths and specialty units in one place.
-            Filter by category, size and price, add units to cart, and run a mock checkout flow before
+            Filter by category, size and price, add units to cart, and complete a secure checkout before
             final enquiry handoff.
           </p>
           <div className="hero-actions">
@@ -100,7 +100,7 @@ export default function HomePage() {
           <h2>Pick stock now, then customise the delivery conversation.</h2>
           <p>
             The new units flow is built for real buying behaviour: shortlist inventory, compare sizes,
-            review galleries, add to cart, then submit a mock checkout request so the sales team has
+            review galleries, add to cart, then submit a checkout request so the sales team has
             a structured brief to follow up on.
           </p>
           <Link to="/units" className="button-primary">
@@ -145,7 +145,7 @@ export default function HomePage() {
         <span className="page-eyebrow">Next Step</span>
         <h2>Need a bespoke layout instead of stock?</h2>
         <p>
-          Use the planner for custom work, or send the mock cart through checkout to show which
+          Use the planner for custom work, or send your cart through checkout to show which
           ready-made units you want to secure first.
         </p>
         <div className="hero-actions">

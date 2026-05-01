@@ -169,7 +169,7 @@ export default function CheckoutPage() {
             <button
               type="button"
               className="button-secondary"
-              onClick={() => window.alert('Project saved locally (mock).')}
+              onClick={() => window.alert('Project saved locally.')}
             >
               Save Project
             </button>

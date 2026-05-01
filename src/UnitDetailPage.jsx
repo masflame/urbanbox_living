@@ -77,7 +77,7 @@ export default function UnitDetailPage() {
                 Add to cart
               </button>
               <button type="button" className="button-secondary" onClick={handleBuyNow}>
-                Mock checkout
+                Buy now
               </button>
             </div>
 
