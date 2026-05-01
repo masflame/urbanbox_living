@@ -1081,6 +1081,8 @@ const COVER_IMAGE_OVERRIDES = {
   'UnitsS::/modern-a-frame-prefab-house/': '26010702171799336',
   // UnitsU — Elevation 7 Series Park Model. Use the colour-graded hero shot.
   'UnitsU::/7-series-photo-gallery/7-series-photo-gallery/': 'kjp09011-enhanced-nr-edit',
+  // UnitsQ — Apple Cabin D1 hero exterior shot.
+  'UnitsQ::/apple-cabin-pod-house/apple-cabin-d1/': '26042205223234282',
 }
 
 function looksLikeFloorPlan(pathValue) {
