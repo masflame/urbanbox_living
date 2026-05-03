@@ -188,6 +188,9 @@
     .email-status { font-size: 12.5px; padding: 10px 12px; border-radius: var(--radius); border: 1px solid var(--border); background: var(--surface-2); color: var(--text-primary); line-height: 1.5; }
     .email-status.success { background: var(--teal-dim); border-color: rgba(47,133,90,0.3); color: var(--teal); }
     .email-status.error   { background: var(--red-dim);  border-color: rgba(197,48,48,0.3); color: var(--red); }
+    .email-important-field { flex-direction: row; align-items: center; gap: 8px; padding: 9px 11px; border: 1px dashed var(--border); border-radius: var(--radius); background: var(--surface-2); }
+    .email-important-field input { width: auto; margin: 0; cursor: pointer; }
+    .email-important-field span { font-size: 12.5px; color: var(--text-secondary); }
     .email-preview-card { min-height: 520px; }
     .email-preview-frame { flex: 1; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; background: #EEEAE0; min-height: 480px; }
     .email-preview-frame iframe { width: 100%; height: 100%; min-height: 480px; border: 0; display: block; background: #EEEAE0; }
@@ -539,6 +542,10 @@
                 <textarea id="emailBody" rows="10" required
                   placeholder="Write your message here. Plain paragraphs are wrapped in our branded letterhead automatically."></textarea>
                 <span class="email-hint">Tip: leave a blank line between paragraphs. URLs become clickable.</span>
+              </label>
+              <label class="email-field email-important-field">
+                <input type="checkbox" id="emailImportant" checked />
+                <span>Mark as <strong>important / high priority</strong> in the recipient's inbox</span>
               </label>
               <div class="email-actions">
                 <button type="button" class="btn" id="emailPreviewBtn">
@@ -1142,6 +1149,7 @@
       const emailSendBtn       = document.getElementById('emailSendBtn');
       const emailStatus        = document.getElementById('emailStatus');
       const emailPreviewFrame  = document.getElementById('emailPreviewFrame');
+      const emailImportant     = document.getElementById('emailImportant');
 
       const BRAND = { gold: '#C9A84C', dark: '#0C0C0C', grey: '#5A5A5A', light: '#F5F4F0', border: '#D2D0C8', white: '#FFFFFF' };
       const CONTACT = {
@@ -1150,7 +1158,7 @@
         web:   'urbanboxliving.co.za',
         address: 'Urban Box Living, South Africa',
       };
-      const LOGO_URL = 'https://urbanboxliving.co.za/logo.png';
+      const LOGO_URL = (window.location.origin || 'https://urbanboxliving.vercel.app') + '/logo.png';
 
       function escHtml(s) {
         return String(s == null ? '' : s)
@@ -1281,6 +1289,7 @@
         const recipientName = emailRecipientName.value.trim();
         const cc            = emailCcInput.value.trim();
         const bcc           = emailBccInput.value.trim();
+        const important     = emailImportant ? emailImportant.checked : true;
 
         if (!to || !subject || !body) {
           showEmailStatus('Please fill in recipient, subject and body.', 'error');
@@ -1298,7 +1307,7 @@
               'Content-Type': 'application/json',
               'x-admin-token': token,
             },
-            body: JSON.stringify({ to, subject, body, recipientName, cc, bcc }),
+            body: JSON.stringify({ to, subject, body, recipientName, cc, bcc, important }),
           });
           const data = await res.json().catch(() => ({}));
           if (!res.ok) {

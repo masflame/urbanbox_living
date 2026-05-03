@@ -13,6 +13,34 @@
 
 import nodemailer from 'nodemailer';
 
+// Load the logo once and embed it as a CID attachment so it always renders,
+// even if recipients block remote images and regardless of which domain is live.
+let LOGO_BUFFER = null;
+async function loadLogo(req) {
+  if (LOGO_BUFFER) return LOGO_BUFFER;
+  // Build candidate URLs: explicit env, the request host, and the Vercel-provided URL.
+  const proto = (req && req.headers && req.headers['x-forwarded-proto']) || 'https';
+  const host  = (req && req.headers && (req.headers['x-forwarded-host'] || req.headers.host)) || '';
+  const candidates = [
+    process.env.LOGO_URL,
+    host ? `${proto}://${host}/logo.png` : null,
+    process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}/logo.png` : null,
+    'https://urbanboxliving.vercel.app/logo.png',
+  ].filter(Boolean);
+  for (const url of candidates) {
+    try {
+      const res = await fetch(url);
+      if (res.ok) {
+        const ab = await res.arrayBuffer();
+        LOGO_BUFFER = Buffer.from(ab);
+        return LOGO_BUFFER;
+      }
+    } catch { /* try next */ }
+  }
+  return null;
+}
+const LOGO_CID = 'ubl-logo@urbanboxliving';
+
 const BRAND = {
   gold:  '#C9A84C',
   dark:  '#0C0C0C',
@@ -29,7 +57,7 @@ const CONTACT = {
   address: 'Urban Box Living, South Africa',
 };
 
-const LOGO_URL = 'https://urbanboxliving.co.za/logo.png';
+const LOGO_URL = `cid:${LOGO_CID}`;
 
 function escapeHtml(s) {
   return String(s == null ? '' : s)
@@ -289,6 +317,8 @@ export default async function handler(req, res) {
   const cc            = payload.cc ? String(payload.cc).trim() : '';
   const bcc           = payload.bcc ? String(payload.bcc).trim() : '';
   const replyTo       = payload.replyTo ? String(payload.replyTo).trim() : '';
+  // Mark as important / high priority by default — admin UI can opt out.
+  const important     = payload.important === undefined ? true : Boolean(payload.important);
 
   if (!to || !subject || !body) {
     res.statusCode = 400;
@@ -328,18 +358,36 @@ export default async function handler(req, res) {
 
   const html = buildEmailHtml({ subject, body, recipientName });
   const text = buildPlainText({ subject, body, recipientName });
+  const logo = await loadLogo(req);
+
+  const mailOptions = {
+    from,
+    to,
+    cc: cc || undefined,
+    bcc: bcc || undefined,
+    replyTo: replyTo || undefined,
+    subject,
+    text,
+    html,
+    attachments: logo ? [{
+      filename: 'logo.png',
+      content: logo,
+      cid: LOGO_CID,
+      contentType: 'image/png',
+    }] : undefined,
+  };
+
+  if (important) {
+    mailOptions.priority = 'high';
+    mailOptions.headers = {
+      'X-Priority': '1 (Highest)',
+      'X-MSMail-Priority': 'High',
+      Importance: 'High',
+    };
+  }
 
   try {
-    const info = await transporter.sendMail({
-      from,
-      to,
-      cc: cc || undefined,
-      bcc: bcc || undefined,
-      replyTo: replyTo || undefined,
-      subject,
-      text,
-      html,
-    });
+    const info = await transporter.sendMail(mailOptions);
 
     res.statusCode = 200;
     res.setHeader('Content-Type', 'application/json');
