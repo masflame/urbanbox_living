@@ -1478,7 +1478,10 @@
           const sel = window.getSelection();
           if (sel && sel.rangeCount && !sel.isCollapsed) {
             const selText = sel.toString();
-            if (selText && /\n/.test(selText) && /^\s*([-*\u2022]|\d+[.)])\s/m.test(selText)) {
+            // Trigger smart-list if selection spans multiple lines AND contains
+            // either a marker (1./-/*) OR at least one colon-terminated heading.
+            if (selText && /\n/.test(selText)
+                && (/^\s*([-*\u2022]|\d+[.)])\s/m.test(selText) || /^[^\n]+:\s*$/m.test(selText))) {
               const html = smartTextToHtml(selText);
               if (html) {
                 emailBodyInput.focus();
@@ -1504,69 +1507,122 @@
         execCmd('foreColor', '#C9A84C');
       });
       // Convert plain-text "1. foo / 2. bar" or "- foo / - bar" patterns into
-      // proper <ol>/<ul> markup, with smart hierarchy from indent levels.
+      // proper <ol>/<ul> markup, with smart hierarchy detection.
+      //
+      // Hierarchy rules (Word-style):
+      //   * Lines starting with "* " are explicit PARENT items.
+      //   * Lines starting with "1." / "1)" / "2." etc are PARENT items (numbered).
+      //   * Lines ENDING in ":" are PARENT items (treated as section headings).
+      //   * Any non-blank line BETWEEN two parents becomes a CHILD of the
+      //     preceding parent (auto-nested), even if the user did not indent it.
+      //   * Explicit indentation (every 2 spaces / 1 tab = +1 level) is also honoured.
       function escapeForHtml(s) {
         return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
       }
       function smartTextToHtml(text) {
         if (!text || !/\n/.test(text)) return '';
         const rawLines = text.replace(/\r\n?/g, '\n').split('\n');
+
+        // Pass 1: classify each line.
         const items = [];
         let hasList = false;
         for (const line of rawLines) {
           if (!line.trim()) { items.push({ type: 'blank' }); continue; }
           const indentMatch = line.match(/^([ \t]*)/);
-          const indent = indentMatch ? indentMatch[1].replace(/\t/g, '    ').length : 0;
+          const explicitIndent = indentMatch
+            ? indentMatch[1].replace(/\t/g, '    ').length
+            : 0;
           const stripped = line.replace(/^[ \t]+/, '');
-          const olMatch = stripped.match(/^(\d+)[.)]\s+(.*)$/);
-          const ulMatch = stripped.match(/^[-*\u2022]\s+(.*)$/);
-          if (olMatch)      { items.push({ type: 'ol', text: olMatch[2], indent }); hasList = true; }
-          else if (ulMatch) { items.push({ type: 'ul', text: ulMatch[1], indent }); hasList = true; }
-          else              { items.push({ type: 'p',  text: stripped,    indent }); }
+          const starParent  = stripped.match(/^\*\s+(.*)$/);
+          const olParent    = stripped.match(/^(\d+)[.)]\s*(.*)$/);
+          const ulMatch     = stripped.match(/^[-\u2022]\s+(.*)$/);
+          const colonParent = !starParent && !olParent && !ulMatch
+            && /^[^\s].*:\s*$/.test(stripped);
+
+          if (starParent)        items.push({ kind: 'parent', listType: 'ul', text: starParent[1],   indent: explicitIndent, hasMarker: true });
+          else if (olParent)     items.push({ kind: 'parent', listType: 'ol', text: olParent[2],     indent: explicitIndent, hasMarker: true });
+          else if (colonParent)  items.push({ kind: 'parent', listType: 'ol', text: stripped.replace(/:\s*$/, ''), indent: explicitIndent, hasMarker: true });
+          else if (ulMatch)      items.push({ kind: 'child',  listType: 'ul', text: ulMatch[1],      indent: explicitIndent, hasMarker: true });
+          else                   items.push({ kind: 'plain',  listType: null, text: stripped,        indent: explicitIndent, hasMarker: false });
+
+          if (starParent || olParent || ulMatch || colonParent) hasList = true;
         }
         if (!hasList) return '';
+
+        // Pass 2: derive levels.
+        // - parents always sit at level 1 (or deeper if explicitly indented).
+        // - any "plain" or "child" line that follows a parent becomes a child
+        //   (level 2) under it, until the next parent or blank line.
+        let lastParentLevel = 0;       // 0 = none
+        const finalItems = [];
+        for (const it of items) {
+          if (it.type === 'blank') {
+            finalItems.push({ type: 'blank' });
+            lastParentLevel = 0;
+            continue;
+          }
+          if (it.kind === 'parent') {
+            const lvl = Math.max(1, Math.floor(it.indent / 2) + 1);
+            lastParentLevel = lvl;
+            finalItems.push({ kind: 'li', listType: it.listType, text: it.text, level: lvl });
+            continue;
+          }
+          if (it.kind === 'child') {
+            const explicit = Math.max(1, Math.floor(it.indent / 2) + 1);
+            const lvl = lastParentLevel ? Math.max(lastParentLevel + 1, explicit) : explicit;
+            finalItems.push({ kind: 'li', listType: it.listType, text: it.text, level: lvl });
+            continue;
+          }
+          // plain (no marker)
+          if (lastParentLevel > 0) {
+            // Auto-nest as child of last parent
+            finalItems.push({ kind: 'li', listType: 'ul', text: it.text, level: lastParentLevel + 1 });
+          } else {
+            finalItems.push({ kind: 'p', text: it.text });
+          }
+        }
+
+        // Pass 3: emit HTML.
         let html = '';
-        const stack = [];          // [{ type }]
-        let inListItem = false;
+        const stack = []; // [{ type: 'ol'|'ul' }]
+        let liOpen = false;
         function closeAll() {
           while (stack.length) {
             const top = stack.pop();
             html += `</li></${top.type}>`;
           }
-          inListItem = false;
+          liOpen = false;
         }
-        for (const it of items) {
+        for (const it of finalItems) {
           if (it.type === 'blank') { closeAll(); continue; }
-          if (it.type === 'p')     { closeAll(); html += `<p>${escapeForHtml(it.text)}</p>`; continue; }
-          const desired = Math.max(1, Math.floor(it.indent / 2) + 1);
+          if (it.kind === 'p')     { closeAll(); html += `<p>${escapeForHtml(it.text)}</p>`; continue; }
           // Close deeper levels
-          while (stack.length > desired) {
+          while (stack.length > it.level) {
             const top = stack.pop();
             html += `</li></${top.type}>`;
-            inListItem = stack.length > 0;
+            liOpen = stack.length > 0;
           }
-          // Same-level type change
-          if (stack.length === desired && stack[stack.length - 1].type !== it.type) {
+          // Same level but type changed -> close + reopen
+          if (stack.length === it.level && stack[stack.length - 1].type !== it.listType) {
             const top = stack.pop();
             html += `</li></${top.type}>`;
-            inListItem = stack.length > 0;
+            liOpen = stack.length > 0;
           }
-          // Open new levels — nest inside current <li> if we have one open
-          while (stack.length < desired) {
-            if (stack.length > 0 && inListItem) {
-              html += `<${it.type}>`;          // nested list inside open <li>
+          // Open levels until we reach desired
+          while (stack.length < it.level) {
+            if (stack.length > 0 && liOpen) {
+              html += `<${it.listType}>`;
             } else {
-              if (inListItem) { html += '</li>'; inListItem = false; }
-              html += `<${it.type}>`;
+              if (liOpen) { html += '</li>'; liOpen = false; }
+              html += `<${it.listType}>`;
             }
-            stack.push({ type: it.type });
+            stack.push({ type: it.listType });
           }
-          // Sibling at this level: close previous <li>
-          if (inListItem && stack.length === desired) {
+          if (liOpen && stack.length === it.level) {
             html += '</li>';
           }
           html += `<li>${escapeForHtml(it.text)}`;
-          inListItem = true;
+          liOpen = true;
         }
         closeAll();
         return html;
