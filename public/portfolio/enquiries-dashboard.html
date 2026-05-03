@@ -1392,12 +1392,32 @@
 
       // The admin token must match ADMIN_AUTH_TOKEN env var on the server.
       // Stored in sessionStorage after admin login (set on the parent page).
-      function getAdminToken() {
+      // Falls back to localStorage and to a one-time password prompt so the
+      // email sender keeps working when the dashboard is opened directly
+      // (e.g. via the /admin React route which bypasses the login modal).
+      const ADMIN_USERNAME = 'nyofu@admin';
+      function readStored(key) {
         try {
-          return sessionStorage.getItem('ubl_admin_token')
-              || (window.parent && window.parent.sessionStorage && window.parent.sessionStorage.getItem('ubl_admin_token'))
+          return sessionStorage.getItem(key)
+              || localStorage.getItem(key)
+              || (window.parent && window.parent.sessionStorage && window.parent.sessionStorage.getItem(key))
+              || (window.parent && window.parent.localStorage && window.parent.localStorage.getItem(key))
               || '';
         } catch { return ''; }
+      }
+      function storeToken(token) {
+        try { sessionStorage.setItem('ubl_admin_token', token); } catch {}
+        try { localStorage.setItem('ubl_admin_token', token); } catch {}
+      }
+      function getAdminToken() {
+        let t = readStored('ubl_admin_token');
+        if (t) return t;
+        // Prompt the user once for the dashboard password.
+        const pwd = window.prompt('Enter the admin dashboard password to send email:');
+        if (!pwd) return '';
+        t = `${ADMIN_USERNAME}:${pwd}`;
+        storeToken(t);
+        return t;
       }
 
       emailForm && emailForm.addEventListener('submit', async (event) => {
@@ -1437,7 +1457,14 @@
           });
           const data = await res.json().catch(() => ({}));
           if (!res.ok) {
-            showEmailStatus(`Failed to send: ${data.error || res.statusText}${data.detail ? ' — ' + data.detail : ''}`, 'error');
+            if (res.status === 401) {
+              // Bad/expired token — clear it so next attempt prompts again.
+              try { sessionStorage.removeItem('ubl_admin_token'); } catch {}
+              try { localStorage.removeItem('ubl_admin_token'); } catch {}
+              showEmailStatus('Unauthorized: incorrect admin password. Click Send again to retry.', 'error');
+            } else {
+              showEmailStatus(`Failed to send: ${data.error || res.statusText}${data.detail ? ' — ' + data.detail : ''}`, 'error');
+            }
           } else {
             const attachNote = pendingAttachments.length
               ? ` (with ${pendingAttachments.length} attachment${pendingAttachments.length === 1 ? '' : 's'})` : '';
