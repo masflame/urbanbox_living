@@ -20,9 +20,16 @@ const CheckoutContext = createContext(null)
 
 function loadInitial() {
   if (typeof window === 'undefined') return null
+  // Prefer localStorage (persists across tabs/sessions); fall back to
+  // sessionStorage so anyone with in-flight state from a previous build
+  // doesn't lose their configurations.
+  let raw = null
+  try { raw = window.localStorage.getItem(STORAGE_KEY) } catch { /* ignore */ }
+  if (!raw) {
+    try { raw = window.sessionStorage.getItem(STORAGE_KEY) } catch { /* ignore */ }
+  }
+  if (!raw) return null
   try {
-    const raw = window.sessionStorage.getItem(STORAGE_KEY)
-    if (!raw) return null
     const parsed = JSON.parse(raw)
     return {
       configs: parsed.configs || {},
@@ -44,12 +51,12 @@ export function CheckoutProvider({ children }) {
   useEffect(() => {
     if (typeof window === 'undefined') return
     try {
-      window.sessionStorage.setItem(
+      window.localStorage.setItem(
         STORAGE_KEY,
         JSON.stringify({ configs, delivery, paymentOption }),
       )
     } catch {
-      /* ignore */
+      /* ignore quota / privacy-mode errors */
     }
   }, [configs, delivery, paymentOption])
 
@@ -67,6 +74,7 @@ export function CheckoutProvider({ children }) {
     setPaymentOption('standard')
     setSubmittedOrder(null)
     if (typeof window !== 'undefined') {
+      try { window.localStorage.removeItem(STORAGE_KEY) } catch { /* ignore */ }
       try { window.sessionStorage.removeItem(STORAGE_KEY) } catch { /* ignore */ }
     }
   }, [])
