@@ -11,7 +11,7 @@
 //   MAIL_FROM     "Urban Box Living <hello.urbanboxliving@xanziteh.co.za>"
 //   ADMIN_AUTH_TOKEN  shared secret the admin UI sends in x-admin-token
 
-const nodemailer = require('nodemailer');
+import nodemailer from 'nodemailer';
 
 const BRAND = {
   gold:  '#C9A84C',
@@ -256,7 +256,7 @@ async function readJsonBody(req) {
   });
 }
 
-module.exports = async function handler(req, res) {
+export default async function handler(req, res) {
   setCors(res);
   if (req.method === 'OPTIONS') { res.statusCode = 204; return res.end(); }
   if (req.method !== 'POST') {
@@ -357,4 +357,4 @@ module.exports = async function handler(req, res) {
       detail: err && err.message ? err.message : String(err),
     }));
   }
-};
+}
