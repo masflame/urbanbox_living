@@ -157,6 +157,45 @@
     .tab-analytics-value { font-family: var(--font-mono); font-size: 26px; color: var(--text-primary); line-height: 1.1; }
     .tab-analytics-panel { background: var(--surface-0); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; }
     .tab-analytics-title { font-size: 11px; font-weight: 600; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; }
+
+    /* ===== Email composer tab ===== */
+    .tab-email { display: none; flex: 1; overflow: auto; padding: 22px; background: var(--bg); }
+    .tab-email.active { display: block; }
+    .email-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 18px; max-width: 1400px; margin: 0 auto; }
+    .email-card { background: var(--surface-0); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 1px 2px rgba(0,0,0,0.03); }
+    .email-card-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+    .email-card-title { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+    .email-card-sub { font-size: 12px; color: var(--text-tertiary); margin-top: 3px; line-height: 1.5; }
+    .email-form { display: flex; flex-direction: column; gap: 12px; }
+    .email-row { display: grid; gap: 12px; }
+    .email-row.two { grid-template-columns: 1fr 1fr; }
+    .email-field { display: flex; flex-direction: column; gap: 5px; }
+    .email-label { font-size: 11px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.06em; }
+    .email-req { color: var(--red); }
+    .email-field input, .email-field textarea {
+      font-family: var(--font-sans); font-size: 13px; color: var(--text-primary);
+      background: var(--surface-0); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 9px 11px; outline: none; transition: border-color var(--transition), box-shadow var(--transition);
+      width: 100%;
+    }
+    .email-field textarea { resize: vertical; min-height: 180px; line-height: 1.55; }
+    .email-field input:focus, .email-field textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-dim); }
+    .email-hint { font-size: 11px; color: var(--text-tertiary); margin-top: 2px; }
+    .email-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 4px; }
+    .email-send-btn { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .email-send-btn:hover { background: #1992A0; border-color: #1992A0; color: #fff; }
+    .email-send-btn[disabled] { opacity: 0.6; cursor: not-allowed; }
+    .email-status { font-size: 12.5px; padding: 10px 12px; border-radius: var(--radius); border: 1px solid var(--border); background: var(--surface-2); color: var(--text-primary); line-height: 1.5; }
+    .email-status.success { background: var(--teal-dim); border-color: rgba(47,133,90,0.3); color: var(--teal); }
+    .email-status.error   { background: var(--red-dim);  border-color: rgba(197,48,48,0.3); color: var(--red); }
+    .email-preview-card { min-height: 520px; }
+    .email-preview-frame { flex: 1; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; background: #EEEAE0; min-height: 480px; }
+    .email-preview-frame iframe { width: 100%; height: 100%; min-height: 480px; border: 0; display: block; background: #EEEAE0; }
+    @media (max-width: 980px) {
+      .email-grid { grid-template-columns: 1fr; }
+      .email-row.two { grid-template-columns: 1fr; }
+      .email-preview-card { min-height: 420px; }
+    }
     .analytics-strip { border-top: 1px solid var(--border); background: var(--surface-0); display: grid; grid-template-columns: 1fr 1fr; gap: 0; flex-shrink: 0; }
     .analytics-block { padding: 14px 20px; border-right: 1px solid var(--border); }
     .analytics-block:last-child { border-right: none; }
@@ -272,6 +311,10 @@
       <div class="nav-item" data-tab="analytics">
         <svg viewBox="0 0 24 24"><path d="M3 3h18v18H3zM8 12h8M12 8v8"/></svg>
         Analytics
+      </div>
+      <div class="nav-item" data-tab="email">
+        <svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M4 4l8 8 8-8"/></svg>
+        Email Sender
       </div>
     </div>
     <div class="sidebar-section" style="padding-top:8px;">
@@ -455,6 +498,76 @@
           <div class="type-rows" id="analyticsTypeBreakdown"></div>
         </div>
       </div>
+
+      <!-- ===================== EMAIL SENDER TAB ===================== -->
+      <div class="tab-email" id="emailTabPane">
+        <div class="email-grid">
+          <div class="email-card">
+            <div class="email-card-head">
+              <div>
+                <div class="email-card-title">Compose professional email</div>
+                <div class="email-card-sub">Sends with the Urban Box Living letterhead, colours and contact footer.</div>
+              </div>
+            </div>
+            <form id="emailForm" class="email-form" autocomplete="off">
+              <div class="email-row two">
+                <label class="email-field">
+                  <span class="email-label">Recipient email <span class="email-req">*</span></span>
+                  <input type="email" id="emailTo" placeholder="client@example.com" required />
+                </label>
+                <label class="email-field">
+                  <span class="email-label">Recipient name (optional)</span>
+                  <input type="text" id="emailRecipientName" placeholder="e.g. John Doe" />
+                </label>
+              </div>
+              <div class="email-row two">
+                <label class="email-field">
+                  <span class="email-label">CC (optional)</span>
+                  <input type="text" id="emailCc" placeholder="comma,separated@emails.com" />
+                </label>
+                <label class="email-field">
+                  <span class="email-label">BCC (optional)</span>
+                  <input type="text" id="emailBcc" placeholder="comma,separated@emails.com" />
+                </label>
+              </div>
+              <label class="email-field">
+                <span class="email-label">Subject <span class="email-req">*</span></span>
+                <input type="text" id="emailSubject" placeholder="e.g. Your Urban Box Living Proposal" required />
+              </label>
+              <label class="email-field">
+                <span class="email-label">Body <span class="email-req">*</span></span>
+                <textarea id="emailBody" rows="10" required
+                  placeholder="Write your message here. Plain paragraphs are wrapped in our branded letterhead automatically."></textarea>
+                <span class="email-hint">Tip: leave a blank line between paragraphs. URLs become clickable.</span>
+              </label>
+              <div class="email-actions">
+                <button type="button" class="btn" id="emailPreviewBtn">
+                  <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  Preview
+                </button>
+                <button type="submit" class="btn email-send-btn" id="emailSendBtn">
+                  <svg viewBox="0 0 24 24"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></svg>
+                  Send email
+                </button>
+              </div>
+              <div id="emailStatus" class="email-status" style="display:none;"></div>
+            </form>
+          </div>
+
+          <div class="email-card email-preview-card">
+            <div class="email-card-head">
+              <div>
+                <div class="email-card-title">Live preview</div>
+                <div class="email-card-sub">This is roughly how the recipient will see your message.</div>
+              </div>
+            </div>
+            <div class="email-preview-frame">
+              <iframe id="emailPreviewFrame" title="Email preview" sandbox></iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- =================== END EMAIL SENDER TAB =================== -->
     </div>
   </div>
 
@@ -482,6 +595,7 @@
       const statsStrip       = document.querySelector('.stats-strip');
       const workspace        = document.getElementById('workspace');
       const analyticsTabPane = document.getElementById('analyticsTabPane');
+      const emailTabPane     = document.getElementById('emailTabPane');
       const breadcrumbCurrent= document.getElementById('breadcrumbCurrent');
       const typeBreakdown    = document.getElementById('typeBreakdown');
       const summaryFacts     = document.getElementById('summaryFacts');
@@ -914,19 +1028,28 @@
         currentTab = tab;
         setActiveTabStyles(tab);
 
+        // Hide all tab panes first
+        statsStrip.style.display = 'none';
+        workspace.style.display = 'none';
+        analyticsTabPane.style.display = 'none';
+        emailTabPane.style.display = 'none';
+
         if (tab === 'analytics') {
-          statsStrip.style.display = 'none';
-          workspace.style.display = 'none';
           analyticsTabPane.style.display = 'flex';
           breadcrumbCurrent.textContent = 'Analytics';
           return;
         }
 
-        analyticsTabPane.style.display = 'none';
+        if (tab === 'email') {
+          emailTabPane.style.display = 'block';
+          breadcrumbCurrent.textContent = 'Email Sender';
+          updateEmailPreview();
+          return;
+        }
+
         workspace.style.display = 'grid';
 
         if (tab === 'enquiries') {
-          statsStrip.style.display = 'none';
           breadcrumbCurrent.textContent = 'Enquiries';
           return;
         }
@@ -1006,6 +1129,197 @@
         workspace.classList.remove('show-detail');
         window.scrollTo({ top: 0, behavior: 'smooth' });
       });
+
+      // ============== EMAIL SENDER ==============
+      const emailForm          = document.getElementById('emailForm');
+      const emailToInput       = document.getElementById('emailTo');
+      const emailRecipientName = document.getElementById('emailRecipientName');
+      const emailCcInput       = document.getElementById('emailCc');
+      const emailBccInput      = document.getElementById('emailBcc');
+      const emailSubjectInput  = document.getElementById('emailSubject');
+      const emailBodyInput     = document.getElementById('emailBody');
+      const emailPreviewBtn    = document.getElementById('emailPreviewBtn');
+      const emailSendBtn       = document.getElementById('emailSendBtn');
+      const emailStatus        = document.getElementById('emailStatus');
+      const emailPreviewFrame  = document.getElementById('emailPreviewFrame');
+
+      const BRAND = { gold: '#C9A84C', dark: '#0C0C0C', grey: '#5A5A5A', light: '#F5F4F0', border: '#D2D0C8', white: '#FFFFFF' };
+      const CONTACT = {
+        phone: '+27 60 830 6956',
+        email: 'hello.urbanboxliving@xanziteh.co.za',
+        web:   'urbanboxliving.co.za',
+        address: 'Urban Box Living, South Africa',
+      };
+      const LOGO_URL = 'https://urbanboxliving.co.za/logo.png';
+
+      function escHtml(s) {
+        return String(s == null ? '' : s)
+          .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+          .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+      }
+      function bodyToHtml(text) {
+        const escaped = escHtml(text);
+        const linked = escaped.replace(/\b(https?:\/\/[^\s<]+)/g,
+          (u) => `<a href="${u}" style="color:#C9A84C;text-decoration:none;">${u}</a>`);
+        return linked
+          .split(/\n{2,}/)
+          .map(p => `<p style="margin:0 0 14px 0;line-height:1.65;color:#1A1A1A;font-size:15px;">${p.replace(/\n/g,'<br/>')}</p>`)
+          .join('');
+      }
+      function buildPreviewHtml({ subject, body, recipientName }) {
+        const today = new Date().toLocaleDateString('en-ZA', { day:'2-digit', month:'long', year:'numeric' });
+        const greeting = recipientName ? `Dear ${escHtml(recipientName)},` : 'Hello,';
+        const subj = subject || 'Your subject will appear here';
+        const bodyHtml = body
+          ? bodyToHtml(body)
+          : '<p style="margin:0;color:#8A8478;font-style:italic;font-size:14px;">Your message body will appear here…</p>';
+        return `<!DOCTYPE html><html><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/></head>
+<body style="margin:0;padding:0;background:#EEEAE0;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="padding:24px 0;">
+<tr><td align="center">
+<table role="presentation" width="640" cellpadding="0" cellspacing="0" style="width:640px;max-width:96%;background:${BRAND.white};border:1px solid ${BRAND.border};box-shadow:0 8px 32px rgba(0,0,0,0.08);">
+  <tr><td style="background:${BRAND.dark};border-left:6px solid ${BRAND.gold};padding:22px 32px;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+      <td valign="middle">
+        <table role="presentation" cellpadding="0" cellspacing="0"><tr>
+          <td valign="middle" style="padding-right:14px;">
+            <img src="${LOGO_URL}" width="48" height="48" alt="Urban Box Living" style="display:block;border-radius:4px;background:#fff;" />
+          </td>
+          <td valign="middle">
+            <div style="color:${BRAND.gold};font-size:18px;font-weight:700;letter-spacing:0.04em;">URBAN BOX LIVING</div>
+            <div style="color:#BFBFBF;font-size:11px;margin-top:2px;">Modular Container Homes &amp; Structures</div>
+          </td>
+        </tr></table>
+      </td>
+      <td valign="middle" align="right">
+        <div style="color:${BRAND.gold};font-size:11px;font-weight:700;letter-spacing:0.12em;">OFFICIAL CORRESPONDENCE</div>
+        <div style="color:#BFBFBF;font-size:10.5px;margin-top:4px;">${today}</div>
+      </td>
+    </tr></table>
+  </td></tr>
+  <tr><td style="background:${BRAND.gold};padding:8px 32px;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+      <td style="color:${BRAND.dark};font-size:11px;font-weight:600;">Tel: ${CONTACT.phone}</td>
+      <td align="center" style="color:${BRAND.dark};font-size:11px;font-weight:600;">${CONTACT.email}</td>
+      <td align="right" style="color:${BRAND.dark};font-size:11px;font-weight:600;">${CONTACT.web}</td>
+    </tr></table>
+  </td></tr>
+  <tr><td style="padding:28px 36px 8px 36px;">
+    <div style="font-size:11px;letter-spacing:0.16em;color:${BRAND.grey};text-transform:uppercase;font-weight:600;">Subject</div>
+    <div style="font-size:20px;font-weight:700;color:${BRAND.dark};margin-top:6px;line-height:1.3;">${escHtml(subj)}</div>
+    <div style="height:2px;width:48px;background:${BRAND.gold};margin-top:14px;"></div>
+  </td></tr>
+  <tr><td style="padding:18px 36px 8px 36px;">
+    <p style="margin:0 0 16px 0;font-size:15px;color:${BRAND.dark};font-weight:600;">${greeting}</p>
+    ${bodyHtml}
+  </td></tr>
+  <tr><td style="padding:8px 36px 28px 36px;">
+    <p style="margin:0 0 6px 0;font-size:15px;color:#1A1A1A;">Kind regards,</p>
+    <p style="margin:0;font-size:15px;color:${BRAND.dark};font-weight:700;">The Urban Box Living Team</p>
+    <p style="margin:2px 0 0 0;font-size:12px;color:${BRAND.grey};">Modular Container Homes &amp; Structures</p>
+  </td></tr>
+  <tr><td style="padding:0 36px;"><div style="height:1px;background:${BRAND.border};"></div></td></tr>
+  <tr><td style="padding:18px 36px 24px 36px;background:${BRAND.light};">
+    <div style="font-size:11px;color:${BRAND.grey};line-height:1.6;">
+      <strong style="color:${BRAND.dark};">Urban Box Living</strong><br/>
+      ${CONTACT.address}<br/>
+      Tel: ${CONTACT.phone} &middot; Email:
+      <a href="mailto:${CONTACT.email}" style="color:${BRAND.gold};text-decoration:none;">${CONTACT.email}</a><br/>
+      Web: <a href="https://${CONTACT.web}" style="color:${BRAND.gold};text-decoration:none;">${CONTACT.web}</a>
+    </div>
+  </td></tr>
+  <tr><td style="height:6px;background:${BRAND.gold};line-height:6px;font-size:0;">&nbsp;</td></tr>
+</table>
+</td></tr></table></body></html>`;
+      }
+
+      function updateEmailPreview() {
+        const html = buildPreviewHtml({
+          subject: emailSubjectInput.value.trim(),
+          body: emailBodyInput.value,
+          recipientName: emailRecipientName.value.trim(),
+        });
+        try {
+          emailPreviewFrame.srcdoc = html;
+        } catch (_) {
+          const doc = emailPreviewFrame.contentDocument || emailPreviewFrame.contentWindow.document;
+          doc.open(); doc.write(html); doc.close();
+        }
+      }
+
+      let emailPreviewTimer;
+      function schedulePreview() {
+        clearTimeout(emailPreviewTimer);
+        emailPreviewTimer = setTimeout(updateEmailPreview, 200);
+      }
+      [emailSubjectInput, emailBodyInput, emailRecipientName].forEach(el => {
+        el.addEventListener('input', schedulePreview);
+      });
+      emailPreviewBtn && emailPreviewBtn.addEventListener('click', updateEmailPreview);
+
+      function showEmailStatus(message, type) {
+        emailStatus.textContent = message;
+        emailStatus.className = 'email-status' + (type ? ' ' + type : '');
+        emailStatus.style.display = 'block';
+      }
+
+      // The admin token must match ADMIN_AUTH_TOKEN env var on the server.
+      // Stored in sessionStorage after admin login (set on the parent page).
+      function getAdminToken() {
+        try {
+          return sessionStorage.getItem('ubl_admin_token')
+              || (window.parent && window.parent.sessionStorage && window.parent.sessionStorage.getItem('ubl_admin_token'))
+              || '';
+        } catch { return ''; }
+      }
+
+      emailForm && emailForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const to            = emailToInput.value.trim();
+        const subject       = emailSubjectInput.value.trim();
+        const body          = emailBodyInput.value.trim();
+        const recipientName = emailRecipientName.value.trim();
+        const cc            = emailCcInput.value.trim();
+        const bcc           = emailBccInput.value.trim();
+
+        if (!to || !subject || !body) {
+          showEmailStatus('Please fill in recipient, subject and body.', 'error');
+          return;
+        }
+
+        emailSendBtn.disabled = true;
+        showEmailStatus('Sending email…', '');
+
+        try {
+          const token = getAdminToken();
+          const res = await fetch('/api/send-email', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'x-admin-token': token,
+            },
+            body: JSON.stringify({ to, subject, body, recipientName, cc, bcc }),
+          });
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok) {
+            showEmailStatus(`Failed to send: ${data.error || res.statusText}${data.detail ? ' — ' + data.detail : ''}`, 'error');
+          } else {
+            showEmailStatus(`Email sent successfully to ${to}.`, 'success');
+            emailBodyInput.value = '';
+            emailSubjectInput.value = '';
+            emailRecipientName.value = '';
+            emailCcInput.value = '';
+            emailBccInput.value = '';
+            updateEmailPreview();
+          }
+        } catch (err) {
+          showEmailStatus(`Network error: ${err && err.message ? err.message : err}`, 'error');
+        } finally {
+          emailSendBtn.disabled = false;
+        }
+      });
+
+      // ============ END EMAIL SENDER ============
 
       switchTab('dashboard');
       loadEnquiries();

@@ -3728,6 +3728,9 @@
     }
 
     sessionStorage.setItem(DASHBOARD_AUTH_KEY, 'granted');
+    // Token used by the admin email sender to authorise /api/send-email calls.
+    // Must match ADMIN_AUTH_TOKEN env var set on Vercel.
+    sessionStorage.setItem('ubl_admin_token', `${DASHBOARD_USERNAME}:${DASHBOARD_PASSWORD}`);
     window.top.location.href = '/admin';
   }
 
