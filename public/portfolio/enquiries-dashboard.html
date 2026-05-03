@@ -221,6 +221,14 @@
     .email-editor h3 { font-size: 15px; margin: 12px 0 6px; color: var(--text-primary); font-weight: 700; }
     .email-editor blockquote { border-left: 3px solid var(--accent); margin: 8px 0; padding: 4px 12px; color: var(--text-secondary); background: var(--surface-2); }
     .email-editor ul, .email-editor ol { margin: 0 0 10px 0; padding-left: 24px; }
+    .email-editor li { margin: 2px 0; }
+    .email-editor ol { list-style-type: decimal; }
+    .email-editor ol ol { list-style-type: lower-alpha; }
+    .email-editor ol ol ol { list-style-type: lower-roman; }
+    .email-editor ul { list-style-type: disc; }
+    .email-editor ul ul { list-style-type: circle; }
+    .email-editor ul ul ul { list-style-type: square; }
+    .email-editor li > ul, .email-editor li > ol { margin: 4px 0 4px 0; }
     .email-editor a { color: var(--accent); }
     .email-preview-card { min-height: 520px; }
     .email-preview-frame { flex: 1; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; background: #EEEAE0; min-height: 480px; }
@@ -586,6 +594,8 @@
                     <span class="etb-sep"></span>
                     <button type="button" class="etb-btn" data-cmd="insertUnorderedList" title="Bullet list">&bull; List</button>
                     <button type="button" class="etb-btn" data-cmd="insertOrderedList" title="Numbered list">1. List</button>
+                    <button type="button" class="etb-btn" data-cmd="outdent" title="Outdent (Shift+Tab)">&#8676;|</button>
+                    <button type="button" class="etb-btn" data-cmd="indent" title="Indent (Tab) \u2014 nests list items">|&#8677;</button>
                     <span class="etb-sep"></span>
                     <button type="button" class="etb-btn" data-cmd="justifyLeft" title="Align left">&#8676;</button>
                     <button type="button" class="etb-btn" data-cmd="justifyCenter" title="Align centre">&#8801;</button>
@@ -1461,7 +1471,25 @@
         const btn = e.target.closest('.etb-btn[data-cmd]');
         if (!btn) return;
         e.preventDefault();
-        execCmd(btn.dataset.cmd);
+        const cmd = btn.dataset.cmd;
+        // For list buttons, if the selection contains plain "1. foo" / "- foo"
+        // patterns spanning multiple lines, convert to a properly nested list.
+        if (cmd === 'insertOrderedList' || cmd === 'insertUnorderedList') {
+          const sel = window.getSelection();
+          if (sel && sel.rangeCount && !sel.isCollapsed) {
+            const selText = sel.toString();
+            if (selText && /\n/.test(selText) && /^\s*([-*\u2022]|\d+[.)])\s/m.test(selText)) {
+              const html = smartTextToHtml(selText);
+              if (html) {
+                emailBodyInput.focus();
+                document.execCommand('insertHTML', false, html);
+                schedulePreview();
+                return;
+              }
+            }
+          }
+        }
+        execCmd(cmd);
       });
       etbFormat && etbFormat.addEventListener('change', (e) => {
         execCmd('formatBlock', e.target.value);
@@ -1475,11 +1503,104 @@
       etbColor && etbColor.addEventListener('click', () => {
         execCmd('foreColor', '#C9A84C');
       });
-      // Paste as plain text by default to avoid weird styles from Word/Gmail.
+      // Convert plain-text "1. foo / 2. bar" or "- foo / - bar" patterns into
+      // proper <ol>/<ul> markup, with smart hierarchy from indent levels.
+      function escapeForHtml(s) {
+        return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      }
+      function smartTextToHtml(text) {
+        if (!text || !/\n/.test(text)) return '';
+        const rawLines = text.replace(/\r\n?/g, '\n').split('\n');
+        const items = [];
+        let hasList = false;
+        for (const line of rawLines) {
+          if (!line.trim()) { items.push({ type: 'blank' }); continue; }
+          const indentMatch = line.match(/^([ \t]*)/);
+          const indent = indentMatch ? indentMatch[1].replace(/\t/g, '    ').length : 0;
+          const stripped = line.replace(/^[ \t]+/, '');
+          const olMatch = stripped.match(/^(\d+)[.)]\s+(.*)$/);
+          const ulMatch = stripped.match(/^[-*\u2022]\s+(.*)$/);
+          if (olMatch)      { items.push({ type: 'ol', text: olMatch[2], indent }); hasList = true; }
+          else if (ulMatch) { items.push({ type: 'ul', text: ulMatch[1], indent }); hasList = true; }
+          else              { items.push({ type: 'p',  text: stripped,    indent }); }
+        }
+        if (!hasList) return '';
+        let html = '';
+        const stack = [];          // [{ type }]
+        let inListItem = false;
+        function closeAll() {
+          while (stack.length) {
+            const top = stack.pop();
+            html += `</li></${top.type}>`;
+          }
+          inListItem = false;
+        }
+        for (const it of items) {
+          if (it.type === 'blank') { closeAll(); continue; }
+          if (it.type === 'p')     { closeAll(); html += `<p>${escapeForHtml(it.text)}</p>`; continue; }
+          const desired = Math.max(1, Math.floor(it.indent / 2) + 1);
+          // Close deeper levels
+          while (stack.length > desired) {
+            const top = stack.pop();
+            html += `</li></${top.type}>`;
+            inListItem = stack.length > 0;
+          }
+          // Same-level type change
+          if (stack.length === desired && stack[stack.length - 1].type !== it.type) {
+            const top = stack.pop();
+            html += `</li></${top.type}>`;
+            inListItem = stack.length > 0;
+          }
+          // Open new levels — nest inside current <li> if we have one open
+          while (stack.length < desired) {
+            if (stack.length > 0 && inListItem) {
+              html += `<${it.type}>`;          // nested list inside open <li>
+            } else {
+              if (inListItem) { html += '</li>'; inListItem = false; }
+              html += `<${it.type}>`;
+            }
+            stack.push({ type: it.type });
+          }
+          // Sibling at this level: close previous <li>
+          if (inListItem && stack.length === desired) {
+            html += '</li>';
+          }
+          html += `<li>${escapeForHtml(it.text)}`;
+          inListItem = true;
+        }
+        closeAll();
+        return html;
+      }
+
+      // Paste handler: try to detect numbered/bulleted text and turn it into nested lists.
       emailBodyInput.addEventListener('paste', (e) => {
         e.preventDefault();
         const text = (e.clipboardData || window.clipboardData).getData('text/plain');
-        document.execCommand('insertText', false, text);
+        const html = smartTextToHtml(text);
+        if (html) {
+          document.execCommand('insertHTML', false, html);
+        } else {
+          document.execCommand('insertText', false, text);
+        }
+        schedulePreview();
+      });
+
+      // Tab / Shift+Tab inside lists = nest / un-nest. Outside lists = insert tab.
+      emailBodyInput.addEventListener('keydown', (e) => {
+        if (e.key !== 'Tab') return;
+        const sel = window.getSelection && window.getSelection();
+        let inList = false;
+        if (sel && sel.rangeCount) {
+          let node = sel.getRangeAt(0).startContainer;
+          while (node && node !== emailBodyInput) {
+            if (node.nodeName === 'LI') { inList = true; break; }
+            node = node.parentNode;
+          }
+        }
+        if (inList) {
+          e.preventDefault();
+          execCmd(e.shiftKey ? 'outdent' : 'indent');
+        }
       });
 
       function showEmailStatus(message, type) {
