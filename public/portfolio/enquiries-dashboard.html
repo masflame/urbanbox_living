@@ -204,6 +204,24 @@
     .email-attach-item .remove { background: transparent; border: 0; color: var(--text-tertiary); cursor: pointer; padding: 2px 6px; border-radius: 4px; font-size: 16px; line-height: 1; }
     .email-attach-item .remove:hover { background: var(--red-dim); color: var(--red); }
     .email-attach-total { font-size: 11px; color: var(--text-tertiary); text-align: right; }
+
+    /* Rich text editor for the body */
+    .email-editor-wrap { display: flex; flex-direction: column; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; background: var(--surface-0); transition: border-color var(--transition), box-shadow var(--transition); }
+    .email-editor-wrap:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-dim); }
+    .email-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; padding: 6px 8px; background: var(--surface-2); border-bottom: 1px solid var(--border); }
+    .etb-btn { background: transparent; border: 1px solid transparent; color: var(--text-primary); font-size: 13px; line-height: 1; padding: 6px 9px; border-radius: 4px; cursor: pointer; min-width: 30px; font-family: var(--font-sans); transition: background var(--transition), border-color var(--transition); }
+    .etb-btn:hover { background: var(--surface-0); border-color: var(--border); }
+    .etb-btn:active, .etb-btn.active { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
+    .etb-sep { width: 1px; height: 18px; background: var(--border); margin: 0 4px; }
+    .etb-select { background: var(--surface-0); color: var(--text-primary); border: 1px solid var(--border); border-radius: 4px; padding: 5px 6px; font-size: 12px; cursor: pointer; font-family: var(--font-sans); }
+    .email-editor { min-height: 220px; max-height: 460px; overflow-y: auto; padding: 12px 14px; font-family: var(--font-sans); font-size: 14px; color: var(--text-primary); line-height: 1.6; outline: none; }
+    .email-editor[contenteditable="true"]:empty::before { content: attr(data-placeholder); color: var(--text-tertiary); pointer-events: none; }
+    .email-editor p { margin: 0 0 10px 0; }
+    .email-editor h2 { font-size: 18px; margin: 14px 0 8px; color: var(--text-primary); font-weight: 700; }
+    .email-editor h3 { font-size: 15px; margin: 12px 0 6px; color: var(--text-primary); font-weight: 700; }
+    .email-editor blockquote { border-left: 3px solid var(--accent); margin: 8px 0; padding: 4px 12px; color: var(--text-secondary); background: var(--surface-2); }
+    .email-editor ul, .email-editor ol { margin: 0 0 10px 0; padding-left: 24px; }
+    .email-editor a { color: var(--accent); }
     .email-preview-card { min-height: 520px; }
     .email-preview-frame { flex: 1; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; background: #EEEAE0; min-height: 480px; }
     .email-preview-frame iframe { width: 100%; height: 100%; min-height: 480px; border: 0; display: block; background: #EEEAE0; }
@@ -552,9 +570,36 @@
               </label>
               <label class="email-field">
                 <span class="email-label">Body <span class="email-req">*</span></span>
-                <textarea id="emailBody" rows="10" required
-                  placeholder="Write your message here. Plain paragraphs are wrapped in our branded letterhead automatically."></textarea>
-                <span class="email-hint">Tip: leave a blank line between paragraphs. URLs become clickable.</span>
+                <div class="email-editor-wrap">
+                  <div class="email-toolbar" id="emailToolbar" role="toolbar" aria-label="Formatting">
+                    <button type="button" class="etb-btn" data-cmd="bold" title="Bold (Ctrl+B)"><b>B</b></button>
+                    <button type="button" class="etb-btn" data-cmd="italic" title="Italic (Ctrl+I)"><i>I</i></button>
+                    <button type="button" class="etb-btn" data-cmd="underline" title="Underline (Ctrl+U)"><u>U</u></button>
+                    <button type="button" class="etb-btn" data-cmd="strikeThrough" title="Strikethrough"><s>S</s></button>
+                    <span class="etb-sep"></span>
+                    <select class="etb-select" id="etbFormat" title="Heading / paragraph">
+                      <option value="P">Paragraph</option>
+                      <option value="H2">Heading 2</option>
+                      <option value="H3">Heading 3</option>
+                      <option value="BLOCKQUOTE">Quote</option>
+                    </select>
+                    <span class="etb-sep"></span>
+                    <button type="button" class="etb-btn" data-cmd="insertUnorderedList" title="Bullet list">&bull; List</button>
+                    <button type="button" class="etb-btn" data-cmd="insertOrderedList" title="Numbered list">1. List</button>
+                    <span class="etb-sep"></span>
+                    <button type="button" class="etb-btn" data-cmd="justifyLeft" title="Align left">&#8676;</button>
+                    <button type="button" class="etb-btn" data-cmd="justifyCenter" title="Align centre">&#8801;</button>
+                    <button type="button" class="etb-btn" data-cmd="justifyRight" title="Align right">&#8677;</button>
+                    <span class="etb-sep"></span>
+                    <button type="button" class="etb-btn" id="etbLink" title="Insert link">&#128279; Link</button>
+                    <button type="button" class="etb-btn" id="etbColor" title="Brand gold colour" style="color:#C9A84C;font-weight:700;">A</button>
+                    <span class="etb-sep"></span>
+                    <button type="button" class="etb-btn" data-cmd="removeFormat" title="Clear formatting">&#10005; Clear</button>
+                  </div>
+                  <div id="emailBody" class="email-editor" contenteditable="true" role="textbox" aria-multiline="true"
+                       data-placeholder="Write your message here. Use the toolbar above for bold, lists, links and more."></div>
+                </div>
+                <span class="email-hint">Tip: select text then click a button. Ctrl+B / Ctrl+I / Ctrl+U also work. URLs become clickable in the email.</span>
               </label>
               <label class="email-field email-important-field">
                 <input type="checkbox" id="emailImportant" checked />
@@ -1284,8 +1329,18 @@
           .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
           .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
       }
-      function bodyToHtml(text) {
-        const escaped = escHtml(text);
+      function bodyToHtml(input) {
+        const raw = String(input == null ? '' : input);
+        // contenteditable produces real HTML — detect tag presence and pass through.
+        // For plain text, escape and split on blank lines as before.
+        const isHtml = /<[a-z][\s\S]*>/i.test(raw);
+        if (isHtml) {
+          // Auto-link bare URLs that aren't already inside an <a> tag.
+          const linked = raw.replace(/(^|[^"'>])(https?:\/\/[^\s<]+)/g,
+            (m, pre, u) => `${pre}<a href="${u}" style="color:#C9A84C;text-decoration:none;">${u}</a>`);
+          return `<div style="line-height:1.65;color:#1A1A1A;font-size:15px;">${linked}</div>`;
+        }
+        const escaped = escHtml(raw);
         const linked = escaped.replace(/\b(https?:\/\/[^\s<]+)/g,
           (u) => `<a href="${u}" style="color:#C9A84C;text-decoration:none;">${u}</a>`);
         return linked
@@ -1363,7 +1418,7 @@
       function updateEmailPreview() {
         const html = buildPreviewHtml({
           subject: emailSubjectInput.value.trim(),
-          body: emailBodyInput.value,
+          body: getBodyHtml(),
           recipientName: emailRecipientName.value.trim(),
         });
         try {
@@ -1379,10 +1434,53 @@
         clearTimeout(emailPreviewTimer);
         emailPreviewTimer = setTimeout(updateEmailPreview, 200);
       }
-      [emailSubjectInput, emailBodyInput, emailRecipientName].forEach(el => {
+      [emailSubjectInput, emailRecipientName].forEach(el => {
         el.addEventListener('input', schedulePreview);
       });
+      emailBodyInput.addEventListener('input', schedulePreview);
       emailPreviewBtn && emailPreviewBtn.addEventListener('click', updateEmailPreview);
+
+      // ----- Rich text editor wiring -----
+      function getBodyHtml() {
+        // Drop a leading empty paragraph that some browsers insert.
+        return (emailBodyInput.innerHTML || '').replace(/^(\s*<br\s*\/?\s*>)+/i, '').trim();
+      }
+      function getBodyText() {
+        return (emailBodyInput.textContent || '').trim();
+      }
+      function execCmd(cmd, value) {
+        emailBodyInput.focus();
+        try { document.execCommand(cmd, false, value || null); } catch {}
+        schedulePreview();
+      }
+      const emailToolbar = document.getElementById('emailToolbar');
+      const etbFormat    = document.getElementById('etbFormat');
+      const etbLink      = document.getElementById('etbLink');
+      const etbColor     = document.getElementById('etbColor');
+      emailToolbar && emailToolbar.addEventListener('click', (e) => {
+        const btn = e.target.closest('.etb-btn[data-cmd]');
+        if (!btn) return;
+        e.preventDefault();
+        execCmd(btn.dataset.cmd);
+      });
+      etbFormat && etbFormat.addEventListener('change', (e) => {
+        execCmd('formatBlock', e.target.value);
+        e.target.selectedIndex = 0;
+      });
+      etbLink && etbLink.addEventListener('click', () => {
+        const url = window.prompt('Enter URL (include https://):', 'https://');
+        if (!url) return;
+        execCmd('createLink', url);
+      });
+      etbColor && etbColor.addEventListener('click', () => {
+        execCmd('foreColor', '#C9A84C');
+      });
+      // Paste as plain text by default to avoid weird styles from Word/Gmail.
+      emailBodyInput.addEventListener('paste', (e) => {
+        e.preventDefault();
+        const text = (e.clipboardData || window.clipboardData).getData('text/plain');
+        document.execCommand('insertText', false, text);
+      });
 
       function showEmailStatus(message, type) {
         emailStatus.textContent = message;
@@ -1424,13 +1522,14 @@
         event.preventDefault();
         const to            = emailToInput.value.trim();
         const subject       = emailSubjectInput.value.trim();
-        const body          = emailBodyInput.value.trim();
+        const body          = getBodyHtml();
+        const bodyPlain     = getBodyText();
         const recipientName = emailRecipientName.value.trim();
         const cc            = emailCcInput.value.trim();
         const bcc           = emailBccInput.value.trim();
         const important     = emailImportant ? emailImportant.checked : true;
 
-        if (!to || !subject || !body) {
+        if (!to || !subject || !bodyPlain) {
           showEmailStatus('Please fill in recipient, subject and body.', 'error');
           return;
         }
@@ -1469,7 +1568,7 @@
             const attachNote = pendingAttachments.length
               ? ` (with ${pendingAttachments.length} attachment${pendingAttachments.length === 1 ? '' : 's'})` : '';
             showEmailStatus(`Email sent successfully to ${to}${attachNote}.`, 'success');
-            emailBodyInput.value = '';
+            emailBodyInput.innerHTML = '';
             emailSubjectInput.value = '';
             emailRecipientName.value = '';
             emailCcInput.value = '';

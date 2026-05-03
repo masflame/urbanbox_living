@@ -76,8 +76,24 @@ function escapeHtml(s) {
 }
 
 function bodyToHtml(text) {
-  // Preserve paragraph breaks, escape HTML, convert URLs to links
-  const escaped = escapeHtml(text);
+  const raw = String(text == null ? '' : text);
+  // Detect rich-text HTML produced by the admin editor (contenteditable).
+  // For safety, strip <script>, <iframe>, <style>, <object>, <embed>,
+  // and any inline event handlers / javascript: URLs.
+  if (/<[a-z][\s\S]*>/i.test(raw)) {
+    let html = raw
+      .replace(/<\/?(script|iframe|object|embed|style|link|meta)[^>]*>/gi, '')
+      .replace(/\son[a-z]+\s*=\s*"[^"]*"/gi, '')
+      .replace(/\son[a-z]+\s*=\s*'[^']*'/gi, '')
+      .replace(/\son[a-z]+\s*=\s*[^\s>]+/gi, '')
+      .replace(/(href|src)\s*=\s*("|')\s*javascript:[^"']*\2/gi, '$1=$2#$2');
+    // Auto-link bare URLs that aren't already inside an anchor or quoted attribute.
+    html = html.replace(/(^|[^"'>])(https?:\/\/[^\s<]+)/g,
+      (m, pre, u) => `${pre}<a href="${u}" style="color:#C9A84C;text-decoration:none;">${u}</a>`);
+    return `<div style="line-height:1.65;color:#1A1A1A;font-size:15px;">${html}</div>`;
+  }
+  // Plain text fallback: escape, link URLs, paragraph-split.
+  const escaped = escapeHtml(raw);
   const linked = escaped.replace(/\b(https?:\/\/[^\s<]+)/g,
     (u) => `<a href="${u}" style="color:#C9A84C;text-decoration:none;">${u}</a>`);
   return linked
@@ -252,6 +268,22 @@ function buildEmailHtml({ subject, body, recipientName }) {
 
 function buildPlainText({ subject, body, recipientName }) {
   const greeting = recipientName ? `Dear ${recipientName},` : 'Hello,';
+  // If body is HTML, strip tags so the text/plain part is readable.
+  const plainBody = /<[a-z][\s\S]*>/i.test(body)
+    ? String(body)
+        .replace(/<\s*br\s*\/?\s*>/gi, '\n')
+        .replace(/<\/(p|div|h[1-6]|li|blockquote)\s*>/gi, '\n')
+        .replace(/<li[^>]*>/gi, ' \u2022 ')
+        .replace(/<[^>]+>/g, '')
+        .replace(/&nbsp;/gi, ' ')
+        .replace(/&amp;/gi, '&')
+        .replace(/&lt;/gi, '<')
+        .replace(/&gt;/gi, '>')
+        .replace(/&quot;/gi, '"')
+        .replace(/&#39;/gi, "'")
+        .replace(/\n{3,}/g, '\n\n')
+        .trim()
+    : body;
   return [
     'URBAN BOX LIVING',
     'Modular Container Homes & Structures',
@@ -260,7 +292,7 @@ function buildPlainText({ subject, body, recipientName }) {
     '',
     greeting,
     '',
-    body,
+    plainBody,
     '',
     'Kind regards,',
     'The Urban Box Living Team',
