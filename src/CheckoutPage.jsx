@@ -10,6 +10,7 @@ import {
   formatBuildRange,
   formatInstallRange,
 } from './utils/timelineEstimate'
+import { generateProjectPdf } from './utils/projectPdf'
 import './configurator.css'
 
 function formatCurrency(value) {
@@ -30,6 +31,7 @@ export default function CheckoutPage() {
   const { configs, setConfig, setConfigs } = useCheckout()
 
   const [openSet, setOpenSet] = useState(() => new Set([0]))
+  const [savingPdf, setSavingPdf] = useState(false)
 
   const setRowExpanded = useCallback((index, open) => {
     setOpenSet((prev) => {
@@ -105,6 +107,24 @@ export default function CheckoutPage() {
     navigate('/checkout/delivery')
   }
 
+  async function handleSaveConfig() {
+    if (savingPdf) return
+    setSavingPdf(true)
+    try {
+      await generateProjectPdf({
+        items,
+        configs,
+        projectSubtotal,
+        buildLabel,
+        installLabel,
+      })
+    } catch (err) {
+      window.alert(`Could not generate PDF: ${err && err.message ? err.message : err}`)
+    } finally {
+      setSavingPdf(false)
+    }
+  }
+
   if (!items.length) {
     return (
       <AppShell
@@ -169,9 +189,10 @@ export default function CheckoutPage() {
             <button
               type="button"
               className="button-secondary"
-              onClick={() => window.alert('Project saved locally.')}
+              onClick={handleSaveConfig}
+              disabled={savingPdf}
             >
-              Save Project
+              {savingPdf ? 'Generating PDF\u2026' : 'Save Config (PDF)'}
             </button>
             <button type="button" className="button-primary" onClick={handleContinue}>
               Checkout - Continue to Delivery
