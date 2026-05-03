@@ -1523,11 +1523,13 @@
         if (!text || !/\n/.test(text)) return '';
         const rawLines = text.replace(/\r\n?/g, '\n').split('\n');
 
-        // Pass 1: classify each line.
+        // Pass 1: classify each non-blank line. Blank lines are dropped so
+        // that "parent\n\nchild\n\nchild" still nests correctly (Word/Gmail
+        // often double-spaces pasted lists).
         const items = [];
         let hasList = false;
         for (const line of rawLines) {
-          if (!line.trim()) { items.push({ type: 'blank' }); continue; }
+          if (!line.trim()) continue;
           const indentMatch = line.match(/^([ \t]*)/);
           const explicitIndent = indentMatch
             ? indentMatch[1].replace(/\t/g, '    ').length
@@ -1539,28 +1541,23 @@
           const colonParent = !starParent && !olParent && !ulMatch
             && /^[^\s].*:\s*$/.test(stripped);
 
-          if (starParent)        items.push({ kind: 'parent', listType: 'ul', text: starParent[1],   indent: explicitIndent, hasMarker: true });
-          else if (olParent)     items.push({ kind: 'parent', listType: 'ol', text: olParent[2],     indent: explicitIndent, hasMarker: true });
-          else if (colonParent)  items.push({ kind: 'parent', listType: 'ol', text: stripped.replace(/:\s*$/, ''), indent: explicitIndent, hasMarker: true });
-          else if (ulMatch)      items.push({ kind: 'child',  listType: 'ul', text: ulMatch[1],      indent: explicitIndent, hasMarker: true });
-          else                   items.push({ kind: 'plain',  listType: null, text: stripped,        indent: explicitIndent, hasMarker: false });
+          if (starParent)        items.push({ kind: 'parent', listType: 'ul', text: starParent[1],   indent: explicitIndent });
+          else if (olParent)     items.push({ kind: 'parent', listType: 'ol', text: olParent[2],     indent: explicitIndent });
+          else if (colonParent)  items.push({ kind: 'parent', listType: 'ol', text: stripped.replace(/:\s*$/, ''), indent: explicitIndent });
+          else if (ulMatch)      items.push({ kind: 'child',  listType: 'ul', text: ulMatch[1],      indent: explicitIndent });
+          else                   items.push({ kind: 'plain',  listType: null, text: stripped,        indent: explicitIndent });
 
           if (starParent || olParent || ulMatch || colonParent) hasList = true;
         }
         if (!hasList) return '';
 
         // Pass 2: derive levels.
-        // - parents always sit at level 1 (or deeper if explicitly indented).
-        // - any "plain" or "child" line that follows a parent becomes a child
-        //   (level 2) under it, until the next parent or blank line.
-        let lastParentLevel = 0;       // 0 = none
+        // - parents sit at level 1 (or deeper if explicitly indented).
+        // - any line that follows a parent without its own marker becomes a
+        //   CHILD (level = parentLevel + 1) of the most recent parent.
+        let lastParentLevel = 0;
         const finalItems = [];
         for (const it of items) {
-          if (it.type === 'blank') {
-            finalItems.push({ type: 'blank' });
-            lastParentLevel = 0;
-            continue;
-          }
           if (it.kind === 'parent') {
             const lvl = Math.max(1, Math.floor(it.indent / 2) + 1);
             lastParentLevel = lvl;
@@ -1573,9 +1570,8 @@
             finalItems.push({ kind: 'li', listType: it.listType, text: it.text, level: lvl });
             continue;
           }
-          // plain (no marker)
+          // plain (no marker) — auto-nest as child if a parent is active
           if (lastParentLevel > 0) {
-            // Auto-nest as child of last parent
             finalItems.push({ kind: 'li', listType: 'ul', text: it.text, level: lastParentLevel + 1 });
           } else {
             finalItems.push({ kind: 'p', text: it.text });
@@ -1584,7 +1580,7 @@
 
         // Pass 3: emit HTML.
         let html = '';
-        const stack = []; // [{ type: 'ol'|'ul' }]
+        const stack = [];
         let liOpen = false;
         function closeAll() {
           while (stack.length) {
@@ -1594,8 +1590,7 @@
           liOpen = false;
         }
         for (const it of finalItems) {
-          if (it.type === 'blank') { closeAll(); continue; }
-          if (it.kind === 'p')     { closeAll(); html += `<p>${escapeForHtml(it.text)}</p>`; continue; }
+          if (it.kind === 'p') { closeAll(); html += `<p>${escapeForHtml(it.text)}</p>`; continue; }
           // Close deeper levels
           while (stack.length > it.level) {
             const top = stack.pop();
