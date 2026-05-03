@@ -191,6 +191,19 @@
     .email-important-field { flex-direction: row; align-items: center; gap: 8px; padding: 9px 11px; border: 1px dashed var(--border); border-radius: var(--radius); background: var(--surface-2); }
     .email-important-field input { width: auto; margin: 0; cursor: pointer; }
     .email-important-field span { font-size: 12.5px; color: var(--text-secondary); }
+    .email-attach-drop { border: 1.5px dashed var(--border); border-radius: var(--radius); padding: 14px; background: var(--surface-2); display: flex; flex-direction: column; gap: 10px; cursor: pointer; transition: border-color var(--transition), background var(--transition); }
+    .email-attach-drop:hover { border-color: var(--accent); background: var(--accent-dim); }
+    .email-attach-drop.dragover { border-color: var(--accent); background: var(--accent-dim); }
+    .email-attach-drop-inner { display: flex; align-items: center; gap: 10px; color: var(--text-secondary); font-size: 12.5px; }
+    .email-attach-drop-inner svg { width: 22px; height: 22px; flex-shrink: 0; stroke: var(--accent); fill: none; stroke-width: 2; }
+    .email-attach-drop input[type=file] { display: none; }
+    .email-attach-list { display: flex; flex-direction: column; gap: 6px; }
+    .email-attach-item { display: flex; align-items: center; gap: 10px; padding: 8px 10px; background: var(--surface-0); border: 1px solid var(--border); border-radius: var(--radius); font-size: 12.5px; }
+    .email-attach-item .name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--text-primary); font-weight: 500; }
+    .email-attach-item .size { color: var(--text-tertiary); font-size: 11.5px; flex-shrink: 0; }
+    .email-attach-item .remove { background: transparent; border: 0; color: var(--text-tertiary); cursor: pointer; padding: 2px 6px; border-radius: 4px; font-size: 16px; line-height: 1; }
+    .email-attach-item .remove:hover { background: var(--red-dim); color: var(--red); }
+    .email-attach-total { font-size: 11px; color: var(--text-tertiary); text-align: right; }
     .email-preview-card { min-height: 520px; }
     .email-preview-frame { flex: 1; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; background: #EEEAE0; min-height: 480px; }
     .email-preview-frame iframe { width: 100%; height: 100%; min-height: 480px; border: 0; display: block; background: #EEEAE0; }
@@ -547,6 +560,19 @@
                 <input type="checkbox" id="emailImportant" checked />
                 <span>Mark as <strong>important / high priority</strong> in the recipient's inbox</span>
               </label>
+              <div class="email-field">
+                <span class="email-label">Attachments (optional)</span>
+                <label class="email-attach-drop" id="emailAttachDrop">
+                  <div class="email-attach-drop-inner">
+                    <svg viewBox="0 0 24 24"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+                    <span><strong>Click to add files</strong> or drag &amp; drop here &mdash; images, PDFs, docs (up to ~15&nbsp;MB total)</span>
+                  </div>
+                  <input type="file" id="emailAttachInput" multiple
+                         accept="image/*,application/pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.zip" />
+                </label>
+                <div class="email-attach-list" id="emailAttachList"></div>
+                <div class="email-attach-total" id="emailAttachTotal" style="display:none;"></div>
+              </div>
               <div class="email-actions">
                 <button type="button" class="btn" id="emailPreviewBtn">
                   <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
@@ -1150,6 +1176,99 @@
       const emailStatus        = document.getElementById('emailStatus');
       const emailPreviewFrame  = document.getElementById('emailPreviewFrame');
       const emailImportant     = document.getElementById('emailImportant');
+      const emailAttachInput   = document.getElementById('emailAttachInput');
+      const emailAttachDrop    = document.getElementById('emailAttachDrop');
+      const emailAttachList    = document.getElementById('emailAttachList');
+      const emailAttachTotal   = document.getElementById('emailAttachTotal');
+
+      // ----- Attachments handling -----
+      const MAX_TOTAL_ATTACH_BYTES = 15 * 1024 * 1024; // 15 MB raw
+      let pendingAttachments = []; // [{ filename, contentType, size, content (base64) }]
+
+      function fmtBytes(n) {
+        if (n < 1024) return n + ' B';
+        if (n < 1024 * 1024) return (n / 1024).toFixed(1) + ' KB';
+        return (n / 1024 / 1024).toFixed(2) + ' MB';
+      }
+      function readFileAsBase64(file) {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => {
+            const result = String(reader.result || '');
+            const idx = result.indexOf(',');
+            resolve(idx === -1 ? result : result.slice(idx + 1));
+          };
+          reader.onerror = () => reject(reader.error || new Error('read failed'));
+          reader.readAsDataURL(file);
+        });
+      }
+      function renderAttachments() {
+        emailAttachList.innerHTML = '';
+        let total = 0;
+        pendingAttachments.forEach((att, idx) => {
+          total += att.size;
+          const row = document.createElement('div');
+          row.className = 'email-attach-item';
+          row.innerHTML = `<span class="name" title="${att.filename}">${att.filename}</span>`
+            + `<span class="size">${fmtBytes(att.size)}</span>`
+            + `<button type="button" class="remove" aria-label="Remove" data-idx="${idx}">&times;</button>`;
+          row.querySelector('.remove').addEventListener('click', () => {
+            pendingAttachments.splice(idx, 1);
+            renderAttachments();
+          });
+          emailAttachList.appendChild(row);
+        });
+        if (pendingAttachments.length) {
+          emailAttachTotal.style.display = 'block';
+          emailAttachTotal.textContent = `${pendingAttachments.length} file${pendingAttachments.length === 1 ? '' : 's'} \u00B7 ${fmtBytes(total)}`;
+        } else {
+          emailAttachTotal.style.display = 'none';
+        }
+      }
+      async function addFiles(fileList) {
+        const currentTotal = pendingAttachments.reduce((s, a) => s + a.size, 0);
+        let newTotal = currentTotal;
+        for (const file of fileList) {
+          if (!file) continue;
+          newTotal += file.size;
+          if (newTotal > MAX_TOTAL_ATTACH_BYTES) {
+            showEmailStatus(`Skipped "${file.name}" \u2014 attachments would exceed ${fmtBytes(MAX_TOTAL_ATTACH_BYTES)} total.`, 'error');
+            newTotal -= file.size;
+            continue;
+          }
+          try {
+            const content = await readFileAsBase64(file);
+            pendingAttachments.push({
+              filename: file.name,
+              contentType: file.type || 'application/octet-stream',
+              size: file.size,
+              content,
+            });
+          } catch (e) {
+            showEmailStatus(`Failed to read "${file.name}": ${e.message || e}`, 'error');
+            newTotal -= file.size;
+          }
+        }
+        renderAttachments();
+      }
+      emailAttachInput && emailAttachInput.addEventListener('change', async (e) => {
+        await addFiles(Array.from(e.target.files || []));
+        e.target.value = ''; // allow re-selecting same file
+      });
+      if (emailAttachDrop) {
+        ['dragenter', 'dragover'].forEach(ev => emailAttachDrop.addEventListener(ev, (e) => {
+          e.preventDefault(); e.stopPropagation();
+          emailAttachDrop.classList.add('dragover');
+        }));
+        ['dragleave', 'drop'].forEach(ev => emailAttachDrop.addEventListener(ev, (e) => {
+          e.preventDefault(); e.stopPropagation();
+          emailAttachDrop.classList.remove('dragover');
+        }));
+        emailAttachDrop.addEventListener('drop', async (e) => {
+          const files = e.dataTransfer && e.dataTransfer.files ? Array.from(e.dataTransfer.files) : [];
+          if (files.length) await addFiles(files);
+        });
+      }
 
       const BRAND = { gold: '#C9A84C', dark: '#0C0C0C', grey: '#5A5A5A', light: '#F5F4F0', border: '#D2D0C8', white: '#FFFFFF' };
       const CONTACT = {
@@ -1307,18 +1426,29 @@
               'Content-Type': 'application/json',
               'x-admin-token': token,
             },
-            body: JSON.stringify({ to, subject, body, recipientName, cc, bcc, important }),
+            body: JSON.stringify({
+              to, subject, body, recipientName, cc, bcc, important,
+              attachments: pendingAttachments.map(a => ({
+                filename: a.filename,
+                contentType: a.contentType,
+                content: a.content,
+              })),
+            }),
           });
           const data = await res.json().catch(() => ({}));
           if (!res.ok) {
             showEmailStatus(`Failed to send: ${data.error || res.statusText}${data.detail ? ' — ' + data.detail : ''}`, 'error');
           } else {
-            showEmailStatus(`Email sent successfully to ${to}.`, 'success');
+            const attachNote = pendingAttachments.length
+              ? ` (with ${pendingAttachments.length} attachment${pendingAttachments.length === 1 ? '' : 's'})` : '';
+            showEmailStatus(`Email sent successfully to ${to}${attachNote}.`, 'success');
             emailBodyInput.value = '';
             emailSubjectInput.value = '';
             emailRecipientName.value = '';
             emailCcInput.value = '';
             emailBccInput.value = '';
+            pendingAttachments = [];
+            renderAttachments();
             updateEmailPreview();
           }
         } catch (err) {

@@ -13,6 +13,13 @@
 
 import nodemailer from 'nodemailer';
 
+// Allow larger JSON bodies so admins can attach images/PDFs (base64 inflates ~33%).
+export const config = {
+  api: {
+    bodyParser: { sizeLimit: '25mb' },
+  },
+};
+
 // Load the logo once and embed it as a CID attachment so it always renders,
 // even if recipients block remote images and regardless of which domain is live.
 let LOGO_BUFFER = null;
@@ -319,6 +326,8 @@ export default async function handler(req, res) {
   const replyTo       = payload.replyTo ? String(payload.replyTo).trim() : '';
   // Mark as important / high priority by default — admin UI can opt out.
   const important     = payload.important === undefined ? true : Boolean(payload.important);
+  // Optional user attachments: array of { filename, content (base64 string), contentType }
+  const userAttachments = Array.isArray(payload.attachments) ? payload.attachments : [];
 
   if (!to || !subject || !body) {
     res.statusCode = 400;
@@ -360,6 +369,44 @@ export default async function handler(req, res) {
   const text = buildPlainText({ subject, body, recipientName });
   const logo = await loadLogo(req);
 
+  // Build attachments list: logo (CID embed) + any user-supplied files (base64).
+  const attachments = [];
+  if (logo) {
+    attachments.push({
+      filename: 'logo.png',
+      content: logo,
+      cid: LOGO_CID,
+      contentType: 'image/png',
+    });
+  }
+
+  // Cap total attachment payload at ~9 MB (Vercel function body limit ~4.5MB,
+  // but base64 is ~33% larger than raw — accept generously and let SMTP decide).
+  const MAX_TOTAL_BYTES = 20 * 1024 * 1024;
+  let totalBytes = 0;
+  for (const att of userAttachments) {
+    if (!att || typeof att !== 'object') continue;
+    const filename = String(att.filename || 'attachment').slice(0, 200);
+    const contentType = att.contentType ? String(att.contentType) : 'application/octet-stream';
+    let raw = att.content;
+    if (typeof raw !== 'string' || !raw) continue;
+    // Strip data URI prefix if present (e.g. "data:image/png;base64,....")
+    const commaIdx = raw.indexOf(',');
+    if (raw.startsWith('data:') && commaIdx !== -1) raw = raw.slice(commaIdx + 1);
+    let buf;
+    try { buf = Buffer.from(raw, 'base64'); } catch { continue; }
+    if (!buf || !buf.length) continue;
+    totalBytes += buf.length;
+    if (totalBytes > MAX_TOTAL_BYTES) {
+      res.statusCode = 413;
+      res.setHeader('Content-Type', 'application/json');
+      return res.end(JSON.stringify({
+        error: `Attachments exceed ${Math.round(MAX_TOTAL_BYTES / 1024 / 1024)}MB total limit`,
+      }));
+    }
+    attachments.push({ filename, content: buf, contentType });
+  }
+
   const mailOptions = {
     from,
     to,
@@ -369,12 +416,7 @@ export default async function handler(req, res) {
     subject,
     text,
     html,
-    attachments: logo ? [{
-      filename: 'logo.png',
-      content: logo,
-      cid: LOGO_CID,
-      contentType: 'image/png',
-    }] : undefined,
+    attachments: attachments.length ? attachments : undefined,
   };
 
   if (important) {
