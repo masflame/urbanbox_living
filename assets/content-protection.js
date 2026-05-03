@@ -28,6 +28,7 @@
   document.addEventListener('cut', blockEvent, { capture: true });
 
   // Block common key combos used for viewing source/devtools/saving/printing.
+
   document.addEventListener(
     'keydown',
     function (event) {
