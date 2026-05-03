@@ -450,7 +450,7 @@ async function downloadPdf(form, estimate) {
       reader.readAsDataURL(blob)
     })
     doc.addImage(b64, 'PNG', LEFT, 18, 52, 52)
-  } catch (_) { /* logo failed to load – skip */ }
+  } catch (_) { /* logo failed to load â€“ skip */ }
 
   // company name + tagline
   doc.setTextColor(...GOLD)
@@ -639,7 +639,7 @@ async function downloadPdf(form, estimate) {
   doc.setFont('helvetica', 'bold')
   doc.setFontSize(7.5)
   doc.setTextColor(...GOLD)
-  doc.text('Urban Box Living (Pty) Ltd  ·  hello.urbanboxliving@xanziteh.co.za  ·  +27 60 830 6956', PW / 2, y + 32, { align: 'center' })
+  doc.text('Urban Box Living (Pty) Ltd  Â·  hello.urbanboxliving@xanziteh.co.za  Â·  +27 60 830 6956', PW / 2, y + 32, { align: 'center' })
 
   doc.save(`UBL-Project-Brief-${form.projectType}-${refNum}.pdf`)
 }
@@ -982,14 +982,14 @@ function App() {
               <div className="planner-lightbox" role="dialog" aria-modal="true" onClick={closeGalleryLightbox}>
                 <div className="planner-lightbox-dialog" onClick={(event) => event.stopPropagation()}>
                   <button type="button" className="planner-lightbox-close" onClick={closeGalleryLightbox} aria-label="Close preview">
-                    ×
+                    Ã—
                   </button>
                   <button type="button" className="planner-lightbox-nav planner-lightbox-prev" onClick={() => moveGalleryLightbox(-1)} aria-label="Previous image">
-                    ‹
+                    â€¹
                   </button>
                   <img src={activeLightboxImage} alt={`${form.selectedDesign} preview`} className="planner-lightbox-image" />
                   <button type="button" className="planner-lightbox-nav planner-lightbox-next" onClick={() => moveGalleryLightbox(1)} aria-label="Next image">
-                    ›
+                    â€º
                   </button>
                   <div className="planner-lightbox-foot">
                     <span>

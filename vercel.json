@@ -1,4 +1,5 @@
 {
+  "buildCommand": "rm -rf node_modules/.vite node_modules/.cache && npm run build",
   "rewrites": [
     {
       "source": "/((?!api/|portfolio/|assets/|.*\\.).*)",
