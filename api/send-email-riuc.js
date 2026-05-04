@@ -183,7 +183,7 @@ function buildEmailHtml({ subject, body, recipientName }) {
 
           <!-- TOP BANNER (composite: gold logo on left, students on right, white bg) -->
           <tr>
-            <td style="padding:0;background:${BRAND.white};line-height:0;font-size:0;border-bottom:1px solid ${BRAND.border};">
+            <td style="padding:0;background:${BRAND.white};line-height:0;font-size:0;border-bottom:4px solid ${BRAND.gold};">
               <table role="presentation" width="660" cellpadding="0" cellspacing="0" style="width:660px;max-width:660px;background:${BRAND.white};">
                 <tr>
                   <td width="230" align="center" valign="middle" style="width:230px;padding:12px 14px;background:${BRAND.white};">
@@ -199,37 +199,16 @@ function buildEmailHtml({ subject, body, recipientName }) {
             </td>
           </tr>
 
-          <!-- HEADER BAND with logo + name -->
+          <!-- DATE / REF (moved from old navy header) -->
           <tr>
-            <td style="background:${BRAND.navy};border-bottom:4px solid ${BRAND.gold};padding:22px 32px;">
+            <td style="background:${BRAND.white};padding:14px 32px 0 32px;font-family:Arial,Helvetica,sans-serif;">
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
                 <tr>
-                  <td valign="middle">
-                    <table role="presentation" cellpadding="0" cellspacing="0"><tr>
-                      <td valign="middle" style="padding-right:16px;">
-                        <img src="${LOGO_URL}" width="56" height="56" alt="RIUC"
-                             style="display:block;background:transparent;" />
-                      </td>
-                      <td valign="middle">
-                        <div style="color:${BRAND.white};font-size:18px;font-weight:700;letter-spacing:0.04em;font-family:Arial,Helvetica,sans-serif;">
-                          ROSEBANK INTERNATIONAL
-                        </div>
-                        <div style="color:${BRAND.gold};font-size:13px;margin-top:2px;letter-spacing:0.06em;font-family:Arial,Helvetica,sans-serif;">
-                          UNIVERSITY COLLEGE &middot; PRETORIA, SOUTH AFRICA
-                        </div>
-                      </td>
-                    </tr></table>
+                  <td valign="middle" style="font-size:11px;color:${BRAND.grey};letter-spacing:0.04em;">
+                    ${today}
                   </td>
-                  <td valign="middle" align="right">
-                    <div style="color:${BRAND.gold};font-size:11px;font-weight:700;letter-spacing:0.12em;font-family:Arial,Helvetica,sans-serif;">
-                      OFFICE OF THE REGISTRAR
-                    </div>
-                    <div style="color:#CFD7E8;font-size:10.5px;margin-top:4px;font-family:Arial,Helvetica,sans-serif;">
-                      ${today}
-                    </div>
-                    <div style="color:#CFD7E8;font-size:10.5px;margin-top:2px;font-family:'Courier New',monospace;">
-                      Ref: ${ref}
-                    </div>
+                  <td valign="middle" align="right" style="font-size:11px;color:${BRAND.grey};font-family:'Courier New',monospace;">
+                    Ref: ${ref}
                   </td>
                 </tr>
               </table>
@@ -315,6 +294,40 @@ function buildEmailHtml({ subject, body, recipientName }) {
                   </td>
                   <td align="right" valign="bottom" style="font-size:10px;color:${BRAND.grey};">
                     Ref ${ref}
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- BOTTOM BRAND BAND (moved from top) -->
+          <tr>
+            <td style="background:${BRAND.navy};border-top:4px solid ${BRAND.gold};padding:22px 32px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td valign="middle">
+                    <table role="presentation" cellpadding="0" cellspacing="0"><tr>
+                      <td valign="middle" style="padding-right:16px;">
+                        <img src="${LOGO_URL}" width="56" height="56" alt="RIUC"
+                             style="display:block;background:transparent;" />
+                      </td>
+                      <td valign="middle">
+                        <div style="color:${BRAND.white};font-size:18px;font-weight:700;letter-spacing:0.04em;font-family:Arial,Helvetica,sans-serif;">
+                          ROSEBANK INTERNATIONAL
+                        </div>
+                        <div style="color:${BRAND.gold};font-size:13px;margin-top:2px;letter-spacing:0.06em;font-family:Arial,Helvetica,sans-serif;">
+                          UNIVERSITY COLLEGE &middot; PRETORIA, SOUTH AFRICA
+                        </div>
+                      </td>
+                    </tr></table>
+                  </td>
+                  <td valign="middle" align="right">
+                    <div style="color:${BRAND.gold};font-size:11px;font-weight:700;letter-spacing:0.12em;font-family:Arial,Helvetica,sans-serif;">
+                      OFFICE OF THE REGISTRAR
+                    </div>
+                    <div style="color:#CFD7E8;font-size:10.5px;margin-top:4px;font-family:Arial,Helvetica,sans-serif;">
+                      ${CONTACT.tagline}
+                    </div>
                   </td>
                 </tr>
               </table>

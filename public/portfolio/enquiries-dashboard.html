@@ -2051,7 +2051,7 @@
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="padding:24px 0;">
 <tr><td align="center">
 <table role="presentation" width="660" cellpadding="0" cellspacing="0" style="width:660px;max-width:96%;background:${B.white};border:1px solid ${B.border};box-shadow:0 8px 32px rgba(15,35,80,0.12);">
-  <tr><td style="padding:0;background:${B.white};line-height:0;font-size:0;border-bottom:1px solid ${B.border};">
+  <tr><td style="padding:0;background:${B.white};line-height:0;font-size:0;border-bottom:4px solid ${B.gold};">
     <table role="presentation" width="660" cellpadding="0" cellspacing="0" style="width:660px;max-width:660px;background:${B.white};">
       <tr>
         <td width="230" align="center" valign="middle" style="width:230px;padding:12px 14px;background:${B.white};">
@@ -2063,23 +2063,10 @@
       </tr>
     </table>
   </td></tr>
-  <tr><td style="background:${B.navy};border-bottom:4px solid ${B.gold};padding:22px 32px;">
+  <tr><td style="background:${B.white};padding:14px 32px 0 32px;font-family:Arial,Helvetica,sans-serif;">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
-      <td valign="middle">
-        <table role="presentation" cellpadding="0" cellspacing="0"><tr>
-          <td valign="middle" style="padding-right:16px;">
-            <img src="${RIUC_LOGO_URL}" width="56" height="56" alt="RIUC" style="display:block;background:transparent;" />
-          </td>
-          <td valign="middle">
-            <div style="color:${B.white};font-size:18px;font-weight:700;letter-spacing:0.04em;font-family:Arial,Helvetica,sans-serif;">ROSEBANK INTERNATIONAL</div>
-            <div style="color:${B.gold};font-size:13px;margin-top:2px;letter-spacing:0.06em;font-family:Arial,Helvetica,sans-serif;">UNIVERSITY COLLEGE &middot; PRETORIA, SOUTH AFRICA</div>
-          </td>
-        </tr></table>
-      </td>
-      <td valign="middle" align="right">
-        <div style="color:${B.gold};font-size:11px;font-weight:700;letter-spacing:0.12em;font-family:Arial,Helvetica,sans-serif;">OFFICE OF THE REGISTRAR</div>
-        <div style="color:#CFD7E8;font-size:10.5px;margin-top:4px;font-family:Arial,Helvetica,sans-serif;">${today}</div>
-      </td>
+      <td valign="middle" style="font-size:11px;color:${B.grey};letter-spacing:0.04em;">${today}</td>
+      <td valign="middle" align="right" style="font-size:11px;color:${B.grey};font-family:'Courier New',monospace;">Ref: PREVIEW</td>
     </tr></table>
   </td></tr>
   <tr><td style="background:${B.gold};padding:8px 32px;font-family:Arial,Helvetica,sans-serif;">
@@ -2112,6 +2099,25 @@
       Email: <a href="mailto:${C.email}" style="color:${B.navy};text-decoration:none;font-weight:600;">${C.email}</a>
       &middot; Web: <a href="https://${C.web}" style="color:${B.navy};text-decoration:none;font-weight:600;">${C.web}</a>
     </div>
+  </td></tr>
+  <tr><td style="background:${B.navy};border-top:4px solid ${B.gold};padding:22px 32px;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+      <td valign="middle">
+        <table role="presentation" cellpadding="0" cellspacing="0"><tr>
+          <td valign="middle" style="padding-right:16px;">
+            <img src="${RIUC_LOGO_URL}" width="56" height="56" alt="RIUC" style="display:block;background:transparent;" />
+          </td>
+          <td valign="middle">
+            <div style="color:${B.white};font-size:18px;font-weight:700;letter-spacing:0.04em;font-family:Arial,Helvetica,sans-serif;">ROSEBANK INTERNATIONAL</div>
+            <div style="color:${B.gold};font-size:13px;margin-top:2px;letter-spacing:0.06em;font-family:Arial,Helvetica,sans-serif;">UNIVERSITY COLLEGE &middot; PRETORIA, SOUTH AFRICA</div>
+          </td>
+        </tr></table>
+      </td>
+      <td valign="middle" align="right">
+        <div style="color:${B.gold};font-size:11px;font-weight:700;letter-spacing:0.12em;font-family:Arial,Helvetica,sans-serif;">OFFICE OF THE REGISTRAR</div>
+        <div style="color:#CFD7E8;font-size:10.5px;margin-top:4px;font-family:Arial,Helvetica,sans-serif;">${C.tagline}</div>
+      </td>
+    </tr></table>
   </td></tr>
   <tr><td style="height:6px;background:${B.gold};line-height:6px;font-size:0;">&nbsp;</td></tr>
 </table>
