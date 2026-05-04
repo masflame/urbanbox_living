@@ -1345,14 +1345,35 @@
         // For plain text, escape and split on blank lines as before.
         const isHtml = /<[a-z][\s\S]*>/i.test(raw);
         if (isHtml) {
+          // Force every <a> to render as a visible underlined gold link, the
+          // same way the server does, so the preview matches the sent email.
+          let html = raw.replace(/<a\b([^>]*)>/gi, (m, attrs) => {
+            let a = attrs || '';
+            let existingStyle = '';
+            a = a.replace(/\sstyle\s*=\s*"([^"]*)"/i, (mm, s) => { existingStyle = s; return ''; });
+            a = a.replace(/\sstyle\s*=\s*'([^']*)'/i, (mm, s) => { existingStyle = s; return ''; });
+            a = a.replace(/\starget\s*=\s*("[^"]*"|'[^']*'|[^\s>]+)/gi, '');
+            a = a.replace(/\srel\s*=\s*("[^"]*"|'[^']*'|[^\s>]+)/gi, '');
+            const baseStyle = 'color:#C9A84C;text-decoration:underline;font-weight:600;';
+            const finalStyle = existingStyle
+              ? `${baseStyle}${existingStyle.replace(/;?\s*$/, ';')}`
+              : baseStyle;
+            return `<a${a} target="_blank" rel="noopener noreferrer" style="${finalStyle}">`;
+          });
           // Auto-link bare URLs that aren't already inside an <a> tag.
-          const linked = raw.replace(/(^|[^"'>])(https?:\/\/[^\s<]+)/g,
-            (m, pre, u) => `${pre}<a href="${u}" style="color:#C9A84C;text-decoration:none;">${u}</a>`);
-          return `<div style="line-height:1.65;color:#1A1A1A;font-size:15px;">${linked}</div>`;
+          const parts = html.split(/(<a\b[^>]*>[\s\S]*?<\/a>)/i);
+          for (let i = 0; i < parts.length; i++) {
+            if (i % 2 === 1) continue;
+            parts[i] = parts[i].replace(
+              /(^|[^"'>=])(https?:\/\/[^\s<"']+)/g,
+              (m, pre, u) => `${pre}<a href="${u}" target="_blank" rel="noopener noreferrer" style="color:#C9A84C;text-decoration:underline;font-weight:600;">${u}</a>`
+            );
+          }
+          return `<div style="line-height:1.65;color:#1A1A1A;font-size:15px;">${parts.join('')}</div>`;
         }
         const escaped = escHtml(raw);
         const linked = escaped.replace(/\b(https?:\/\/[^\s<]+)/g,
-          (u) => `<a href="${u}" style="color:#C9A84C;text-decoration:none;">${u}</a>`);
+          (u) => `<a href="${u}" target="_blank" rel="noopener noreferrer" style="color:#C9A84C;text-decoration:underline;font-weight:600;">${u}</a>`);
         return linked
           .split(/\n{2,}/)
           .map(p => `<p style="margin:0 0 14px 0;line-height:1.65;color:#1A1A1A;font-size:15px;">${p.replace(/\n/g,'<br/>')}</p>`)
@@ -1499,9 +1520,44 @@
         e.target.selectedIndex = 0;
       });
       etbLink && etbLink.addEventListener('click', () => {
-        const url = window.prompt('Enter URL (include https://):', 'https://');
+        // window.prompt() steals focus from the contenteditable and collapses
+        // the current selection, which makes execCommand('createLink') a no-op
+        // (no <a> tag is actually inserted). We must save the Range BEFORE
+        // showing the prompt, then restore it before running the command.
+        const sel = window.getSelection && window.getSelection();
+        const savedRange = (sel && sel.rangeCount) ? sel.getRangeAt(0).cloneRange() : null;
+        const hadSelection = !!(savedRange && !savedRange.collapsed);
+        const selectedText = hadSelection ? savedRange.toString() : '';
+
+        let url = window.prompt('Enter URL (include https://):', 'https://');
         if (!url) return;
-        execCmd('createLink', url);
+        url = String(url).trim();
+        if (!url || url === 'https://' || url === 'http://') return;
+        // Default to https:// if the user forgot a scheme.
+        if (!/^[a-z][a-z0-9+.-]*:/i.test(url) && !url.startsWith('mailto:') && !url.startsWith('tel:')) {
+          url = 'https://' + url.replace(/^\/+/, '');
+        }
+
+        emailBodyInput.focus();
+        // Restore the selection that prompt() destroyed.
+        if (savedRange) {
+          const newSel = window.getSelection();
+          newSel.removeAllRanges();
+          newSel.addRange(savedRange);
+        }
+
+        if (hadSelection) {
+          // Wrap the existing selection in <a>.
+          try { document.execCommand('createLink', false, url); } catch {}
+        } else {
+          // No text was selected: insert the URL itself as a clickable link
+          // at the caret position.
+          const safeUrl  = url.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+          const safeText = (selectedText || url).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+          const anchor = `<a href="${safeUrl}" style="color:#C9A84C;text-decoration:underline;">${safeText}</a>&nbsp;`;
+          try { document.execCommand('insertHTML', false, anchor); } catch {}
+        }
+        schedulePreview();
       });
       etbColor && etbColor.addEventListener('click', () => {
         execCmd('foreColor', '#C9A84C');

@@ -87,15 +87,47 @@ function bodyToHtml(text) {
       .replace(/\son[a-z]+\s*=\s*'[^']*'/gi, '')
       .replace(/\son[a-z]+\s*=\s*[^\s>]+/gi, '')
       .replace(/(href|src)\s*=\s*("|')\s*javascript:[^"']*\2/gi, '$1=$2#$2');
-    // Auto-link bare URLs that aren't already inside an anchor or quoted attribute.
-    html = html.replace(/(^|[^"'>])(https?:\/\/[^\s<]+)/g,
-      (m, pre, u) => `${pre}<a href="${u}" style="color:#C9A84C;text-decoration:none;">${u}</a>`);
+
+    // Force every <a> tag to render as a visible, underlined, brand-gold link
+    // in email clients (Gmail/Outlook strip or override default <a> styles).
+    // We also add target="_blank" + rel for safety, and merge any pre-existing
+    // style attribute so inline colours from the editor are not lost.
+    html = html.replace(/<a\b([^>]*)>/gi, (m, attrs) => {
+      let a = attrs || '';
+      // Drop any existing style attribute — we will replace it.
+      let existingStyle = '';
+      a = a.replace(/\sstyle\s*=\s*"([^"]*)"/i, (mm, s) => { existingStyle = s; return ''; });
+      a = a.replace(/\sstyle\s*=\s*'([^']*)'/i, (mm, s) => { existingStyle = s; return ''; });
+      // Drop any existing target / rel — we'll set our own.
+      a = a.replace(/\starget\s*=\s*("[^"]*"|'[^']*'|[^\s>]+)/gi, '');
+      a = a.replace(/\srel\s*=\s*("[^"]*"|'[^']*'|[^\s>]+)/gi, '');
+      const baseStyle = 'color:#C9A84C;text-decoration:underline;font-weight:600;';
+      const finalStyle = existingStyle
+        ? `${baseStyle}${existingStyle.replace(/;?\s*$/, ';')}`
+        : baseStyle;
+      return `<a${a} target="_blank" rel="noopener noreferrer" style="${finalStyle}">`;
+    });
+
+    // Auto-link bare URLs that aren't already inside an <a>. We split the
+    // string on existing anchor tags so the regex never fires on text that
+    // is already part of a link.
+    const parts = html.split(/(<a\b[^>]*>[\s\S]*?<\/a>)/i);
+    for (let i = 0; i < parts.length; i++) {
+      // Even-indexed parts are OUTSIDE any anchor; odd-indexed parts ARE the
+      // anchor tags themselves and must be left untouched.
+      if (i % 2 === 1) continue;
+      parts[i] = parts[i].replace(
+        /(^|[^"'>=])(https?:\/\/[^\s<"']+)/g,
+        (m, pre, u) => `${pre}<a href="${u}" target="_blank" rel="noopener noreferrer" style="color:#C9A84C;text-decoration:underline;font-weight:600;">${u}</a>`
+      );
+    }
+    html = parts.join('');
     return `<div style="line-height:1.65;color:#1A1A1A;font-size:15px;">${html}</div>`;
   }
   // Plain text fallback: escape, link URLs, paragraph-split.
   const escaped = escapeHtml(raw);
   const linked = escaped.replace(/\b(https?:\/\/[^\s<]+)/g,
-    (u) => `<a href="${u}" style="color:#C9A84C;text-decoration:none;">${u}</a>`);
+    (u) => `<a href="${u}" target="_blank" rel="noopener noreferrer" style="color:#C9A84C;text-decoration:underline;font-weight:600;">${u}</a>`);
   return linked
     .split(/\n{2,}/)
     .map(p => `<p style="margin:0 0 14px 0;line-height:1.65;color:#1A1A1A;font-size:15px;">${p.replace(/\n/g,'<br/>')}</p>`)
