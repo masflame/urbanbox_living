@@ -186,13 +186,13 @@ function buildEmailHtml({ subject, body, recipientName }) {
             <td style="padding:0;background:${BRAND.white};line-height:0;font-size:0;border-bottom:1px solid ${BRAND.border};">
               <table role="presentation" width="660" cellpadding="0" cellspacing="0" style="width:660px;max-width:660px;background:${BRAND.white};">
                 <tr>
-                  <td width="245" align="center" valign="middle" style="width:245px;padding:18px 16px;background:${BRAND.white};">
-                    <img src="${GOLD_LOGO_URL}" alt="RIUC" width="190"
-                         style="display:block;width:190px;max-width:100%;height:auto;border:0;" />
+                  <td width="230" align="center" valign="middle" style="width:230px;padding:8px 12px;background:${BRAND.white};">
+                    <img src="${GOLD_LOGO_URL}" alt="RIUC" height="110"
+                         style="display:block;height:110px;width:auto;max-width:210px;border:0;margin:0 auto;" />
                   </td>
-                  <td width="415" align="right" valign="bottom" style="width:415px;background:${BRAND.white};padding:0;">
-                    <img src="${STUDENTS_URL}" alt="RIUC Students" width="415"
-                         style="display:block;width:415px;max-width:100%;height:auto;border:0;" />
+                  <td width="430" align="right" valign="middle" style="width:430px;background:${BRAND.white};padding:0;">
+                    <img src="${STUDENTS_URL}" alt="RIUC Students" width="430" height="110"
+                         style="display:block;width:430px;height:110px;max-width:430px;object-fit:cover;border:0;" />
                   </td>
                 </tr>
               </table>
