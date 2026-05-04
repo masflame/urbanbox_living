@@ -358,6 +358,10 @@
         <svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M4 4l8 8 8-8"/></svg>
         Email Sender
       </div>
+      <div class="nav-item" data-tab="email2">
+        <svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M4 4l8 8 8-8"/></svg>
+        Email Sender 2
+      </div>
     </div>
     <div class="sidebar-section" style="padding-top:8px;">
       <div class="sidebar-section-label">Settings</div>
@@ -656,6 +660,122 @@
         </div>
       </div>
       <!-- =================== END EMAIL SENDER TAB =================== -->
+
+      <!-- ===================== EMAIL SENDER 2 (RIUC) TAB ===================== -->
+      <div class="tab-email" id="email2TabPane">
+        <div class="email-grid">
+          <div class="email-card">
+            <div class="email-card-head">
+              <div>
+                <div class="email-card-title">Compose RIUC professional email</div>
+                <div class="email-card-sub">Sends with the Rosebank International University College letterhead, navy &amp; gold branding and Accra contact footer.</div>
+              </div>
+            </div>
+            <form id="email2Form" class="email-form" autocomplete="off">
+              <div class="email-row two">
+                <label class="email-field">
+                  <span class="email-label">Recipient email <span class="email-req">*</span></span>
+                  <input type="email" id="email2To" placeholder="student@example.com" required />
+                </label>
+                <label class="email-field">
+                  <span class="email-label">Recipient name (optional)</span>
+                  <input type="text" id="email2RecipientName" placeholder="e.g. Ama Mensah" />
+                </label>
+              </div>
+              <div class="email-row two">
+                <label class="email-field">
+                  <span class="email-label">CC (optional)</span>
+                  <input type="text" id="email2Cc" placeholder="comma,separated@emails.com" />
+                </label>
+                <label class="email-field">
+                  <span class="email-label">BCC (optional)</span>
+                  <input type="text" id="email2Bcc" placeholder="comma,separated@emails.com" />
+                </label>
+              </div>
+              <label class="email-field">
+                <span class="email-label">Subject <span class="email-req">*</span></span>
+                <input type="text" id="email2Subject" placeholder="e.g. Your RIUC Admission Offer" required />
+              </label>
+              <label class="email-field">
+                <span class="email-label">Body <span class="email-req">*</span></span>
+                <div class="email-editor-wrap">
+                  <div class="email-toolbar" id="email2Toolbar" role="toolbar" aria-label="Formatting">
+                    <button type="button" class="etb-btn" data-cmd="bold" title="Bold (Ctrl+B)"><b>B</b></button>
+                    <button type="button" class="etb-btn" data-cmd="italic" title="Italic (Ctrl+I)"><i>I</i></button>
+                    <button type="button" class="etb-btn" data-cmd="underline" title="Underline (Ctrl+U)"><u>U</u></button>
+                    <button type="button" class="etb-btn" data-cmd="strikeThrough" title="Strikethrough"><s>S</s></button>
+                    <span class="etb-sep"></span>
+                    <select class="etb-select" id="etb2Format" title="Heading / paragraph">
+                      <option value="P">Paragraph</option>
+                      <option value="H2">Heading 2</option>
+                      <option value="H3">Heading 3</option>
+                      <option value="BLOCKQUOTE">Quote</option>
+                    </select>
+                    <span class="etb-sep"></span>
+                    <button type="button" class="etb-btn" data-cmd="insertUnorderedList" title="Bullet list">&bull; List</button>
+                    <button type="button" class="etb-btn" data-cmd="insertOrderedList" title="Numbered list">1. List</button>
+                    <button type="button" class="etb-btn" data-cmd="outdent" title="Outdent (Shift+Tab)">&#8676;|</button>
+                    <button type="button" class="etb-btn" data-cmd="indent" title="Indent (Tab)">|&#8677;</button>
+                    <span class="etb-sep"></span>
+                    <button type="button" class="etb-btn" data-cmd="justifyLeft" title="Align left">&#8676;</button>
+                    <button type="button" class="etb-btn" data-cmd="justifyCenter" title="Align centre">&#8801;</button>
+                    <button type="button" class="etb-btn" data-cmd="justifyRight" title="Align right">&#8677;</button>
+                    <span class="etb-sep"></span>
+                    <button type="button" class="etb-btn" id="etb2Link" title="Insert link">&#128279; Link</button>
+                    <button type="button" class="etb-btn" id="etb2Color" title="Brand navy colour" style="color:#1B3A77;font-weight:700;">A</button>
+                    <span class="etb-sep"></span>
+                    <button type="button" class="etb-btn" data-cmd="removeFormat" title="Clear formatting">&#10005; Clear</button>
+                  </div>
+                  <div id="email2Body" class="email-editor" contenteditable="true" role="textbox" aria-multiline="true"
+                       data-placeholder="Write your message here. Use the toolbar above for bold, lists, links and more."></div>
+                </div>
+                <span class="email-hint">Tip: select text then click a button. Ctrl+B / Ctrl+I / Ctrl+U also work. URLs become clickable in the email.</span>
+              </label>
+              <label class="email-field email-important-field">
+                <input type="checkbox" id="email2Important" checked />
+                <span>Mark as <strong>important / high priority</strong> in the recipient's inbox</span>
+              </label>
+              <div class="email-field">
+                <span class="email-label">Attachments (optional)</span>
+                <label class="email-attach-drop" id="email2AttachDrop">
+                  <div class="email-attach-drop-inner">
+                    <svg viewBox="0 0 24 24"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+                    <span><strong>Click to add files</strong> or drag &amp; drop here &mdash; images, PDFs, docs (up to ~15&nbsp;MB total)</span>
+                  </div>
+                  <input type="file" id="email2AttachInput" multiple
+                         accept="image/*,application/pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.zip" />
+                </label>
+                <div class="email-attach-list" id="email2AttachList"></div>
+                <div class="email-attach-total" id="email2AttachTotal" style="display:none;"></div>
+              </div>
+              <div class="email-actions">
+                <button type="button" class="btn" id="email2PreviewBtn">
+                  <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  Preview
+                </button>
+                <button type="submit" class="btn email-send-btn" id="email2SendBtn">
+                  <svg viewBox="0 0 24 24"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></svg>
+                  Send email
+                </button>
+              </div>
+              <div id="email2Status" class="email-status" style="display:none;"></div>
+            </form>
+          </div>
+
+          <div class="email-card email-preview-card">
+            <div class="email-card-head">
+              <div>
+                <div class="email-card-title">Live preview</div>
+                <div class="email-card-sub">This is roughly how the recipient will see your message.</div>
+              </div>
+            </div>
+            <div class="email-preview-frame">
+              <iframe id="email2PreviewFrame" title="Email preview" sandbox></iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- =================== END EMAIL SENDER 2 TAB =================== -->
     </div>
   </div>
 
@@ -1121,6 +1241,8 @@
         workspace.style.display = 'none';
         analyticsTabPane.style.display = 'none';
         emailTabPane.style.display = 'none';
+        const email2TabPaneEl = document.getElementById('email2TabPane');
+        if (email2TabPaneEl) email2TabPaneEl.style.display = 'none';
 
         if (tab === 'analytics') {
           analyticsTabPane.style.display = 'flex';
@@ -1132,6 +1254,13 @@
           emailTabPane.style.display = 'block';
           breadcrumbCurrent.textContent = 'Email Sender';
           updateEmailPreview();
+          return;
+        }
+
+        if (tab === 'email2') {
+          if (email2TabPaneEl) email2TabPaneEl.style.display = 'block';
+          breadcrumbCurrent.textContent = 'Email Sender 2 (RIUC)';
+          if (typeof updateEmail2Preview === 'function') updateEmail2Preview();
           return;
         }
 
@@ -1813,6 +1942,434 @@
       });
 
       // ============ END EMAIL SENDER ============
+
+      // ============== EMAIL SENDER 2 (RIUC) ==============
+      // Mirrors the Urban Box Living sender above, but posts to
+      // /api/send-email-riuc and renders a Rosebank International University
+      // College letterhead (navy + gold). Reuses helpers (smartTextToHtml,
+      // getAdminToken, fmtBytes, readFileAsBase64) from the block above.
+      (function setupRiucSender() {
+        const form          = document.getElementById('email2Form');
+        if (!form) return; // safety: pane not in DOM
+        const toInput       = document.getElementById('email2To');
+        const recipientName = document.getElementById('email2RecipientName');
+        const ccInput       = document.getElementById('email2Cc');
+        const bccInput      = document.getElementById('email2Bcc');
+        const subjectInput  = document.getElementById('email2Subject');
+        const bodyInput     = document.getElementById('email2Body');
+        const previewBtn    = document.getElementById('email2PreviewBtn');
+        const sendBtn       = document.getElementById('email2SendBtn');
+        const statusEl      = document.getElementById('email2Status');
+        const previewFrame  = document.getElementById('email2PreviewFrame');
+        const importantChk  = document.getElementById('email2Important');
+        const attachInput   = document.getElementById('email2AttachInput');
+        const attachDrop    = document.getElementById('email2AttachDrop');
+        const attachListEl  = document.getElementById('email2AttachList');
+        const attachTotalEl = document.getElementById('email2AttachTotal');
+        const toolbar       = document.getElementById('email2Toolbar');
+        const formatSel     = document.getElementById('etb2Format');
+        const linkBtn       = document.getElementById('etb2Link');
+        const colorBtn      = document.getElementById('etb2Color');
+
+        const MAX_TOTAL = 15 * 1024 * 1024;
+        let pending = [];
+
+        const RIUC_BRAND = {
+          navy:   '#1B3A77',
+          navyDk: '#0F2350',
+          gold:   '#C9A646',
+          grey:   '#5A5A5A',
+          light:  '#F4F6FB',
+          border: '#D4DAE6',
+          white:  '#FFFFFF',
+        };
+        const RIUC_CONTACT = {
+          name:    'Rosebank International University College',
+          phone:   '+233 307 007 800',
+          whatsapp:'+233 59 646 6466',
+          email:   'info@riuc.edu.gh',
+          web:     'www.riuc.edu.gh',
+          address: 'Opeibea House, No A177 Liberation Road, Airport Commercial Centre, Accra, Ghana',
+          tagline: 'Fast Track Your Global Career',
+        };
+        const origin = window.location.origin || 'https://urbanboxliving.vercel.app';
+        const RIUC_LOGO_URL   = origin + '/riuc-logo-white.png';
+        const RIUC_BANNER_URL = origin + '/riuc-banner-top.png';
+
+        function escHtml(s) {
+          return String(s == null ? '' : s)
+            .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+            .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+        }
+        function bodyToHtml(input) {
+          const raw = String(input == null ? '' : input);
+          const isHtml = /<[a-z][\s\S]*>/i.test(raw);
+          if (isHtml) {
+            let html = raw.replace(/<a\b([^>]*)>/gi, (m, attrs) => {
+              let a = attrs || '';
+              let existingStyle = '';
+              a = a.replace(/\sstyle\s*=\s*"([^"]*)"/i, (mm, s) => { existingStyle = s; return ''; });
+              a = a.replace(/\sstyle\s*=\s*'([^']*)'/i, (mm, s) => { existingStyle = s; return ''; });
+              a = a.replace(/\starget\s*=\s*("[^"]*"|'[^']*'|[^\s>]+)/gi, '');
+              a = a.replace(/\srel\s*=\s*("[^"]*"|'[^']*'|[^\s>]+)/gi, '');
+              const baseStyle = `color:${RIUC_BRAND.navy};text-decoration:underline;font-weight:600;`;
+              const finalStyle = existingStyle
+                ? `${baseStyle}${existingStyle.replace(/;?\s*$/, ';')}`
+                : baseStyle;
+              return `<a${a} target="_blank" rel="noopener noreferrer" style="${finalStyle}">`;
+            });
+            const parts = html.split(/(<a\b[^>]*>[\s\S]*?<\/a>)/i);
+            for (let i = 0; i < parts.length; i++) {
+              if (i % 2 === 1) continue;
+              parts[i] = parts[i].replace(
+                /(^|[^"'>=])(https?:\/\/[^\s<"']+)/g,
+                (m, pre, u) => `${pre}<a href="${u}" target="_blank" rel="noopener noreferrer" style="color:${RIUC_BRAND.navy};text-decoration:underline;font-weight:600;">${u}</a>`
+              );
+            }
+            return `<div style="line-height:1.65;color:#1A1A1A;font-size:15px;">${parts.join('')}</div>`;
+          }
+          const escaped = escHtml(raw);
+          const linked = escaped.replace(/\b(https?:\/\/[^\s<]+)/g,
+            (u) => `<a href="${u}" target="_blank" rel="noopener noreferrer" style="color:${RIUC_BRAND.navy};text-decoration:underline;font-weight:600;">${u}</a>`);
+          return linked
+            .split(/\n{2,}/)
+            .map(p => `<p style="margin:0 0 14px 0;line-height:1.65;color:#1A1A1A;font-size:15px;">${p.replace(/\n/g,'<br/>')}</p>`)
+            .join('');
+        }
+
+        function buildPreviewHtml({ subject, body, recipientName }) {
+          const today = new Date().toLocaleDateString('en-GB', { day:'2-digit', month:'long', year:'numeric' });
+          const greeting = recipientName ? `Dear ${escHtml(recipientName)},` : 'Dear Student,';
+          const subj = subject || 'Your subject will appear here';
+          const bodyHtml = body
+            ? bodyToHtml(body)
+            : '<p style="margin:0;color:#6E7891;font-style:italic;font-size:14px;">Your message body will appear here…</p>';
+          const B = RIUC_BRAND, C = RIUC_CONTACT;
+          return `<!DOCTYPE html><html><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/></head>
+<body style="margin:0;padding:0;background:#EAEEF6;font-family:Georgia,'Times New Roman',serif;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="padding:24px 0;">
+<tr><td align="center">
+<table role="presentation" width="660" cellpadding="0" cellspacing="0" style="width:660px;max-width:96%;background:${B.white};border:1px solid ${B.border};box-shadow:0 8px 32px rgba(15,35,80,0.12);">
+  <tr><td style="padding:0;background:${B.navy};line-height:0;font-size:0;">
+    <img src="${RIUC_BANNER_URL}" alt="Rosebank International University College" width="660" style="display:block;width:100%;max-width:660px;height:auto;border:0;" />
+  </td></tr>
+  <tr><td style="background:${B.navy};border-bottom:4px solid ${B.gold};padding:22px 32px;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+      <td valign="middle">
+        <table role="presentation" cellpadding="0" cellspacing="0"><tr>
+          <td valign="middle" style="padding-right:16px;">
+            <img src="${RIUC_LOGO_URL}" width="56" height="56" alt="RIUC" style="display:block;background:transparent;" />
+          </td>
+          <td valign="middle">
+            <div style="color:${B.white};font-size:18px;font-weight:700;letter-spacing:0.04em;font-family:Arial,Helvetica,sans-serif;">ROSEBANK INTERNATIONAL</div>
+            <div style="color:${B.gold};font-size:13px;margin-top:2px;letter-spacing:0.06em;font-family:Arial,Helvetica,sans-serif;">UNIVERSITY COLLEGE &middot; ACCRA, GHANA</div>
+          </td>
+        </tr></table>
+      </td>
+      <td valign="middle" align="right">
+        <div style="color:${B.gold};font-size:11px;font-weight:700;letter-spacing:0.12em;font-family:Arial,Helvetica,sans-serif;">OFFICIAL CORRESPONDENCE</div>
+        <div style="color:#CFD7E8;font-size:10.5px;margin-top:4px;font-family:Arial,Helvetica,sans-serif;">${today}</div>
+      </td>
+    </tr></table>
+  </td></tr>
+  <tr><td style="background:${B.gold};padding:8px 32px;font-family:Arial,Helvetica,sans-serif;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+      <td style="color:${B.navyDk};font-size:11px;font-weight:700;">Tel: ${C.phone}</td>
+      <td align="center" style="color:${B.navyDk};font-size:11px;font-weight:700;">${C.email}</td>
+      <td align="right" style="color:${B.navyDk};font-size:11px;font-weight:700;">${C.web}</td>
+    </tr></table>
+  </td></tr>
+  <tr><td style="padding:28px 36px 8px 36px;">
+    <div style="font-size:11px;letter-spacing:0.16em;color:${B.grey};text-transform:uppercase;font-weight:700;font-family:Arial,Helvetica,sans-serif;">Subject</div>
+    <div style="font-size:21px;font-weight:700;color:${B.navyDk};margin-top:6px;line-height:1.3;">${escHtml(subj)}</div>
+    <div style="height:2px;width:56px;background:${B.gold};margin-top:14px;"></div>
+  </td></tr>
+  <tr><td style="padding:18px 36px 8px 36px;font-family:Georgia,'Times New Roman',serif;">
+    <p style="margin:0 0 16px 0;font-size:15px;color:${B.navyDk};font-weight:700;">${greeting}</p>
+    ${bodyHtml}
+  </td></tr>
+  <tr><td style="padding:8px 36px 28px 36px;font-family:Georgia,'Times New Roman',serif;">
+    <p style="margin:0 0 6px 0;font-size:15px;color:#1A1A1A;">Yours sincerely,</p>
+    <p style="margin:0;font-size:15px;color:${B.navyDk};font-weight:700;">The RIUC Office of Admissions</p>
+    <p style="margin:2px 0 0 0;font-size:12px;color:${B.grey};font-style:italic;">${C.tagline}</p>
+  </td></tr>
+  <tr><td style="padding:0 36px;"><div style="height:1px;background:${B.border};"></div></td></tr>
+  <tr><td style="padding:18px 36px 24px 36px;background:${B.light};font-family:Arial,Helvetica,sans-serif;">
+    <div style="font-size:11px;color:${B.grey};line-height:1.6;">
+      <strong style="color:${B.navyDk};">${C.name}</strong><br/>
+      ${C.address}<br/>
+      Tel: ${C.phone} &middot; WhatsApp: ${C.whatsapp}<br/>
+      Email: <a href="mailto:${C.email}" style="color:${B.navy};text-decoration:none;font-weight:600;">${C.email}</a>
+      &middot; Web: <a href="https://${C.web}" style="color:${B.navy};text-decoration:none;font-weight:600;">${C.web}</a>
+    </div>
+  </td></tr>
+  <tr><td style="height:6px;background:${B.gold};line-height:6px;font-size:0;">&nbsp;</td></tr>
+</table>
+</td></tr></table></body></html>`;
+        }
+
+        function getBodyHtml() {
+          return (bodyInput.innerHTML || '').replace(/^(\s*<br\s*\/?\s*>)+/i, '').trim();
+        }
+        function getBodyText() {
+          return (bodyInput.textContent || '').trim();
+        }
+        function updatePreview() {
+          const html = buildPreviewHtml({
+            subject: subjectInput.value.trim(),
+            body: getBodyHtml(),
+            recipientName: recipientName.value.trim(),
+          });
+          try { previewFrame.srcdoc = html; }
+          catch (_) {
+            const doc = previewFrame.contentDocument || previewFrame.contentWindow.document;
+            doc.open(); doc.write(html); doc.close();
+          }
+        }
+        // Expose so switchTab can call it on first activation.
+        window.updateEmail2Preview = updatePreview;
+
+        let previewTimer;
+        function schedulePreview() {
+          clearTimeout(previewTimer);
+          previewTimer = setTimeout(updatePreview, 200);
+        }
+        [subjectInput, recipientName].forEach(el => el.addEventListener('input', schedulePreview));
+        bodyInput.addEventListener('input', schedulePreview);
+        previewBtn && previewBtn.addEventListener('click', updatePreview);
+
+        // ----- Toolbar -----
+        function execCmd(cmd, value) {
+          bodyInput.focus();
+          try { document.execCommand(cmd, false, value || null); } catch {}
+          schedulePreview();
+        }
+        toolbar && toolbar.addEventListener('click', (e) => {
+          const btn = e.target.closest('.etb-btn[data-cmd]');
+          if (!btn) return;
+          e.preventDefault();
+          const cmd = btn.dataset.cmd;
+          if (cmd === 'insertOrderedList' || cmd === 'insertUnorderedList') {
+            const sel = window.getSelection();
+            if (sel && sel.rangeCount && !sel.isCollapsed) {
+              const selText = sel.toString();
+              if (selText && /\n/.test(selText)
+                  && (/^\s*([-*\u2022]|\d+[.)])\s/m.test(selText) || /^[^\n]+:\s*$/m.test(selText))) {
+                const html = smartTextToHtml(selText);
+                if (html) {
+                  bodyInput.focus();
+                  document.execCommand('insertHTML', false, html);
+                  schedulePreview();
+                  return;
+                }
+              }
+            }
+          }
+          execCmd(cmd);
+        });
+        formatSel && formatSel.addEventListener('change', (e) => {
+          execCmd('formatBlock', e.target.value);
+          e.target.selectedIndex = 0;
+        });
+        linkBtn && linkBtn.addEventListener('click', () => {
+          const sel = window.getSelection && window.getSelection();
+          const savedRange = (sel && sel.rangeCount) ? sel.getRangeAt(0).cloneRange() : null;
+          const hadSelection = !!(savedRange && !savedRange.collapsed);
+          const selectedText = hadSelection ? savedRange.toString() : '';
+
+          let url = window.prompt('Enter URL (include https://):', 'https://');
+          if (!url) return;
+          url = String(url).trim();
+          if (!url || url === 'https://' || url === 'http://') return;
+          if (!/^[a-z][a-z0-9+.-]*:/i.test(url) && !url.startsWith('mailto:') && !url.startsWith('tel:')) {
+            url = 'https://' + url.replace(/^\/+/, '');
+          }
+
+          bodyInput.focus();
+          if (savedRange) {
+            const newSel = window.getSelection();
+            newSel.removeAllRanges();
+            newSel.addRange(savedRange);
+          }
+          if (hadSelection) {
+            try { document.execCommand('createLink', false, url); } catch {}
+          } else {
+            const safeUrl  = url.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+            const safeText = (selectedText || url).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+            const anchor = `<a href="${safeUrl}" style="color:${RIUC_BRAND.navy};text-decoration:underline;">${safeText}</a>&nbsp;`;
+            try { document.execCommand('insertHTML', false, anchor); } catch {}
+          }
+          schedulePreview();
+        });
+        colorBtn && colorBtn.addEventListener('click', () => execCmd('foreColor', RIUC_BRAND.navy));
+
+        // ----- Paste / Tab handling (mirrors UBL sender) -----
+        bodyInput.addEventListener('paste', (e) => {
+          e.preventDefault();
+          const text = (e.clipboardData || window.clipboardData).getData('text/plain');
+          const html = smartTextToHtml(text);
+          if (html) document.execCommand('insertHTML', false, html);
+          else document.execCommand('insertText', false, text);
+          schedulePreview();
+        });
+        bodyInput.addEventListener('keydown', (e) => {
+          if (e.key !== 'Tab') return;
+          const sel = window.getSelection && window.getSelection();
+          let inList = false;
+          if (sel && sel.rangeCount) {
+            let node = sel.getRangeAt(0).startContainer;
+            while (node && node !== bodyInput) {
+              if (node.nodeName === 'LI') { inList = true; break; }
+              node = node.parentNode;
+            }
+          }
+          if (inList) {
+            e.preventDefault();
+            execCmd(e.shiftKey ? 'outdent' : 'indent');
+          }
+        });
+
+        // ----- Attachments -----
+        function renderAttach() {
+          attachListEl.innerHTML = '';
+          let total = 0;
+          pending.forEach((att, idx) => {
+            total += att.size;
+            const row = document.createElement('div');
+            row.className = 'email-attach-item';
+            row.innerHTML = `<span class="name" title="${att.filename}">${att.filename}</span>`
+              + `<span class="size">${fmtBytes(att.size)}</span>`
+              + `<button type="button" class="remove" aria-label="Remove" data-idx="${idx}">&times;</button>`;
+            row.querySelector('.remove').addEventListener('click', () => {
+              pending.splice(idx, 1);
+              renderAttach();
+            });
+            attachListEl.appendChild(row);
+          });
+          if (pending.length) {
+            attachTotalEl.style.display = 'block';
+            attachTotalEl.textContent = `${pending.length} file${pending.length === 1 ? '' : 's'} \u00B7 ${fmtBytes(total)}`;
+          } else {
+            attachTotalEl.style.display = 'none';
+          }
+        }
+        async function addFiles(fileList) {
+          const currentTotal = pending.reduce((s, a) => s + a.size, 0);
+          let newTotal = currentTotal;
+          for (const file of fileList) {
+            if (!file) continue;
+            newTotal += file.size;
+            if (newTotal > MAX_TOTAL) {
+              showStatus(`Skipped "${file.name}" \u2014 attachments would exceed ${fmtBytes(MAX_TOTAL)} total.`, 'error');
+              newTotal -= file.size;
+              continue;
+            }
+            try {
+              const content = await readFileAsBase64(file);
+              pending.push({
+                filename: file.name,
+                contentType: file.type || 'application/octet-stream',
+                size: file.size,
+                content,
+              });
+            } catch (e) {
+              showStatus(`Failed to read "${file.name}": ${e.message || e}`, 'error');
+              newTotal -= file.size;
+            }
+          }
+          renderAttach();
+        }
+        attachInput && attachInput.addEventListener('change', async (e) => {
+          await addFiles(Array.from(e.target.files || []));
+          e.target.value = '';
+        });
+        if (attachDrop) {
+          ['dragenter', 'dragover'].forEach(ev => attachDrop.addEventListener(ev, (e) => {
+            e.preventDefault(); e.stopPropagation();
+            attachDrop.classList.add('dragover');
+          }));
+          ['dragleave', 'drop'].forEach(ev => attachDrop.addEventListener(ev, (e) => {
+            e.preventDefault(); e.stopPropagation();
+            attachDrop.classList.remove('dragover');
+          }));
+          attachDrop.addEventListener('drop', async (e) => {
+            const files = e.dataTransfer && e.dataTransfer.files ? Array.from(e.dataTransfer.files) : [];
+            if (files.length) await addFiles(files);
+          });
+        }
+
+        function showStatus(msg, type) {
+          statusEl.textContent = msg;
+          statusEl.className = 'email-status' + (type ? ' ' + type : '');
+          statusEl.style.display = 'block';
+        }
+
+        form.addEventListener('submit', async (event) => {
+          event.preventDefault();
+          const to = toInput.value.trim();
+          const subject = subjectInput.value.trim();
+          const body = getBodyHtml();
+          const bodyPlain = getBodyText();
+          const rname = recipientName.value.trim();
+          const cc = ccInput.value.trim();
+          const bcc = bccInput.value.trim();
+          const important = importantChk ? importantChk.checked : true;
+
+          if (!to || !subject || !bodyPlain) {
+            showStatus('Please fill in recipient, subject and body.', 'error');
+            return;
+          }
+
+          sendBtn.disabled = true;
+          showStatus('Sending email…', '');
+
+          try {
+            const token = getAdminToken();
+            const res = await fetch('/api/send-email-riuc', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'x-admin-token': token,
+              },
+              body: JSON.stringify({
+                to, subject, body, recipientName: rname, cc, bcc, important,
+                attachments: pending.map(a => ({
+                  filename: a.filename,
+                  contentType: a.contentType,
+                  content: a.content,
+                })),
+              }),
+            });
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok) {
+              if (res.status === 401) {
+                try { sessionStorage.removeItem('ubl_admin_token'); } catch {}
+                try { localStorage.removeItem('ubl_admin_token'); } catch {}
+                showStatus('Unauthorized: incorrect admin password. Click Send again to retry.', 'error');
+              } else {
+                showStatus(`Failed to send: ${data.error || res.statusText}${data.detail ? ' — ' + data.detail : ''}`, 'error');
+              }
+            } else {
+              const note = pending.length
+                ? ` (with ${pending.length} attachment${pending.length === 1 ? '' : 's'})` : '';
+              showStatus(`Email sent successfully to ${to}${note}.`, 'success');
+              bodyInput.innerHTML = '';
+              subjectInput.value = '';
+              recipientName.value = '';
+              ccInput.value = '';
+              bccInput.value = '';
+              pending = [];
+              renderAttach();
+              updatePreview();
+            }
+          } catch (err) {
+            showStatus(`Network error: ${err && err.message ? err.message : err}`, 'error');
+          } finally {
+            sendBtn.disabled = false;
+          }
+        });
+      })();
+      // ============ END EMAIL SENDER 2 ============
 
       switchTab('dashboard');
       loadEnquiries();
