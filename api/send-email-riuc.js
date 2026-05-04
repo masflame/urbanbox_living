@@ -199,35 +199,16 @@ function buildEmailHtml({ subject, body, recipientName }) {
             </td>
           </tr>
 
-          <!-- DATE / REF (moved from old navy header) -->
+          <!-- UNIFIED GOLD BAR: date + contact -->
           <tr>
-            <td style="background:${BRAND.white};padding:14px 32px 0 32px;font-family:Arial,Helvetica,sans-serif;">
+            <td style="background:${BRAND.gold};padding:10px 32px;font-family:Arial,Helvetica,sans-serif;">
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
                 <tr>
-                  <td valign="middle" style="font-size:11px;color:${BRAND.grey};letter-spacing:0.04em;">
+                  <td valign="middle" style="color:${BRAND.navyDk};font-size:11px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;">
                     ${today}
                   </td>
-                  <td valign="middle" align="right" style="font-size:11px;color:${BRAND.grey};font-family:'Courier New',monospace;">
-                    Ref: ${ref}
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-
-          <!-- CONTACT BAR -->
-          <tr>
-            <td style="background:${BRAND.gold};padding:8px 32px;font-family:Arial,Helvetica,sans-serif;">
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-                <tr>
-                  <td style="color:${BRAND.navyDk};font-size:11px;font-weight:700;">
-                    Tel: ${CONTACT.phone}
-                  </td>
-                  <td align="center" style="color:${BRAND.navyDk};font-size:11px;font-weight:700;">
-                    ${CONTACT.email}
-                  </td>
-                  <td align="right" style="color:${BRAND.navyDk};font-size:11px;font-weight:700;">
-                    ${CONTACT.web}
+                  <td valign="middle" align="right" style="color:${BRAND.navyDk};font-size:11px;font-weight:700;">
+                    Tel: ${CONTACT.phone} &nbsp;&middot;&nbsp; ${CONTACT.email} &nbsp;&middot;&nbsp; ${CONTACT.web}
                   </td>
                 </tr>
               </table>
