@@ -1993,8 +1993,9 @@
           tagline: 'Fast Track Your Global Career',
         };
         const origin = window.location.origin || 'https://urbanboxliving.vercel.app';
-        const RIUC_LOGO_URL   = origin + '/riuc-logo-white.png';
-        const RIUC_BANNER_URL = origin + '/riuc-banner-top.png';
+        const RIUC_LOGO_URL      = origin + '/riuc-logo-white.png';
+        const RIUC_GOLD_LOGO_URL = origin + '/riuc-logo.png';
+        const RIUC_STUDENTS_URL  = origin + '/riuc-students.png';
 
         function escHtml(s) {
           return String(s == null ? '' : s)
@@ -2050,8 +2051,17 @@
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="padding:24px 0;">
 <tr><td align="center">
 <table role="presentation" width="660" cellpadding="0" cellspacing="0" style="width:660px;max-width:96%;background:${B.white};border:1px solid ${B.border};box-shadow:0 8px 32px rgba(15,35,80,0.12);">
-  <tr><td style="padding:0;background:${B.navy};line-height:0;font-size:0;">
-    <img src="${RIUC_BANNER_URL}" alt="Rosebank International University College" width="660" style="display:block;width:100%;max-width:660px;height:auto;border:0;" />
+  <tr><td style="padding:0;background:${B.white};line-height:0;font-size:0;border-bottom:1px solid ${B.border};">
+    <table role="presentation" width="660" cellpadding="0" cellspacing="0" style="width:660px;max-width:660px;background:${B.white};">
+      <tr>
+        <td width="245" align="center" valign="middle" style="width:245px;padding:18px 16px;background:${B.white};">
+          <img src="${RIUC_GOLD_LOGO_URL}" alt="RIUC" width="190" style="display:block;width:190px;max-width:100%;height:auto;border:0;" />
+        </td>
+        <td width="415" align="right" valign="bottom" style="width:415px;background:${B.white};padding:0;">
+          <img src="${RIUC_STUDENTS_URL}" alt="RIUC Students" width="415" style="display:block;width:415px;max-width:100%;height:auto;border:0;" />
+        </td>
+      </tr>
+    </table>
   </td></tr>
   <tr><td style="background:${B.navy};border-bottom:4px solid ${B.gold};padding:22px 32px;">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
@@ -2062,7 +2072,7 @@
           </td>
           <td valign="middle">
             <div style="color:${B.white};font-size:18px;font-weight:700;letter-spacing:0.04em;font-family:Arial,Helvetica,sans-serif;">ROSEBANK INTERNATIONAL</div>
-            <div style="color:${B.gold};font-size:13px;margin-top:2px;letter-spacing:0.06em;font-family:Arial,Helvetica,sans-serif;">UNIVERSITY COLLEGE &middot; ACCRA, GHANA</div>
+            <div style="color:${B.gold};font-size:13px;margin-top:2px;letter-spacing:0.06em;font-family:Arial,Helvetica,sans-serif;">UNIVERSITY COLLEGE &middot; PRETORIA, SOUTH AFRICA</div>
           </td>
         </tr></table>
       </td>

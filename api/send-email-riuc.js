@@ -45,12 +45,15 @@ const CONTACT = {
 };
 
 // ---------- Logo / banner (fetched once, embedded as CID) ----------
-let LOGO_BUFFER = null;
-let BANNER_BUFFER = null;
-const LOGO_CID   = 'riuc-logo@riuc';
-const BANNER_CID = 'riuc-banner@riuc';
-const LOGO_URL   = `cid:${LOGO_CID}`;
-const BANNER_URL = `cid:${BANNER_CID}`;
+let LOGO_BUFFER = null;       // header strip logo (white wordmark)
+let GOLD_LOGO_BUFFER = null;  // gold shield logo for top banner
+let STUDENTS_BUFFER = null;   // students cutout image for top banner
+const LOGO_CID       = 'riuc-logo@riuc';
+const GOLD_LOGO_CID  = 'riuc-gold-logo@riuc';
+const STUDENTS_CID   = 'riuc-students@riuc';
+const LOGO_URL       = `cid:${LOGO_CID}`;
+const GOLD_LOGO_URL  = `cid:${GOLD_LOGO_CID}`;
+const STUDENTS_URL   = `cid:${STUDENTS_CID}`;
 
 async function fetchFirst(urls) {
   for (const url of urls.filter(Boolean)) {
@@ -78,16 +81,28 @@ async function loadLogo(req) {
   return LOGO_BUFFER;
 }
 
-async function loadBanner(req) {
-  if (BANNER_BUFFER) return BANNER_BUFFER;
+async function loadGoldLogo(req) {
+  if (GOLD_LOGO_BUFFER) return GOLD_LOGO_BUFFER;
   const proto = (req && req.headers && req.headers['x-forwarded-proto']) || 'https';
   const host  = (req && req.headers && (req.headers['x-forwarded-host'] || req.headers.host)) || '';
-  BANNER_BUFFER = await fetchFirst([
-    process.env.RIUC_BANNER_URL,
-    host ? `${proto}://${host}/riuc-banner-top.png` : null,
-    process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}/riuc-banner-top.png` : null,
+  GOLD_LOGO_BUFFER = await fetchFirst([
+    process.env.RIUC_GOLD_LOGO_URL,
+    host ? `${proto}://${host}/riuc-logo.png` : null,
+    process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}/riuc-logo.png` : null,
   ]);
-  return BANNER_BUFFER;
+  return GOLD_LOGO_BUFFER;
+}
+
+async function loadStudents(req) {
+  if (STUDENTS_BUFFER) return STUDENTS_BUFFER;
+  const proto = (req && req.headers && req.headers['x-forwarded-proto']) || 'https';
+  const host  = (req && req.headers && (req.headers['x-forwarded-host'] || req.headers.host)) || '';
+  STUDENTS_BUFFER = await fetchFirst([
+    process.env.RIUC_STUDENTS_URL,
+    host ? `${proto}://${host}/riuc-students.png` : null,
+    process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}/riuc-students.png` : null,
+  ]);
+  return STUDENTS_BUFFER;
 }
 
 // ---------- Helpers ----------
@@ -166,11 +181,21 @@ function buildEmailHtml({ subject, body, recipientName }) {
                style="width:660px;max-width:96%;background:${BRAND.white};border:1px solid ${BRAND.border};
                       box-shadow:0 8px 32px rgba(15,35,80,0.12);">
 
-          <!-- TOP BANNER (image) -->
+          <!-- TOP BANNER (composite: gold logo on left, students on right, white bg) -->
           <tr>
-            <td style="padding:0;background:${BRAND.navy};line-height:0;font-size:0;">
-              <img src="${BANNER_URL}" alt="Rosebank International University College"
-                   width="660" style="display:block;width:100%;max-width:660px;height:auto;border:0;" />
+            <td style="padding:0;background:${BRAND.white};line-height:0;font-size:0;border-bottom:1px solid ${BRAND.border};">
+              <table role="presentation" width="660" cellpadding="0" cellspacing="0" style="width:660px;max-width:660px;background:${BRAND.white};">
+                <tr>
+                  <td width="245" align="center" valign="middle" style="width:245px;padding:18px 16px;background:${BRAND.white};">
+                    <img src="${GOLD_LOGO_URL}" alt="RIUC" width="190"
+                         style="display:block;width:190px;max-width:100%;height:auto;border:0;" />
+                  </td>
+                  <td width="415" align="right" valign="bottom" style="width:415px;background:${BRAND.white};padding:0;">
+                    <img src="${STUDENTS_URL}" alt="RIUC Students" width="415"
+                         style="display:block;width:415px;max-width:100%;height:auto;border:0;" />
+                  </td>
+                </tr>
+              </table>
             </td>
           </tr>
 
@@ -190,7 +215,7 @@ function buildEmailHtml({ subject, body, recipientName }) {
                           ROSEBANK INTERNATIONAL
                         </div>
                         <div style="color:${BRAND.gold};font-size:13px;margin-top:2px;letter-spacing:0.06em;font-family:Arial,Helvetica,sans-serif;">
-                          UNIVERSITY COLLEGE &middot; ACCRA, GHANA
+                          UNIVERSITY COLLEGE &middot; PRETORIA, SOUTH AFRICA
                         </div>
                       </td>
                     </tr></table>
@@ -445,7 +470,9 @@ export default async function handler(req, res) {
 
   const html = buildEmailHtml({ subject, body, recipientName });
   const text = buildPlainText({ subject, body, recipientName });
-  const [logo, banner] = await Promise.all([loadLogo(req), loadBanner(req)]);
+  const [logo, goldLogo, students] = await Promise.all([
+    loadLogo(req), loadGoldLogo(req), loadStudents(req)
+  ]);
 
   const attachments = [];
   if (logo) {
@@ -456,11 +483,19 @@ export default async function handler(req, res) {
       contentType: 'image/png',
     });
   }
-  if (banner) {
+  if (goldLogo) {
     attachments.push({
-      filename: 'riuc-banner.png',
-      content: banner,
-      cid: BANNER_CID,
+      filename: 'riuc-gold-logo.png',
+      content: goldLogo,
+      cid: GOLD_LOGO_CID,
+      contentType: 'image/png',
+    });
+  }
+  if (students) {
+    attachments.push({
+      filename: 'riuc-students.png',
+      content: students,
+      cid: STUDENTS_CID,
       contentType: 'image/png',
     });
   }
