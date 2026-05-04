@@ -220,6 +220,9 @@
     .email-editor h2 { font-size: 18px; margin: 14px 0 8px; color: var(--text-primary); font-weight: 700; }
     .email-editor h3 { font-size: 15px; margin: 12px 0 6px; color: var(--text-primary); font-weight: 700; }
     .email-editor blockquote { border-left: 3px solid var(--accent); margin: 8px 0; padding: 4px 12px; color: var(--text-secondary); background: var(--surface-2); }
+    /* Kill stray background highlights (gray boxes) injected by paste / execCommand,
+       but keep CTA buttons (which have data-cta) intact. */
+    .email-editor *:not([data-cta]):not([data-cta] *):not(blockquote) { background-color: transparent !important; background-image: none !important; }
     .email-editor ul, .email-editor ol { margin: 0 0 10px 0; padding-left: 24px; }
     .email-editor li { margin: 2px 0; }
     .email-editor ol { list-style-type: decimal; }
@@ -2196,6 +2199,24 @@
               );
             }
             let joined = parts.join('');
+            // Strip stray background colors (gray highlights from paste / execCommand).
+            // CTA buttons (data-cta) keep their colour.
+            joined = joined.replace(/<([a-z][a-z0-9]*)\b([^>]*?)>/gi, (m, tag, attrs) => {
+              if (/\bdata-cta\b/i.test(attrs)) return m;
+              const t = tag.toLowerCase();
+              if (t === 'a' || t === 'img') return m;
+              const newAttrs = attrs.replace(/\sstyle\s*=\s*("[^"]*"|'[^']*')/i, (sm, sv) => {
+                const quote = sv[0];
+                let css = sv.slice(1, -1);
+                css = css
+                  .replace(/(^|;)\s*background(-color|-image)?\s*:[^;]*/gi, '$1')
+                  .replace(/^\s*;+/, '')
+                  .replace(/;\s*;+/g, ';')
+                  .trim();
+                return css ? ` style=${quote}${css}${quote}` : '';
+              });
+              return `<${tag}${newAttrs}>`;
+            });
             // Force solid-disc bullets (mirror server-side bodyToHtml)
             joined = joined
               .replace(/<ul\b([^>]*)>/gi, (m, attrs) => {

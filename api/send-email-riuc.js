@@ -150,6 +150,26 @@ function bodyToHtml(text) {
     }
     html = parts.join('');
 
+    // Strip stray background colors from inline styles (gray highlights left by
+    // paste / contenteditable). CTA buttons keep their colour because they're
+    // marked with data-cta and are skipped here.
+    html = html.replace(/<([a-z][a-z0-9]*)\b([^>]*?)>/gi, (m, tag, attrs) => {
+      if (/\bdata-cta\b/i.test(attrs)) return m;
+      const t = tag.toLowerCase();
+      if (t === 'a' || t === 'img') return m;
+      const newAttrs = attrs.replace(/\sstyle\s*=\s*("[^"]*"|'[^']*')/i, (sm, sv) => {
+        const quote = sv[0];
+        let css = sv.slice(1, -1);
+        css = css
+          .replace(/(^|;)\s*background(-color|-image)?\s*:[^;]*/gi, '$1')
+          .replace(/^\s*;+/, '')
+          .replace(/;\s*;+/g, ';')
+          .trim();
+        return css ? ` style=${quote}${css}${quote}` : '';
+      });
+      return `<${tag}${newAttrs}>`;
+    });
+
     // Force solid-disc bullets (some clients render <ul> as open rings/circles)
     html = html
       .replace(/<ul\b([^>]*)>/gi, (m, attrs) => {
