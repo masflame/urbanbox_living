@@ -174,7 +174,7 @@ function buildEmailHtml({ subject, body, recipientName }) {
 <meta name="viewport" content="width=device-width,initial-scale=1.0" />
 <title>${escapeHtml(subject)}</title>
 </head>
-<body style="margin:0;padding:0;background:#EAEEF6;font-family:Georgia,'Times New Roman',serif;color:#1A1A1A;">
+<body style="margin:0;padding:0;background:#EAEEF6;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;color:#1A1A1A;">
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#EAEEF6;padding:32px 0;">
     <tr>
       <td align="center">
@@ -231,7 +231,7 @@ function buildEmailHtml({ subject, body, recipientName }) {
 
           <!-- BODY -->
           <tr>
-            <td style="padding:18px 36px 8px 36px;font-family:Georgia,'Times New Roman',serif;">
+            <td style="padding:18px 36px 8px 36px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">
               <p style="margin:0 0 16px 0;font-size:15px;color:${BRAND.navyDk};font-weight:700;">
                 ${greeting}
               </p>
@@ -241,12 +241,12 @@ function buildEmailHtml({ subject, body, recipientName }) {
 
           <!-- SIGN-OFF -->
           <tr>
-            <td style="padding:8px 36px 28px 36px;font-family:Georgia,'Times New Roman',serif;">
+            <td style="padding:8px 36px 28px 36px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">
               <p style="margin:0 0 6px 0;font-size:15px;color:#1A1A1A;line-height:1.6;">
                 Yours sincerely,
               </p>
               <p style="margin:0;font-size:15px;color:${BRAND.navyDk};font-weight:700;">
-                The RIUC Office of Admissions
+                RIUC Bursary &amp; Finance Office
               </p>
               <p style="margin:2px 0 0 0;font-size:12px;color:${BRAND.grey};font-style:italic;">
                 ${CONTACT.tagline}
@@ -360,7 +360,7 @@ function buildPlainText({ subject, body, recipientName }) {
     plainBody,
     '',
     'Yours sincerely,',
-    'The RIUC Office of Admissions',
+    'RIUC Bursary & Finance Office',
     '',
     '------------------------------------------------',
     CONTACT.name,

@@ -668,8 +668,8 @@
           <div class="email-card">
             <div class="email-card-head">
               <div>
-                <div class="email-card-title">Compose RIUC professional email</div>
-                <div class="email-card-sub">Sends with the Rosebank International University College letterhead, navy &amp; gold branding and Accra contact footer.</div>
+                <div class="email-card-title">Compose RIUC fee notice</div>
+                <div class="email-card-sub">Used for fee notices, outstanding fee reminders and other Bursary &amp; Finance correspondence. Sends with the RIUC letterhead and Accra contact footer.</div>
               </div>
             </div>
             <form id="email2Form" class="email-form" autocomplete="off">
@@ -695,7 +695,7 @@
               </div>
               <label class="email-field">
                 <span class="email-label">Subject <span class="email-req">*</span></span>
-                <input type="text" id="email2Subject" placeholder="e.g. Your RIUC Admission Offer" required />
+                <input type="text" id="email2Subject" placeholder="e.g. Outstanding Tuition Fees - Semester 1" required />
               </label>
               <label class="email-field">
                 <span class="email-label">Body <span class="email-req">*</span></span>
@@ -2215,7 +2215,7 @@
             : '<p style="margin:0;color:#6E7891;font-style:italic;font-size:14px;">Your message body will appear here…</p>';
           const B = RIUC_BRAND, C = RIUC_CONTACT;
           return `<!DOCTYPE html><html><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/></head>
-<body style="margin:0;padding:0;background:#EAEEF6;font-family:Georgia,'Times New Roman',serif;">
+<body style="margin:0;padding:0;background:#EAEEF6;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="padding:24px 0;">
 <tr><td align="center">
 <table role="presentation" width="660" cellpadding="0" cellspacing="0" style="width:660px;max-width:96%;background:${B.white};border:1px solid ${B.border};box-shadow:0 8px 32px rgba(15,35,80,0.12);">
@@ -2242,13 +2242,13 @@
     <div style="font-size:21px;font-weight:700;color:${B.navyDk};margin-top:6px;line-height:1.3;">${escHtml(subj)}</div>
     <div style="height:2px;width:56px;background:${B.gold};margin-top:14px;"></div>
   </td></tr>
-  <tr><td style="padding:18px 36px 8px 36px;font-family:Georgia,'Times New Roman',serif;">
+  <tr><td style="padding:18px 36px 8px 36px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">
     <p style="margin:0 0 16px 0;font-size:15px;color:${B.navyDk};font-weight:700;">${greeting}</p>
     ${bodyHtml}
   </td></tr>
-  <tr><td style="padding:8px 36px 28px 36px;font-family:Georgia,'Times New Roman',serif;">
+  <tr><td style="padding:8px 36px 28px 36px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">
     <p style="margin:0 0 6px 0;font-size:15px;color:#1A1A1A;">Yours sincerely,</p>
-    <p style="margin:0;font-size:15px;color:${B.navyDk};font-weight:700;">The RIUC Office of Admissions</p>
+    <p style="margin:0;font-size:15px;color:${B.navyDk};font-weight:700;">RIUC Bursary &amp; Finance Office</p>
     <p style="margin:2px 0 0 0;font-size:12px;color:${B.grey};font-style:italic;">${C.tagline}</p>
   </td></tr>
   <tr><td style="padding:0 36px;"><div style="height:1px;background:${B.border};"></div></td></tr>
