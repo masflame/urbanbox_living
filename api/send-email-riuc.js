@@ -149,6 +149,22 @@ function bodyToHtml(text) {
       );
     }
     html = parts.join('');
+
+    // Force solid-disc bullets (some clients render <ul> as open rings/circles)
+    html = html
+      .replace(/<ul\b([^>]*)>/gi, (m, attrs) => {
+        const a = (attrs || '').replace(/\sstyle\s*=\s*("[^"]*"|'[^']*')/i, '');
+        return `<ul${a} style="list-style-type:disc;padding-left:24px;margin:0 0 14px 0;">`;
+      })
+      .replace(/<ol\b([^>]*)>/gi, (m, attrs) => {
+        const a = (attrs || '').replace(/\sstyle\s*=\s*("[^"]*"|'[^']*')/i, '');
+        return `<ol${a} style="list-style-type:decimal;padding-left:24px;margin:0 0 14px 0;">`;
+      })
+      .replace(/<li\b([^>]*)>/gi, (m, attrs) => {
+        const a = (attrs || '').replace(/\sstyle\s*=\s*("[^"]*"|'[^']*')/i, '');
+        return `<li${a} style="margin:4px 0;line-height:1.6;color:#1A1A1A;">`;
+      });
+
     return `<div style="line-height:1.65;color:#1A1A1A;font-size:15px;">${html}</div>`;
   }
   const escaped = escapeHtml(raw);
