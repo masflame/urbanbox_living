@@ -447,7 +447,6 @@ export default async function handler(req, res) {
   const user   = process.env.SMTP_USER;
   const pass   = process.env.SMTP_PASS;
   const from   = process.env.MAIL_FROM_RIUC
-              || process.env.MAIL_FROM
               || (user ? `Rosebank International University College <${user}>` : '');
 
   if (!host || !user || !pass || !from) {
