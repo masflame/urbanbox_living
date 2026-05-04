@@ -186,9 +186,9 @@ function buildEmailHtml({ subject, body, recipientName }) {
             <td style="padding:0;background:${BRAND.white};line-height:0;font-size:0;border-bottom:1px solid ${BRAND.border};">
               <table role="presentation" width="660" cellpadding="0" cellspacing="0" style="width:660px;max-width:660px;background:${BRAND.white};">
                 <tr>
-                  <td width="230" align="center" valign="middle" style="width:230px;padding:8px 12px;background:${BRAND.white};">
-                    <img src="${GOLD_LOGO_URL}" alt="RIUC" height="110"
-                         style="display:block;height:110px;width:auto;max-width:210px;border:0;margin:0 auto;" />
+                  <td width="230" align="center" valign="middle" style="width:230px;padding:12px 14px;background:${BRAND.white};">
+                    <img src="${GOLD_LOGO_URL}" alt="RIUC" width="200"
+                         style="display:block;width:200px;max-width:100%;height:auto;border:0;margin:0 auto;" />
                   </td>
                   <td width="430" align="right" valign="middle" style="width:430px;background:${BRAND.white};padding:0;">
                     <img src="${STUDENTS_URL}" alt="RIUC Students" width="430" height="110"
@@ -222,7 +222,7 @@ function buildEmailHtml({ subject, body, recipientName }) {
                   </td>
                   <td valign="middle" align="right">
                     <div style="color:${BRAND.gold};font-size:11px;font-weight:700;letter-spacing:0.12em;font-family:Arial,Helvetica,sans-serif;">
-                      OFFICIAL CORRESPONDENCE
+                      OFFICE OF THE REGISTRAR
                     </div>
                     <div style="color:#CFD7E8;font-size:10.5px;margin-top:4px;font-family:Arial,Helvetica,sans-serif;">
                       ${today}
