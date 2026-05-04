@@ -126,6 +126,7 @@ function bodyToHtml(text) {
       .replace(/(href|src)\s*=\s*("|')\s*javascript:[^"']*\2/gi, '$1=$2#$2');
 
     html = html.replace(/<a\b([^>]*)>/gi, (m, attrs) => {
+      if (/\bdata-cta\b/i.test(attrs || '')) return m;
       let a = attrs || '';
       let existingStyle = '';
       a = a.replace(/\sstyle\s*=\s*"([^"]*)"/i, (mm, s) => { existingStyle = s; return ''; });

@@ -93,6 +93,8 @@ function bodyToHtml(text) {
     // We also add target="_blank" + rel for safety, and merge any pre-existing
     // style attribute so inline colours from the editor are not lost.
     html = html.replace(/<a\b([^>]*)>/gi, (m, attrs) => {
+      // Preserve CTA-button anchors verbatim so their inline colours survive.
+      if (/\bdata-cta\b/i.test(attrs || '')) return m;
       let a = attrs || '';
       // Drop any existing style attribute — we will replace it.
       let existingStyle = '';
