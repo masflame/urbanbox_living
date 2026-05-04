@@ -454,8 +454,17 @@ export default async function handler(req, res) {
   const secure = String(process.env.SMTP_SECURE || 'true').toLowerCase() === 'true';
   const user   = process.env.SMTP_USER;
   const pass   = process.env.SMTP_PASS;
-  const from   = process.env.MAIL_FROM_RIUC
-              || (user ? `Rosebank International University College <${user}>` : '');
+  const FROM_NAME = process.env.MAIL_FROM_NAME_RIUC || 'Rosebank International University College';
+  const rawFrom = (process.env.MAIL_FROM_RIUC || '').trim();
+  let from = '';
+  if (rawFrom) {
+    // If the env var already contains a display name (e.g. "Name <email>"), use it as-is.
+    // Otherwise treat it as a bare address and wrap it with the friendly display name
+    // so Gmail/Outlook don't fall back to showing the raw local-part as the sender name.
+    from = /<[^>]+>/.test(rawFrom) ? rawFrom : `${FROM_NAME} <${rawFrom}>`;
+  } else if (user) {
+    from = `${FROM_NAME} <${user}>`;
+  }
 
   if (!host || !user || !pass || !from) {
     res.statusCode = 500;
