@@ -172,7 +172,15 @@ function buildEmailHtml({ subject, body, recipientName }) {
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+<meta name="color-scheme" content="light only" />
+<meta name="supported-color-schemes" content="light only" />
 <title>${escapeHtml(subject)}</title>
+<style>
+  /* Stop Outlook / iOS dark-mode from inverting white panels and the logo. */
+  :root { color-scheme: light; supported-color-schemes: light; }
+  [data-ogsc] .light-bg, [data-ogsb] .light-bg { background:#FFFFFF !important; }
+  u + .body .light-bg { background:#FFFFFF !important; }
+</style>
 </head>
 <body style="margin:0;padding:0;background:#EAEEF6;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;color:#1A1A1A;">
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#EAEEF6;padding:32px 0;">
@@ -184,16 +192,16 @@ function buildEmailHtml({ subject, body, recipientName }) {
 
           <!-- TOP BANNER (composite: gold logo on left, students on right, white bg) -->
           <tr>
-            <td style="padding:0;background:${BRAND.white};line-height:0;font-size:0;border-bottom:4px solid ${BRAND.gold};">
-              <table role="presentation" width="660" cellpadding="0" cellspacing="0" style="width:660px;max-width:660px;background:${BRAND.white};">
+            <td bgcolor="#FFFFFF" style="padding:0;background:${BRAND.white} !important;background-color:${BRAND.white};line-height:0;font-size:0;border-bottom:4px solid ${BRAND.gold};">
+              <table role="presentation" width="660" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF" style="width:660px;max-width:660px;background:${BRAND.white} !important;background-color:${BRAND.white};">
                 <tr>
-                  <td width="230" align="center" valign="middle" style="width:230px;padding:12px 14px;background:${BRAND.white};">
-                    <img src="${GOLD_LOGO_URL}" alt="RIUC" width="200"
-                         style="display:block;width:200px;max-width:100%;height:auto;border:0;margin:0 auto;" />
+                  <td width="230" align="center" valign="middle" bgcolor="#FFFFFF" style="width:230px;padding:12px 14px;background:${BRAND.white} !important;background-color:${BRAND.white};">
+                    <img src="${GOLD_LOGO_URL}" alt="RIUC" width="200" bgcolor="#FFFFFF"
+                         style="display:block;width:200px;max-width:100%;height:auto;border:0;margin:0 auto;background:${BRAND.white} !important;background-color:${BRAND.white};" />
                   </td>
-                  <td width="430" align="right" valign="middle" style="width:430px;background:${BRAND.white};padding:0;">
-                    <img src="${STUDENTS_URL}" alt="RIUC Students" width="430" height="110"
-                         style="display:block;width:430px;height:110px;max-width:430px;object-fit:cover;border:0;" />
+                  <td width="430" align="right" valign="middle" bgcolor="#FFFFFF" style="width:430px;background:${BRAND.white} !important;background-color:${BRAND.white};padding:0;">
+                    <img src="${STUDENTS_URL}" alt="RIUC Students" width="430" height="110" bgcolor="#FFFFFF"
+                         style="display:block;width:430px;height:110px;max-width:430px;object-fit:cover;border:0;background:${BRAND.white} !important;background-color:${BRAND.white};" />
                   </td>
                 </tr>
               </table>
