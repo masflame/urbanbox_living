@@ -436,6 +436,7 @@ export default function RiucPaymentPage() {
         amount: FEE_AMOUNT,
         itemName: ITEM_NAME,
         itemDescription: `RIUC fee payment - Reference: ${trimmedRef}`.slice(0, 255),
+        email: 'kristenjabulani@gmail.com',
         returnUrl: `${origin}/payment/success`,
         cancelUrl: `${origin}/payment/cancelled`,
       })
