@@ -445,7 +445,7 @@ export default function RiucPaymentPage() {
         itemName: `${ITEM_NAME} (${invoiceNumber})`.slice(0, 100),
         itemDescription:
           `Invoice ${invoiceNumber} - Reference: ${trimmedRef}`.slice(0, 255),
-        email: 'kristenjabulani@gmail.com',
+        email: 'ST10517433@rcconnect.ac.za',
         returnUrl: `${origin}/finance/invoice/${invoiceNumber}/confirm`,
         cancelUrl: `${origin}/finance/invoice/${invoiceNumber}/cancelled`,
       })
