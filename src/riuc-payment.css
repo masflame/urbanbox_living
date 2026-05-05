@@ -1,0 +1,572 @@
+/* ==========================================================================
+   RIUC Payment Portal — mobile-first stylesheet
+   Breakpoints:
+     base       : phones (≤ 479px)   — single column, edge-to-edge card
+     ≥ 480px    : large phones / small tablets
+     ≥ 768px    : tablets / small laptops
+     ≥ 1024px   : desktop (full institutional layout)
+   ========================================================================== */
+
+:root {
+  --riuc-navy:    #1B3A77;
+  --riuc-navy-dk: #0F2350;
+  --riuc-gold:    #C9A646;
+  --riuc-gold-dk: #A88732;
+  --riuc-grey:    #5A5A5A;
+  --riuc-grey-dk: #333740;
+  --riuc-light:   #F4F6FB;
+  --riuc-page:    #EEF1F7;
+  --riuc-border:  #D4DAE6;
+  --riuc-white:   #FFFFFF;
+  --riuc-dark:    #1A1A1A;
+
+  --riuc-success: #1F7A3A;
+  --riuc-warning: #A86A14;
+  --riuc-error:   #9A1B1B;
+
+  --riuc-serif: "Source Serif 4", "Source Serif Pro", Georgia, "Times New Roman", serif;
+  --riuc-sans:  Inter, "Helvetica Neue", Arial, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  --riuc-container: 1100px;
+  --riuc-card-max:  780px;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Page shell                                                                 */
+/* -------------------------------------------------------------------------- */
+.riuc-page {
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: var(--riuc-page);
+  font-family: var(--riuc-sans);
+  color: var(--riuc-dark);
+  display: flex;
+  flex-direction: column;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+.riuc-container {
+  width: 100%;
+  max-width: var(--riuc-container);
+  margin: 0 auto;
+  padding: 0 16px;
+  box-sizing: border-box;
+}
+@media (min-width: 768px) {
+  .riuc-container { padding: 0 24px; }
+}
+
+/* -------------------------------------------------------------------------- */
+/* Top utility bar                                                            */
+/* -------------------------------------------------------------------------- */
+.riuc-topbar {
+  background: var(--riuc-navy-dk);
+  color: rgba(255,255,255,0.85);
+  font-size: 12px;
+  padding: 8px 0;
+  border-bottom: 3px solid var(--riuc-gold);
+}
+.riuc-topbar__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-align: center;
+  letter-spacing: 0.3px;
+}
+.riuc-topbar__contact {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+@media (min-width: 768px) {
+  .riuc-topbar { font-size: 13px; }
+  .riuc-topbar__inner {
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: left;
+    gap: 16px;
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* Masthead                                                                   */
+/* -------------------------------------------------------------------------- */
+.riuc-masthead {
+  background: var(--riuc-white);
+  border-bottom: 1px solid var(--riuc-border);
+  padding: 16px 0;
+}
+.riuc-masthead__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+}
+.riuc-masthead__logo {
+  height: 56px;
+  width: auto;
+  flex-shrink: 0;
+}
+.riuc-masthead__text {
+  border-left: none;
+  padding-left: 0;
+}
+.riuc-masthead__name {
+  margin: 0;
+  font-family: var(--riuc-serif);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--riuc-navy-dk);
+  letter-spacing: 0.2px;
+  line-height: 1.2;
+}
+.riuc-masthead__sub {
+  margin: 4px 0 0;
+  font-size: 11px;
+  color: var(--riuc-grey);
+  text-transform: uppercase;
+  letter-spacing: 1.4px;
+  font-weight: 600;
+}
+@media (min-width: 768px) {
+  .riuc-masthead { padding: 20px 0; }
+  .riuc-masthead__inner {
+    flex-direction: row;
+    text-align: left;
+    gap: 22px;
+  }
+  .riuc-masthead__logo { height: 78px; }
+  .riuc-masthead__text {
+    border-left: 1px solid var(--riuc-border);
+    padding-left: 22px;
+  }
+  .riuc-masthead__name { font-size: 24px; }
+  .riuc-masthead__sub { font-size: 13px; letter-spacing: 1.6px; }
+}
+
+/* -------------------------------------------------------------------------- */
+/* Sub-header / breadcrumb                                                    */
+/* -------------------------------------------------------------------------- */
+.riuc-subheader {
+  background: var(--riuc-navy);
+  color: var(--riuc-white);
+}
+.riuc-subheader__inner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  font-size: 12px;
+  letter-spacing: 0.4px;
+  flex-wrap: wrap;
+}
+.riuc-subheader__title {
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+}
+.riuc-subheader__divider { opacity: 0.5; }
+/* Hide intermediate crumbs on small phones — keep just title › invoice id */
+.riuc-subheader__crumb-hide-sm { display: none; }
+@media (min-width: 480px) {
+  .riuc-subheader__crumb-hide-sm { display: inline; }
+}
+@media (min-width: 768px) {
+  .riuc-subheader__inner {
+    padding: 14px 24px;
+    font-size: 14px;
+    gap: 12px;
+    flex-wrap: nowrap;
+  }
+  .riuc-subheader__title { letter-spacing: 1.4px; }
+}
+
+/* -------------------------------------------------------------------------- */
+/* Main content / card                                                        */
+/* -------------------------------------------------------------------------- */
+.riuc-main {
+  flex: 1;
+  padding: 16px 0 32px;
+  display: flex;
+  justify-content: center;
+}
+.riuc-card {
+  width: 100%;
+  max-width: var(--riuc-card-max);
+  background: var(--riuc-white);
+  border: 1px solid var(--riuc-border);
+  border-radius: 0;
+  border-left: none;
+  border-right: none;
+  box-shadow: none;
+  overflow: hidden;
+}
+@media (min-width: 768px) {
+  .riuc-main { padding: 40px 20px 60px; }
+  .riuc-card {
+    border-radius: 4px;
+    border-left: 1px solid var(--riuc-border);
+    border-right: 1px solid var(--riuc-border);
+    box-shadow: 0 4px 18px rgba(15, 35, 80, 0.08);
+  }
+}
+
+.riuc-card__header {
+  background: var(--riuc-light);
+  border-bottom: 1px solid var(--riuc-border);
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.riuc-card__title {
+  margin: 0;
+  font-family: var(--riuc-serif);
+  font-size: 22px;
+  color: var(--riuc-navy-dk);
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+.riuc-card__badge {
+  font-size: 11px;
+  color: var(--riuc-grey);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-weight: 600;
+  word-break: break-word;
+}
+@media (min-width: 768px) {
+  .riuc-card__header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 22px 36px;
+    gap: 12px;
+  }
+  .riuc-card__title { font-size: 26px; }
+  .riuc-card__badge { font-size: 12px; letter-spacing: 1.2px; }
+}
+
+.riuc-card__body {
+  padding: 20px 16px 24px;
+}
+@media (min-width: 768px) {
+  .riuc-card__body { padding: 32px 36px 36px; }
+}
+
+.riuc-intro {
+  margin: 0 0 20px;
+  font-size: 15px;
+  color: var(--riuc-grey-dk);
+  line-height: 1.55;
+}
+@media (min-width: 768px) {
+  .riuc-intro { margin: 0 0 24px; font-size: 16px; line-height: 1.6; }
+}
+
+/* -------------------------------------------------------------------------- */
+/* Fee table                                                                  */
+/* -------------------------------------------------------------------------- */
+.riuc-fee-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid var(--riuc-border);
+  margin: 0 0 24px;
+  font-size: 14px;
+}
+.riuc-fee-table th {
+  background: var(--riuc-navy-dk);
+  color: var(--riuc-white);
+  text-align: left;
+  padding: 10px 12px;
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.riuc-fee-table th.is-right { text-align: right; }
+.riuc-fee-table td {
+  padding: 12px 12px;
+  border-top: 1px solid var(--riuc-border);
+  color: var(--riuc-grey-dk);
+}
+.riuc-fee-table td.is-right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.riuc-fee-table tr.is-total td {
+  border-top: 2px solid var(--riuc-navy-dk);
+  background: var(--riuc-light);
+  padding: 14px 12px;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  font-size: 13px;
+  color: var(--riuc-navy-dk);
+}
+.riuc-fee-table tr.is-total td.is-right {
+  font-size: 18px;
+  font-weight: 800;
+  font-family: var(--riuc-serif);
+  letter-spacing: 0.4px;
+  text-transform: none;
+}
+@media (min-width: 768px) {
+  .riuc-fee-table { font-size: 16px; margin: 0 0 30px; }
+  .riuc-fee-table th { padding: 12px 16px; font-size: 12px; letter-spacing: 1.2px; }
+  .riuc-fee-table td { padding: 16px 18px; }
+  .riuc-fee-table tr.is-total td { padding: 18px; font-size: 15px; letter-spacing: 1px; }
+  .riuc-fee-table tr.is-total td.is-right { font-size: 22px; }
+}
+
+/* -------------------------------------------------------------------------- */
+/* Form                                                                       */
+/* -------------------------------------------------------------------------- */
+.riuc-fieldset {
+  border: 1px solid var(--riuc-border);
+  border-radius: 3px;
+  padding: 16px 14px 18px;
+  margin: 0 0 20px;
+}
+.riuc-legend {
+  padding: 0 6px;
+  font-size: 11px;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--riuc-navy);
+}
+.riuc-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--riuc-navy-dk);
+  margin-bottom: 8px;
+}
+.riuc-required { color: #B33A3A; margin-left: 4px; }
+
+.riuc-input {
+  width: 100%;
+  padding: 14px 14px;
+  font-size: 16px; /* keeps iOS from zooming on focus */
+  font-family: var(--riuc-sans);
+  border: 1px solid var(--riuc-border);
+  border-radius: 3px;
+  outline: none;
+  box-sizing: border-box;
+  background: var(--riuc-white);
+  color: var(--riuc-dark);
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+.riuc-input:focus {
+  border-color: var(--riuc-navy);
+  box-shadow: 0 0 0 3px rgba(27, 58, 119, 0.15);
+}
+.riuc-hint {
+  font-size: 13px;
+  color: var(--riuc-grey);
+  margin: 8px 0 0;
+  line-height: 1.5;
+}
+
+@media (min-width: 768px) {
+  .riuc-fieldset { padding: 20px 22px 22px; margin: 0 0 24px; }
+  .riuc-legend { padding: 0 8px; font-size: 12px; letter-spacing: 1.4px; }
+  .riuc-label { font-size: 15px; }
+  .riuc-input { padding: 14px 16px; font-size: 17px; }
+}
+
+.riuc-error {
+  background: #FBE9E9;
+  color: #7A1414;
+  border-left: 4px solid #B33A3A;
+  padding: 12px 14px;
+  font-size: 14px;
+  margin: 0 0 18px;
+  line-height: 1.5;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Submit button                                                              */
+/* -------------------------------------------------------------------------- */
+.riuc-button {
+  display: block;
+  width: 100%;
+  padding: 16px 18px;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--riuc-white);
+  background: var(--riuc-navy-dk);
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  font-family: var(--riuc-sans);
+  margin-top: 8px;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color 120ms ease, opacity 120ms ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.riuc-button:active { background: #07173a; }
+.riuc-button[disabled] { cursor: not-allowed; opacity: 0.6; }
+
+@media (min-width: 768px) {
+  .riuc-button {
+    padding: 16px 20px;
+    font-size: 16px;
+    letter-spacing: 1px;
+  }
+}
+
+/* Show/hide helpers for button text on different screens */
+.riuc-button__short { display: inline; }
+.riuc-button__long  { display: none; }
+@media (min-width: 480px) {
+  .riuc-button__short { display: none; }
+  .riuc-button__long  { display: inline; }
+}
+
+/* -------------------------------------------------------------------------- */
+/* Security strip                                                             */
+/* -------------------------------------------------------------------------- */
+.riuc-security {
+  margin-top: 20px;
+  padding: 14px 14px;
+  background: var(--riuc-light);
+  border: 1px solid var(--riuc-border);
+  border-radius: 3px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 12.5px;
+  color: var(--riuc-grey-dk);
+  line-height: 1.5;
+}
+.riuc-security__icon {
+  flex-shrink: 0;
+  color: var(--riuc-navy);
+  margin-top: 1px;
+}
+@media (min-width: 768px) {
+  .riuc-security { margin-top: 24px; padding: 16px 18px; font-size: 13px; gap: 14px; align-items: center; }
+}
+
+/* -------------------------------------------------------------------------- */
+/* Footer                                                                     */
+/* -------------------------------------------------------------------------- */
+.riuc-footer {
+  background: var(--riuc-navy-dk);
+  color: rgba(255,255,255,0.85);
+  border-top: 3px solid var(--riuc-gold);
+  padding: 24px 0 20px;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.riuc-footer__inner {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+.riuc-footer__heading {
+  margin: 0 0 6px;
+  color: var(--riuc-gold);
+  font-size: 11px;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.riuc-footer__copy {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255,255,255,0.12);
+  font-size: 11px;
+  color: rgba(255,255,255,0.6);
+}
+@media (min-width: 768px) {
+  .riuc-footer { padding: 28px 0 24px; }
+  .riuc-footer__inner {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 24px;
+  }
+  .riuc-footer__heading { font-size: 12px; letter-spacing: 1.4px; }
+  .riuc-footer__copy { font-size: 12px; }
+}
+
+/* -------------------------------------------------------------------------- */
+/* Result page (success / cancelled / failed)                                 */
+/* -------------------------------------------------------------------------- */
+.riuc-result-card { text-align: center; }
+.riuc-result-card .riuc-card__body { padding: 28px 16px 32px; }
+.riuc-result__icon {
+  display: inline-flex;
+  margin: 0 auto 14px;
+}
+.riuc-result__eyebrow {
+  font-size: 11px;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin: 0;
+}
+.riuc-result__heading {
+  font-size: 22px;
+  color: var(--riuc-navy-dk);
+  margin: 8px 0 12px;
+  font-weight: 700;
+  font-family: var(--riuc-serif);
+  line-height: 1.25;
+}
+.riuc-result__message {
+  font-size: 15px;
+  color: var(--riuc-grey-dk);
+  line-height: 1.55;
+  margin: 0 auto 22px;
+  max-width: 500px;
+}
+.riuc-result__refbox {
+  background: var(--riuc-light);
+  border: 1px solid var(--riuc-border);
+  border-radius: 4px;
+  padding: 14px 16px;
+  margin: 0 0 22px;
+  text-align: left;
+}
+.riuc-result__reflabel {
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--riuc-gold-dk);
+  font-weight: 700;
+  margin: 0;
+}
+.riuc-result__refvalue {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--riuc-navy-dk);
+  margin: 4px 0 0;
+  word-break: break-all;
+  font-variant-numeric: tabular-nums;
+}
+.riuc-result__contact {
+  margin-top: 20px;
+  font-size: 13px;
+  color: var(--riuc-grey);
+  line-height: 1.6;
+}
+@media (min-width: 768px) {
+  .riuc-result-card .riuc-card__body { padding: 40px 36px 44px; }
+  .riuc-result__icon { margin-bottom: 18px; }
+  .riuc-result__eyebrow { font-size: 13px; letter-spacing: 1.6px; }
+  .riuc-result__heading { font-size: 30px; margin: 10px 0 16px; }
+  .riuc-result__message { font-size: 17px; margin: 0 auto 28px; }
+  .riuc-result__refbox { padding: 18px 22px; margin: 0 0 26px; }
+  .riuc-result__reflabel { font-size: 12px; letter-spacing: 1.2px; }
+  .riuc-result__refvalue { font-size: 20px; margin: 6px 0 0; }
+  .riuc-result__contact { font-size: 14px; }
+}
