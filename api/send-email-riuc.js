@@ -514,43 +514,25 @@ function buildEmailPdfBuffer({ subject, body, recipientName, logo }) {
   doc.setFillColor(gold[0], gold[1], gold[2]);
   doc.rect(0, 96, pageW, 4, 'F');
 
-  // Logo on the left of the header (if available).
-  // The letterhead logo is a wide white-on-blue wordmark, so render it at
-  // a wider aspect ratio than the square shield used elsewhere.
-  let hasLogo = false;
+  // Logo on the left of the header (if available)
   if (logo) {
     try {
       const dataUrl = `data:image/png;base64,${logo.toString('base64')}`;
-      // Box: up to 220pt wide, 64pt tall, vertically centred in the 96pt band.
-      const logoW = 220;
-      const logoH = 64;
-      doc.addImage(dataUrl, 'PNG', marginX, (96 - logoH) / 2, logoW, logoH);
-      hasLogo = true;
+      doc.addImage(dataUrl, 'PNG', marginX, 22, 56, 56);
     } catch { /* ignore image errors */ }
   }
 
-  // The wordmark is in the logo itself — only render text fallback if logo missing.
-  if (!hasLogo) {
-    doc.setTextColor(255, 255, 255);
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(15);
-    doc.text('ROSEBANK INTERNATIONAL UNIVERSITY COLLEGE', marginX, 50);
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(10);
-    doc.setTextColor(gold[0], gold[1], gold[2]);
-    doc.text(CONTACT.tagline, marginX, 68);
-  }
-
-  // Contact line on the right of the header band.
   doc.setTextColor(255, 255, 255);
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(15);
+  doc.text('ROSEBANK INTERNATIONAL UNIVERSITY COLLEGE', marginX + (logo ? 72 : 0), 50);
   doc.setFont('helvetica', 'normal');
+  doc.setFontSize(10);
+  doc.setTextColor(gold[0], gold[1], gold[2]);
+  doc.text(CONTACT.tagline, marginX + (logo ? 72 : 0), 68);
+  doc.setTextColor(255, 255, 255);
   doc.setFontSize(9);
-  doc.text(
-    `Tel ${CONTACT.phone}  |  ${CONTACT.email}  |  ${CONTACT.web}`,
-    pageW - marginX,
-    84,
-    { align: 'right' },
-  );
+  doc.text(`Tel ${CONTACT.phone}  |  ${CONTACT.email}  |  ${CONTACT.web}`, marginX + (logo ? 72 : 0), 84);
 
   // ---- Date + reference strip ----
   const today = new Date().toLocaleDateString('en-GB', {
