@@ -7,7 +7,7 @@
 //   SMTP_HOST, SMTP_PORT, SMTP_SECURE, SMTP_USER, SMTP_PASS
 //   ADMIN_AUTH_TOKEN  shared secret the admin UI sends in x-admin-token
 // Optional:
-//   MAIL_FROM_RIUC    "Rosebank International University College <info@riuc.edu.gh>"
+//   MAIL_FROM_RIUC    "Rosebank International University College <info@riuc.edu.za>"
 //                     Falls back to MAIL_FROM, then to SMTP_USER.
 //   RIUC_LOGO_URL     Override URL the function fetches the RIUC logo from.
 //   RIUC_BANNER_URL   Override URL for the top banner image.
@@ -21,7 +21,7 @@ export const config = {
   },
 };
 
-// ---------- Brand & contact details (from https://www.riuc.edu.gh) ----------
+// ---------- Brand & contact details (from https://www.riuc.edu.za) ----------
 const BRAND = {
   navy:   '#1B3A77',  // primary RIUC navy
   navyDk: '#0F2350',  // header band
@@ -40,8 +40,8 @@ const CONTACT = {
   tagline: 'Fast Track Your Global Career',
   phone:   '086 1259 906',
   whatsapp:'087 260 6854',
-  email:   'info@riuc.edu.gh',
-  web:     'www.riuc.edu.gh',
+  email:   'info@riuc.edu.za',
+  web:     'www.riuc.edu.za',
   address: '239 Pretorius St, Pretoria Central, Pretoria, 0126',
 };
 

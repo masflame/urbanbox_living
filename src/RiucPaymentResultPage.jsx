@@ -92,7 +92,7 @@ export default function RiucPaymentResultPage({ status = 'success' }) {
           <span>Rosebank International University College · Pretoria, South Africa</span>
           <span className="riuc-topbar__contact">
             <span>Tel: 086 1259 906</span>
-            <span>info@riuc.edu.gh</span>
+            <span>info@riuc.edu.za</span>
           </span>
         </div>
       </div>
@@ -172,7 +172,7 @@ export default function RiucPaymentResultPage({ status = 'success' }) {
 
             <p className="riuc-result__contact">
               For assistance, contact the Office of Finance at{' '}
-              <strong>info@riuc.edu.gh</strong> or 086 1259 906.
+              <strong>info@riuc.edu.za</strong> or 086 1259 906.
             </p>
           </div>
         </section>
@@ -197,13 +197,13 @@ export default function RiucPaymentResultPage({ status = 'success' }) {
               <br />
               Whatsapp: 087 260 6854
               <br />
-              Email: info@riuc.edu.gh
+              Email: info@riuc.edu.za
             </p>
           </div>
           <div>
             <p className="riuc-footer__heading">Online</p>
             <p style={{ margin: 0 }}>
-              www.riuc.edu.gh
+              www.riuc.edu.za
               <br />
               Student Payment Portal
               <br />
