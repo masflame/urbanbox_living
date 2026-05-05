@@ -37,11 +37,11 @@ const CONTACT = {
   name:    'Rosebank International University College',
   short:   'RIUC',
   tagline: 'Fast Track Your Global Career',
-  phone:   '+233 307 007 800',
+  phone:   '086 1259 906',
   whatsapp:'+233 59 646 6466',
   email:   'info@riuc.edu.gh',
   web:     'www.riuc.edu.gh',
-  address: 'Opeibea House, No A177 Liberation Road, Airport Commercial Centre, Accra, Ghana',
+  address: 'Opeibea House, No A177 Liberation Road, Airport Commercial Centre, Pretoria, South Africa',
 };
 
 // ---------- Logo / banner (fetched once, embedded as CID) ----------

@@ -93,9 +93,9 @@ export default function RiucPaymentPage() {
       {/* Top utility bar */}
       <div className="riuc-topbar">
         <div className="riuc-container riuc-topbar__inner">
-          <span>Rosebank International University College · Accra, Ghana</span>
+          <span>Rosebank International University College · Pretoria, South Africa</span>
           <span className="riuc-topbar__contact">
-            <span>+233 307 007 800</span>
+            <span>Tel: 086 1259 906</span>
             <span>info@riuc.edu.gh</span>
           </span>
         </div>
@@ -241,13 +241,13 @@ export default function RiucPaymentPage() {
               <br />
               Airport Commercial Centre
               <br />
-              Accra, Ghana
+              Pretoria, South Africa
             </p>
           </div>
           <div>
             <p className="riuc-footer__heading">Contact</p>
             <p style={{ margin: 0 }}>
-              Tel: +233 307 007 800
+              Tel: 086 1259 906
               <br />
               WhatsApp: +233 59 646 6466
               <br />
