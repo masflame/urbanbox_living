@@ -1,5 +1,25 @@
 {
   "buildCommand": "rm -rf node_modules/.vite node_modules/.cache && npm run build",
+  "redirects": [
+    {
+      "source": "/payment",
+      "has": [{ "type": "host", "value": "urbanboxliving.vercel.app" }],
+      "destination": "https://pay.xanziteh.co.za/payment",
+      "permanent": false
+    },
+    {
+      "source": "/payment/:path*",
+      "has": [{ "type": "host", "value": "urbanboxliving.vercel.app" }],
+      "destination": "https://pay.xanziteh.co.za/payment/:path*",
+      "permanent": false
+    },
+    {
+      "source": "/finance/:path*",
+      "has": [{ "type": "host", "value": "urbanboxliving.vercel.app" }],
+      "destination": "https://pay.xanziteh.co.za/finance/:path*",
+      "permanent": false
+    }
+  ],
   "rewrites": [
     {
       "source": "/((?!api/|portfolio/|assets/|.*\\.).*)",
