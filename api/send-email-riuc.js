@@ -446,7 +446,7 @@ function decodeHtmlEntities(s) {
 // rewritten with placeholder tokens [[CTA:n]] / [[LINK:n|text]] that survive
 // htmlToPlain() and can be detected during layout.
 function extractInteractiveTokens(body) {
-  const ctas = [];   // [{ url, text }]
+  const ctas = [];   // [{ url, text, color }]
   const links = [];  // [{ url, text }]
   const raw = String(body == null ? '' : body);
   if (!/<a\b/i.test(raw)) {
@@ -460,8 +460,14 @@ function extractInteractiveTokens(body) {
     if (!href || !text) return text || '';
     const isCta = /\bdata-cta\b/i.test(attrs || '');
     if (isCta) {
+      // Pull the button background colour straight out of the anchor's inline
+      // style so the PDF matches whatever the editor emitted.
+      const styleMatch = /\bstyle\s*=\s*("([^"]*)"|'([^']*)')/i.exec(attrs || '');
+      const styleStr = styleMatch ? (styleMatch[2] || styleMatch[3] || '') : '';
+      const bgMatch = /background(?:-color)?\s*:\s*([^;"']+)/i.exec(styleStr);
+      const color = bgMatch ? bgMatch[1].trim() : BRAND.navy;
       const idx = ctas.length;
-      ctas.push({ url: href, text });
+      ctas.push({ url: href, text, color });
       return `\n\n[[CTA:${idx}]]\n\n`;
     }
     const idx = links.length;
@@ -469,6 +475,15 @@ function extractInteractiveTokens(body) {
     return `[[LINK:${idx}]]`;
   });
   return { html, ctas, links };
+}
+
+// Convert a CSS colour (#hex or rgb()/named) into [r,g,b]. Falls back to navy.
+function cssColorToRgb(value) {
+  const v = String(value || '').trim();
+  if (/^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(v)) return hexToRgb(v);
+  const rgb = /^rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/i.exec(v);
+  if (rgb) return [Number(rgb[1]), Number(rgb[2]), Number(rgb[3])];
+  return hexToRgb(BRAND.navy);
 }
 
 function htmlToPlain(input) {
@@ -588,25 +603,50 @@ function buildEmailPdfBuffer({ subject, body, recipientName, logo }) {
   }
 
   function drawCtaButton(cta) {
-    const padX = 18;
+    // Mirror the email's <a data-cta> styling exactly:
+    // background: cta.color, color #FFFFFF, Arial 14px bold, letter-spacing 0.04em,
+    // padding 12px 26px, border-radius 6px, centred with 18px vertical margin.
+    const padX = 26;
     const padY = 12;
+    const radius = 6;
+    const fontSize = 14;
+    const tracking = 0.04 * fontSize; // letter-spacing 0.04em
+    const verticalMargin = 18;
+
     doc.setFont('helvetica', 'bold');
-    doc.setFontSize(11);
-    const labelW = doc.getTextWidth(cta.text);
-    const btnW = Math.min(contentW, labelW + padX * 2);
-    const btnH = 38;
-    ensureSpace(4);
-    cursorY += 6;
-    // navy fill, gold underline
-    doc.setFillColor(navy[0], navy[1], navy[2]);
-    doc.roundedRect(marginX, cursorY, btnW, btnH, 4, 4, 'F');
-    doc.setFillColor(gold[0], gold[1], gold[2]);
-    doc.rect(marginX, cursorY + btnH - 3, btnW, 3, 'F');
+    doc.setFontSize(fontSize);
+    const label = String(cta.text || '');
+    // Account for letter-spacing when measuring label width.
+    const labelW = doc.getTextWidth(label) + tracking * Math.max(0, label.length - 1);
+    const btnW = labelW + padX * 2;
+    const btnH = fontSize + padY * 2; // ~38pt for default text
+
+    ensureSpace(Math.ceil((btnH + verticalMargin * 2) / lineHeight));
+    cursorY += verticalMargin;
+
+    // Centred horizontally inside the content column (matches text-align:center).
+    const btnX = marginX + (contentW - btnW) / 2;
+    const [br, bg, bb] = cssColorToRgb(cta.color);
+    doc.setFillColor(br, bg, bb);
+    doc.roundedRect(btnX, cursorY, btnW, btnH, radius, radius, 'F');
+
     doc.setTextColor(255, 255, 255);
-    doc.text(cta.text, marginX + btnW / 2, cursorY + padY + 11, { align: 'center' });
+    // Draw label centred. jsPDF doesn't support letter-spacing natively, so
+    // when tracking is requested we draw character-by-character to honour it.
+    if (tracking > 0 && label.length > 1) {
+      let x = btnX + padX;
+      const baselineY = cursorY + padY + fontSize - 3; // optical baseline
+      for (const ch of label) {
+        doc.text(ch, x, baselineY);
+        x += doc.getTextWidth(ch) + tracking;
+      }
+    } else {
+      doc.text(label, btnX + btnW / 2, cursorY + padY + fontSize - 3, { align: 'center' });
+    }
     // Make the button clickable.
-    doc.link(marginX, cursorY, btnW, btnH, { url: cta.url });
-    cursorY += btnH + 14;
+    doc.link(btnX, cursorY, btnW, btnH, { url: cta.url });
+
+    cursorY += btnH + verticalMargin;
     // restore body styling
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(11);
