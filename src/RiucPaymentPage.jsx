@@ -237,11 +237,11 @@ export default function RiucPaymentPage() {
           <div>
             <p className="riuc-footer__heading">Office of Finance</p>
             <p style={{ margin: 0 }}>
-              Opeibea House, No A177 Liberation Road
+              239 Pretorius St, Pretoria Central
               <br />
-              Airport Commercial Centre
+              Pretoria
               <br />
-              Pretoria, South Africa
+              0126
             </p>
           </div>
           <div>
@@ -249,7 +249,7 @@ export default function RiucPaymentPage() {
             <p style={{ margin: 0 }}>
               Tel: 086 1259 906
               <br />
-              WhatsApp: +233 59 646 6466
+              Whatsapp: 087 260 6854
               <br />
               Email: info@riuc.edu.gh
             </p>

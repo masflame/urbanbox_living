@@ -13,6 +13,7 @@
 //   RIUC_BANNER_URL   Override URL for the top banner image.
 
 import nodemailer from 'nodemailer';
+import { jsPDF } from 'jspdf';
 
 export const config = {
   api: {
@@ -38,10 +39,10 @@ const CONTACT = {
   short:   'RIUC',
   tagline: 'Fast Track Your Global Career',
   phone:   '086 1259 906',
-  whatsapp:'+233 59 646 6466',
+  whatsapp:'087 260 6854',
   email:   'info@riuc.edu.gh',
   web:     'www.riuc.edu.gh',
-  address: 'Opeibea House, No A177 Liberation Road, Airport Commercial Centre, Pretoria, South Africa',
+  address: '239 Pretorius St, Pretoria Central, Pretoria, 0126',
 };
 
 // ---------- Logo / banner (fetched once, embedded as CID) ----------
@@ -312,7 +313,7 @@ function buildEmailHtml({ subject, body, recipientName }) {
                   <td style="font-size:11px;color:${BRAND.grey};line-height:1.6;">
                     <strong style="color:${BRAND.navyDk};">${CONTACT.name}</strong><br/>
                     ${CONTACT.address}<br/>
-                    Tel: ${CONTACT.phone} &middot; WhatsApp: ${CONTACT.whatsapp}<br/>
+                    Tel: ${CONTACT.phone} &middot; Whatsapp: ${CONTACT.whatsapp}<br/>
                     Email:
                     <a href="mailto:${CONTACT.email}" style="color:${BRAND.navy};text-decoration:none;font-weight:600;">${CONTACT.email}</a>
                     &middot; Web:
@@ -410,10 +411,187 @@ function buildPlainText({ subject, body, recipientName }) {
     CONTACT.name,
     CONTACT.address,
     `Tel:      ${CONTACT.phone}`,
-    `WhatsApp: ${CONTACT.whatsapp}`,
+    `Whatsapp: ${CONTACT.whatsapp}`,
     `Email:    ${CONTACT.email}`,
     `Web:      ${CONTACT.web}`,
   ].join('\n');
+}
+
+// ---------- PDF version of the email (attached to outgoing message) ----------
+function htmlToPlain(input) {
+  const raw = String(input == null ? '' : input);
+  if (!/<[a-z][\s\S]*>/i.test(raw)) return raw;
+  return raw
+    .replace(/<\s*br\s*\/?\s*>/gi, '\n')
+    .replace(/<\/(p|div|h[1-6]|li|blockquote|tr)\s*>/gi, '\n')
+    .replace(/<li[^>]*>/gi, ' \u2022 ')
+    .replace(/<[^>]+>/g, '')
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/&amp;/gi, '&')
+    .replace(/&lt;/gi, '<')
+    .replace(/&gt;/gi, '>')
+    .replace(/&quot;/gi, '"')
+    .replace(/&#39;/gi, "'")
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+}
+
+function hexToRgb(hex) {
+  const h = String(hex || '').replace('#', '');
+  const n = parseInt(h.length === 3 ? h.split('').map(c => c + c).join('') : h, 16);
+  return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+}
+
+function buildEmailPdfBuffer({ subject, body, recipientName, logo }) {
+  const doc = new jsPDF({ unit: 'pt', format: 'a4' });
+  const pageW = doc.internal.pageSize.getWidth();
+  const pageH = doc.internal.pageSize.getHeight();
+  const marginX = 56;
+  const contentW = pageW - marginX * 2;
+
+  const navy   = hexToRgb(BRAND.navyDk);
+  const navy2  = hexToRgb(BRAND.navy);
+  const gold   = hexToRgb(BRAND.gold);
+  const grey   = hexToRgb(BRAND.grey);
+  const dark   = hexToRgb(BRAND.dark);
+
+  // ---- Header band ----
+  doc.setFillColor(navy[0], navy[1], navy[2]);
+  doc.rect(0, 0, pageW, 96, 'F');
+  doc.setFillColor(gold[0], gold[1], gold[2]);
+  doc.rect(0, 96, pageW, 4, 'F');
+
+  // Logo on the left of the header (if available)
+  if (logo) {
+    try {
+      const dataUrl = `data:image/png;base64,${logo.toString('base64')}`;
+      doc.addImage(dataUrl, 'PNG', marginX, 22, 56, 56);
+    } catch { /* ignore image errors */ }
+  }
+
+  doc.setTextColor(255, 255, 255);
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(15);
+  doc.text('ROSEBANK INTERNATIONAL UNIVERSITY COLLEGE', marginX + (logo ? 72 : 0), 50);
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(10);
+  doc.setTextColor(gold[0], gold[1], gold[2]);
+  doc.text(CONTACT.tagline, marginX + (logo ? 72 : 0), 68);
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(9);
+  doc.text(`Tel ${CONTACT.phone}  |  ${CONTACT.email}  |  ${CONTACT.web}`, marginX + (logo ? 72 : 0), 84);
+
+  // ---- Date + reference strip ----
+  const today = new Date().toLocaleDateString('en-GB', {
+    day: '2-digit', month: 'long', year: 'numeric',
+  });
+  doc.setTextColor(grey[0], grey[1], grey[2]);
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(10);
+  doc.text(today, marginX, 130);
+  doc.text(CONTACT.address, pageW - marginX, 130, { align: 'right' });
+
+  // ---- Subject ----
+  let cursorY = 168;
+  doc.setTextColor(grey[0], grey[1], grey[2]);
+  doc.setFontSize(8);
+  doc.setFont('helvetica', 'bold');
+  doc.text('SUBJECT', marginX, cursorY);
+  cursorY += 14;
+  doc.setTextColor(navy[0], navy[1], navy[2]);
+  doc.setFontSize(16);
+  const subjLines = doc.splitTextToSize(String(subject || ''), contentW);
+  doc.text(subjLines, marginX, cursorY);
+  cursorY += subjLines.length * 19 + 6;
+  doc.setDrawColor(gold[0], gold[1], gold[2]);
+  doc.setLineWidth(2);
+  doc.line(marginX, cursorY, marginX + 56, cursorY);
+  cursorY += 26;
+
+  // ---- Greeting ----
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(11);
+  doc.setTextColor(navy[0], navy[1], navy[2]);
+  doc.text(recipientName ? `Dear ${recipientName},` : 'Dear Student,', marginX, cursorY);
+  cursorY += 22;
+
+  // ---- Body ----
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(11);
+  doc.setTextColor(dark[0], dark[1], dark[2]);
+  const plain = htmlToPlain(body);
+  const paragraphs = plain.split(/\n{2,}/);
+  const lineHeight = 15;
+  const bottomMargin = 140;
+
+  function ensureSpace(lines) {
+    if (cursorY + lines * lineHeight > pageH - bottomMargin) {
+      doc.addPage();
+      cursorY = 72;
+    }
+  }
+
+  for (const para of paragraphs) {
+    const pieces = para.split(/\n/);
+    for (const piece of pieces) {
+      const wrapped = doc.splitTextToSize(piece, contentW);
+      ensureSpace(wrapped.length);
+      doc.text(wrapped, marginX, cursorY);
+      cursorY += wrapped.length * lineHeight;
+    }
+    cursorY += 8; // paragraph gap
+  }
+
+  // ---- Sign off ----
+  cursorY += 10;
+  ensureSpace(4);
+  doc.setTextColor(dark[0], dark[1], dark[2]);
+  doc.text('Yours sincerely,', marginX, cursorY);
+  cursorY += 18;
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(navy[0], navy[1], navy[2]);
+  doc.text('RIUC Bursary & Finance Office', marginX, cursorY);
+
+  // ---- Footer on every page ----
+  const totalPages = doc.internal.getNumberOfPages();
+  for (let p = 1; p <= totalPages; p++) {
+    doc.setPage(p);
+    const fy = pageH - 70;
+    doc.setDrawColor(220, 220, 220);
+    doc.setLineWidth(0.5);
+    doc.line(marginX, fy, pageW - marginX, fy);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(9);
+    doc.setTextColor(navy[0], navy[1], navy[2]);
+    doc.text(CONTACT.name, marginX, fy + 16);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(grey[0], grey[1], grey[2]);
+    doc.setFontSize(8);
+    doc.text(CONTACT.address, marginX, fy + 30);
+    doc.text(
+      `Tel: ${CONTACT.phone}  |  Whatsapp: ${CONTACT.whatsapp}  |  ${CONTACT.email}  |  ${CONTACT.web}`,
+      marginX, fy + 42,
+    );
+    doc.setFontSize(8);
+    doc.setTextColor(grey[0], grey[1], grey[2]);
+    doc.text(`Page ${p} of ${totalPages}`, pageW - marginX, fy + 42, { align: 'right' });
+    // bottom navy strip
+    doc.setFillColor(navy2[0], navy2[1], navy2[2]);
+    doc.rect(0, pageH - 14, pageW, 14, 'F');
+    doc.setFillColor(gold[0], gold[1], gold[2]);
+    doc.rect(0, pageH - 18, pageW, 4, 'F');
+  }
+
+  const arrayBuffer = doc.output('arraybuffer');
+  return Buffer.from(arrayBuffer);
+}
+
+function safePdfFilename(subject) {
+  const base = String(subject || 'RIUC-Communication')
+    .replace(/[^A-Za-z0-9 _-]+/g, '')
+    .replace(/\s+/g, '_')
+    .slice(0, 80) || 'RIUC-Communication';
+  return `${base}.pdf`;
 }
 
 function setCors(res) {
@@ -545,6 +723,20 @@ export default async function handler(req, res) {
       cid: STUDENTS_CID,
       contentType: 'image/png',
     });
+  }
+
+  // Generate a PDF version of this email and attach it.
+  try {
+    const pdfBuffer = buildEmailPdfBuffer({ subject, body, recipientName, logo: goldLogo || logo });
+    if (pdfBuffer && pdfBuffer.length) {
+      attachments.push({
+        filename: safePdfFilename(subject),
+        content: pdfBuffer,
+        contentType: 'application/pdf',
+      });
+    }
+  } catch (pdfErr) {
+    console.error('RIUC email PDF generation failed:', pdfErr);
   }
 
   const MAX_TOTAL_BYTES = 20 * 1024 * 1024;
