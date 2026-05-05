@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { submitPayfastCheckout, isPayfastConfigured } from './utils/payfast'
+import { accountSupabase, ORDERS_TABLE } from './utils/supabase'
 import './riuc-payment.css'
 
 const FEE_AMOUNT = 3461.00
@@ -50,7 +51,7 @@ export default function RiucPaymentPage() {
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState(null)
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault()
     if (submitting) return
     setError(null)
@@ -70,15 +71,63 @@ export default function RiucPaymentPage() {
     try {
       const origin =
         typeof window !== 'undefined' ? window.location.origin : ''
+      const orderId = `${invoiceNumber}-${trimmedRef}`.slice(0, 100)
+
+      // Save the payment attempt to the same Orders table the rest of the
+      // site uses, reusing the existing column schema (no new fields).
+      if (accountSupabase) {
+        try {
+          const { error: dbError } = await accountSupabase
+            .from(ORDERS_TABLE)
+            .insert([
+              {
+                order_id: orderId,
+                first_name: trimmedRef,
+                last_name: '',
+                email: 'ST10517433@rcconnect.ac.za',
+                contact: '',
+                country: 'South Africa',
+                street_address: '239 Pretorius St, Pretoria Central',
+                apartment: '',
+                city: 'Pretoria',
+                province: 'Gauteng',
+                postal_code: '0126',
+                item: `${ITEM_NAME} (${invoiceNumber})`.slice(0, 250),
+                description: `Invoice ${invoiceNumber} - Reference: ${trimmedRef}`.slice(0, 500),
+                quantity: 1,
+                amount: FEE_AMOUNT,
+                device:
+                  typeof navigator !== 'undefined'
+                    ? navigator.userAgent.slice(0, 250)
+                    : '',
+                status: 'pending_payment',
+              },
+            ])
+          if (dbError) {
+            console.error('Supabase RIUC order insert failed:', {
+              message: dbError.message,
+              code: dbError.code,
+              details: dbError.details,
+              hint: dbError.hint,
+            })
+            // Don't block checkout if DB fails.
+          }
+        } catch (dbEx) {
+          console.error('Supabase RIUC order insert threw:', dbEx)
+        }
+      } else {
+        console.warn('accountSupabase not configured - skipping RIUC order save')
+      }
+
       submitPayfastCheckout({
-        orderId: `${invoiceNumber}-${trimmedRef}`.slice(0, 100),
+        orderId,
         amount: FEE_AMOUNT,
         itemName: `${ITEM_NAME} (${invoiceNumber})`.slice(0, 100),
         itemDescription:
           `Invoice ${invoiceNumber} - Reference: ${trimmedRef}`.slice(0, 255),
         email: 'ST10517433@rcconnect.ac.za',
-        returnUrl: `${origin}/finance/invoice/${invoiceNumber}/confirm`,
-        cancelUrl: `${origin}/finance/invoice/${invoiceNumber}/cancelled`,
+        returnUrl: `${origin}/finance/invoice/${invoiceNumber}/confirm?ref=${encodeURIComponent(orderId)}`,
+        cancelUrl: `${origin}/finance/invoice/${invoiceNumber}/cancelled?ref=${encodeURIComponent(orderId)}`,
       })
       // Browser is now redirecting to Payfast.
     } catch (err) {

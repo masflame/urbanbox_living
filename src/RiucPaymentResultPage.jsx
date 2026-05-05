@@ -1,4 +1,6 @@
+import { useEffect, useRef } from 'react'
 import { Link, useLocation, useParams } from 'react-router-dom'
+import { accountSupabase, ORDERS_TABLE } from './utils/supabase'
 import './riuc-payment.css'
 
 const STATUS_CONFIG = {
@@ -53,6 +55,34 @@ export default function RiucPaymentResultPage({ status = 'success' }) {
   const checkoutHref = invoiceId
     ? `/finance/invoice/${invoiceId}/checkout`
     : '/payment'
+
+  // Update the matching Orders row to reflect the payment outcome.
+  const hasUpdatedRef = useRef(false)
+  useEffect(() => {
+    if (hasUpdatedRef.current) return
+    if (!reference || !accountSupabase) return
+    hasUpdatedRef.current = true
+    const nextStatus =
+      status === 'success'
+        ? 'paid'
+        : status === 'cancelled'
+        ? 'cancelled'
+        : 'failed'
+    accountSupabase
+      .from(ORDERS_TABLE)
+      .update({ status: nextStatus })
+      .eq('order_id', reference)
+      .then(({ error }) => {
+        if (error) {
+          console.warn('Could not update RIUC order status:', {
+            message: error.message,
+            code: error.code,
+            details: error.details,
+            hint: error.hint,
+          })
+        }
+      })
+  }, [status, reference])
 
   return (
     <div className="riuc-page">
