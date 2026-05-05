@@ -5,7 +5,7 @@ import './riuc-payment.css'
 
 const FEE_AMOUNT = 3461.00
 const FEE_LABEL = 'R3,461.00'
-const ITEM_NAME = 'RIUC Application Fee'
+const ITEM_NAME = 'RIUC Monthly Tuition Fee Instalment'
 
 function formatZar(amount) {
   return new Intl.NumberFormat('en-ZA', {
@@ -138,7 +138,7 @@ export default function RiucPaymentPage() {
       <main className="riuc-main">
         <form className="riuc-card" onSubmit={handleSubmit} noValidate>
           <div className="riuc-card__header">
-            <h2 className="riuc-card__title">Fee Payment</h2>
+            <h2 className="riuc-card__title">Tuition Fee Instalment</h2>
             <span className="riuc-card__badge">
               Invoice {invoiceNumber} · Issued {issueDate} · ZAR
             </span>
