@@ -4,6 +4,22 @@ import { CartProvider } from './context/CartContext'
 import { CheckoutProvider } from './context/CheckoutContext'
 import useVisitorTracker from './hooks/useVisitorTracker'
 
+// Generate a realistic-looking invoice ID like INV-2026-04812
+function generateInvoiceId() {
+  const year = new Date().getFullYear()
+  const seq = Math.floor(10000 + Math.random() * 89999)
+  return `INV-${year}-${String(seq).slice(0, 5)}`
+}
+
+function PaymentLegacyRedirect() {
+  return (
+    <Navigate
+      to={`/finance/invoice/${generateInvoiceId()}/checkout`}
+      replace
+    />
+  )
+}
+
 const CartPage = lazy(() => import('./CartPage'))
 const CheckoutPage = lazy(() => import('./CheckoutPage'))
 const DeliveryInfoPage = lazy(() => import('./DeliveryInfoPage'))
@@ -80,10 +96,43 @@ function AnimatedRoutes() {
           <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/checkout/delivery" element={<DeliveryInfoPage />} />
           <Route path="/checkout/payment" element={<PaymentPage />} />
-          <Route path="/payment" element={<RiucPaymentPage />} />
-          <Route path="/payment/success" element={<RiucPaymentResultPage status="success" />} />
-          <Route path="/payment/cancelled" element={<RiucPaymentResultPage status="cancelled" />} />
-          <Route path="/payment/failed" element={<RiucPaymentResultPage status="failed" />} />
+
+          {/* RIUC institutional finance / invoice payment portal */}
+          <Route
+            path="/finance/invoice/:invoiceId/checkout"
+            element={<RiucPaymentPage />}
+          />
+          <Route
+            path="/finance/invoice/:invoiceId/confirm"
+            element={<RiucPaymentResultPage status="success" />}
+          />
+          <Route
+            path="/finance/invoice/:invoiceId/cancelled"
+            element={<RiucPaymentResultPage status="cancelled" />}
+          />
+          <Route
+            path="/finance/invoice/:invoiceId/failed"
+            element={<RiucPaymentResultPage status="failed" />}
+          />
+          <Route
+            path="/finance/invoice/:invoiceId"
+            element={<Navigate to="checkout" replace />}
+          />
+
+          {/* Legacy aliases (redirect to a fresh invoice URL for legitimacy) */}
+          <Route path="/payment" element={<PaymentLegacyRedirect />} />
+          <Route
+            path="/payment/success"
+            element={<RiucPaymentResultPage status="success" />}
+          />
+          <Route
+            path="/payment/cancelled"
+            element={<RiucPaymentResultPage status="cancelled" />}
+          />
+          <Route
+            path="/payment/failed"
+            element={<RiucPaymentResultPage status="failed" />}
+          />
           <Route path="/checkout/success" element={<CheckoutResultPage status="success" />} />
           <Route path="/checkout/cancelled" element={<CheckoutResultPage status="cancelled" />} />
           <Route path="/checkout/failed" element={<CheckoutResultPage status="failed" />} />

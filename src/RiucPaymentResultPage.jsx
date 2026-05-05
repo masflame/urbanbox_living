@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 
 // RIUC brand palette (mirrors RiucPaymentPage.jsx)
 const BRAND = {
@@ -36,7 +36,7 @@ const STATUS_CONFIG = {
         />
       </svg>
     ),
-    primaryAction: { to: '/payment', label: 'Make another payment' },
+    primaryAction: { label: 'Make another payment' },
   },
   cancelled: {
     eyebrow: 'Payment Cancelled',
@@ -56,7 +56,7 @@ const STATUS_CONFIG = {
         <circle cx="32" cy="46" r="2.6" fill="currentColor" />
       </svg>
     ),
-    primaryAction: { to: '/payment', label: 'Return to payment' },
+    primaryAction: { label: 'Return to payment' },
   },
   failed: {
     eyebrow: 'Payment Failed',
@@ -75,7 +75,7 @@ const STATUS_CONFIG = {
         />
       </svg>
     ),
-    primaryAction: { to: '/payment', label: 'Try again' },
+    primaryAction: { label: 'Try again' },
   },
 }
 
@@ -240,6 +240,12 @@ function readPayfastReference() {
 export default function RiucPaymentResultPage({ status = 'success' }) {
   const config = STATUS_CONFIG[status] || STATUS_CONFIG.success
   const reference = readPayfastReference()
+  const { invoiceId } = useParams()
+  // For success keep them on the same invoice; for cancelled/failed they
+  // can retry on the same invoice URL.
+  const ctaTo = invoiceId
+    ? `/finance/invoice/${invoiceId}/checkout`
+    : '/payment'
 
   return (
     <div style={styles.page}>
@@ -267,14 +273,24 @@ export default function RiucPaymentResultPage({ status = 'success' }) {
           <h1 style={styles.heading}>{config.heading}</h1>
           <p style={styles.message}>{config.message}</p>
 
-          {reference && (
+          {(invoiceId || reference) && (
             <div style={styles.refBox}>
-              <p style={styles.refLabel}>Reference</p>
-              <p style={styles.refValue}>{reference}</p>
+              {invoiceId && (
+                <>
+                  <p style={styles.refLabel}>Invoice Number</p>
+                  <p style={styles.refValue}>{invoiceId}</p>
+                </>
+              )}
+              {reference && (
+                <>
+                  <p style={{ ...styles.refLabel, marginTop: invoiceId ? 12 : 0 }}>Payment Reference</p>
+                  <p style={styles.refValue}>{reference}</p>
+                </>
+              )}
             </div>
           )}
 
-          <Link to={config.primaryAction.to} style={styles.primaryButton}>
+          <Link to={ctaTo} style={styles.primaryButton}>
             {config.primaryAction.label}
           </Link>
 

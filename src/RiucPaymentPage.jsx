@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useParams } from 'react-router-dom'
 import { submitPayfastCheckout, isPayfastConfigured } from './utils/payfast'
 
 // RIUC brand palette (mirrors api/send-email-riuc.js)
@@ -407,6 +408,13 @@ function LockIcon() {
 }
 
 export default function RiucPaymentPage() {
+  const { invoiceId } = useParams()
+  const invoiceNumber = invoiceId || 'INV-PENDING'
+  const issueDate = new Date().toLocaleDateString('en-ZA', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+  })
   const [reference, setReference] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState(null)
@@ -432,13 +440,14 @@ export default function RiucPaymentPage() {
       const origin =
         typeof window !== 'undefined' ? window.location.origin : ''
       submitPayfastCheckout({
-        orderId: trimmedRef.slice(0, 100),
+        orderId: `${invoiceNumber}-${trimmedRef}`.slice(0, 100),
         amount: FEE_AMOUNT,
-        itemName: ITEM_NAME,
-        itemDescription: `RIUC fee payment - Reference: ${trimmedRef}`.slice(0, 255),
+        itemName: `${ITEM_NAME} (${invoiceNumber})`.slice(0, 100),
+        itemDescription:
+          `Invoice ${invoiceNumber} - Reference: ${trimmedRef}`.slice(0, 255),
         email: 'kristenjabulani@gmail.com',
-        returnUrl: `${origin}/payment/success`,
-        cancelUrl: `${origin}/payment/cancelled`,
+        returnUrl: `${origin}/finance/invoice/${invoiceNumber}/confirm`,
+        cancelUrl: `${origin}/finance/invoice/${invoiceNumber}/cancelled`,
       })
       // Browser is now redirecting to Payfast.
     } catch (err) {
@@ -487,9 +496,13 @@ export default function RiucPaymentPage() {
       {/* Section sub-header */}
       <nav style={styles.subHeader} aria-label="Payment section">
         <div style={styles.subHeaderInner}>
-          <span style={styles.subHeaderTitle}>Student Payment Portal</span>
+          <span style={styles.subHeaderTitle}>Office of Finance</span>
           <span style={styles.subHeaderDivider}>›</span>
-          <span>Pay Application / Tuition Fee</span>
+          <span>Invoices</span>
+          <span style={styles.subHeaderDivider}>›</span>
+          <span>{invoiceNumber}</span>
+          <span style={styles.subHeaderDivider}>›</span>
+          <span>Checkout</span>
         </div>
       </nav>
 
@@ -497,7 +510,9 @@ export default function RiucPaymentPage() {
         <form style={styles.card} onSubmit={handleSubmit} noValidate>
           <div style={styles.cardHeader}>
             <h2 style={styles.cardTitle}>Fee Payment</h2>
-            <span style={styles.cardRefBadge}>Secure Transaction · ZAR</span>
+            <span style={styles.cardRefBadge}>
+              Invoice {invoiceNumber} · Issued {issueDate} · ZAR
+            </span>
           </div>
 
           <div style={styles.cardBody}>
