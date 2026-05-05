@@ -20,8 +20,8 @@ const FEE_AMOUNT = 3461.00
 const FEE_LABEL = 'R3,461.00'
 const ITEM_NAME = 'RIUC Application Fee'
 
-const SERIF = 'Georgia, "Times New Roman", "Liberation Serif", serif'
-const SANS  = '"Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif'
+const SERIF = '"Source Serif 4", "Source Serif Pro", Georgia, "Times New Roman", serif'
+const SANS  = 'Inter, "Helvetica Neue", Arial, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif'
 
 function formatZar(amount) {
   return new Intl.NumberFormat('en-ZA', {
