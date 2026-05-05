@@ -24,7 +24,7 @@ const STATUS_CONFIG = {
       'Your payment to Rosebank International University College has been received successfully. A confirmation will be issued via the RIUC Finance Office.',
     accent: BRAND.successGreen,
     icon: (
-      <svg viewBox="0 0 64 64" width="56" height="56" aria-hidden="true">
+      <svg viewBox="0 0 64 64" width="80" height="80" aria-hidden="true">
         <circle cx="32" cy="32" r="30" fill="none" stroke="currentColor" strokeWidth="3" />
         <path
           d="M18 33 L28 43 L46 23"
@@ -45,7 +45,7 @@ const STATUS_CONFIG = {
       'No funds have been taken from your account. You can return to the payment page and try again whenever you are ready.',
     accent: BRAND.warningAmber,
     icon: (
-      <svg viewBox="0 0 64 64" width="56" height="56" aria-hidden="true">
+      <svg viewBox="0 0 64 64" width="80" height="80" aria-hidden="true">
         <circle cx="32" cy="32" r="30" fill="none" stroke="currentColor" strokeWidth="3" />
         <path
           d="M32 18 L32 36"
@@ -65,7 +65,7 @@ const STATUS_CONFIG = {
       'Something went wrong while processing your payment. No funds have been taken. Please try again or contact the RIUC Finance Office for assistance.',
     accent: BRAND.errorRed,
     icon: (
-      <svg viewBox="0 0 64 64" width="56" height="56" aria-hidden="true">
+      <svg viewBox="0 0 64 64" width="80" height="80" aria-hidden="true">
         <circle cx="32" cy="32" r="30" fill="none" stroke="currentColor" strokeWidth="3" />
         <path
           d="M22 22 L42 42 M42 22 L22 42"
@@ -86,138 +86,139 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    padding: '32px 16px 56px',
+    padding: '48px 20px 72px',
     fontFamily: '"Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
     color: BRAND.dark,
   },
   header: {
     width: '100%',
-    maxWidth: 560,
+    maxWidth: 760,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 14,
-    marginBottom: 22,
+    gap: 20,
+    marginBottom: 32,
   },
   logo: {
-    height: 64,
+    height: 88,
     width: 'auto',
     filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.25))',
   },
   brandText: {
     color: BRAND.white,
-    lineHeight: 1.15,
+    lineHeight: 1.2,
   },
   brandTitle: {
-    fontSize: 18,
+    fontSize: 24,
     fontWeight: 700,
     letterSpacing: 0.3,
     margin: 0,
   },
   brandTag: {
-    fontSize: 12,
+    fontSize: 15,
     color: BRAND.gold,
-    margin: '4px 0 0',
-    letterSpacing: 0.6,
+    margin: '6px 0 0',
+    letterSpacing: 0.8,
     textTransform: 'uppercase',
   },
   card: {
     width: '100%',
-    maxWidth: 560,
+    maxWidth: 760,
     background: BRAND.white,
-    borderRadius: 14,
-    boxShadow: '0 22px 60px rgba(8, 18, 52, 0.35)',
+    borderRadius: 18,
+    boxShadow: '0 28px 72px rgba(8, 18, 52, 0.4)',
     overflow: 'hidden',
     border: `1px solid ${BRAND.border}`,
   },
   cardTopBar: {
-    height: 6,
+    height: 8,
     background: `linear-gradient(90deg, ${BRAND.gold} 0%, ${BRAND.goldDk} 100%)`,
   },
   cardBody: {
-    padding: '32px 28px',
+    padding: '48px 48px 52px',
     textAlign: 'center',
   },
   iconWrap: {
-    margin: '4px auto 14px',
+    margin: '4px auto 18px',
     display: 'inline-flex',
     alignItems: 'center',
     justifyContent: 'center',
   },
   eyebrow: {
-    fontSize: 11,
-    letterSpacing: 1.5,
+    fontSize: 14,
+    letterSpacing: 1.8,
     textTransform: 'uppercase',
     fontWeight: 700,
     margin: 0,
   },
   heading: {
-    fontSize: 24,
+    fontSize: 34,
     color: BRAND.navyDk,
-    margin: '6px 0 12px',
+    margin: '10px 0 18px',
     fontWeight: 700,
-    lineHeight: 1.25,
+    lineHeight: 1.2,
   },
   message: {
-    fontSize: 15,
+    fontSize: 19,
     color: BRAND.grey,
     lineHeight: 1.55,
-    margin: '0 auto 22px',
-    maxWidth: 440,
+    margin: '0 auto 30px',
+    maxWidth: 560,
   },
   refBox: {
     background: BRAND.light,
     border: `1px solid ${BRAND.border}`,
-    borderRadius: 10,
-    padding: '12px 16px',
-    marginBottom: 22,
-    fontSize: 13,
+    borderRadius: 12,
+    padding: '18px 22px',
+    marginBottom: 30,
+    fontSize: 16,
     color: BRAND.navyDk,
     textAlign: 'left',
   },
   refLabel: {
-    fontSize: 11,
-    letterSpacing: 1,
+    fontSize: 13,
+    letterSpacing: 1.2,
     textTransform: 'uppercase',
     color: BRAND.goldDk,
     fontWeight: 700,
     margin: 0,
   },
   refValue: {
-    fontSize: 15,
-    fontWeight: 700,
+    fontSize: 22,
+    fontWeight: 800,
     color: BRAND.navyDk,
-    margin: '4px 0 0',
+    margin: '6px 0 0',
     wordBreak: 'break-all',
   },
   primaryButton: {
     display: 'inline-block',
     marginTop: 4,
-    padding: '13px 26px',
-    fontSize: 14,
-    fontWeight: 700,
-    letterSpacing: 0.6,
+    padding: '18px 36px',
+    fontSize: 17,
+    fontWeight: 800,
+    letterSpacing: 0.8,
     textTransform: 'uppercase',
     color: BRAND.navyDk,
     background: `linear-gradient(180deg, ${BRAND.gold} 0%, ${BRAND.goldDk} 100%)`,
     border: 'none',
-    borderRadius: 10,
+    borderRadius: 12,
     cursor: 'pointer',
-    boxShadow: '0 8px 22px rgba(201, 166, 70, 0.35)',
+    boxShadow: '0 10px 28px rgba(201, 166, 70, 0.4)',
     textDecoration: 'none',
   },
   contact: {
-    marginTop: 18,
-    fontSize: 12,
+    marginTop: 26,
+    fontSize: 16,
     color: BRAND.grey,
+    lineHeight: 1.6,
   },
   footer: {
-    marginTop: 22,
-    fontSize: 12,
-    color: 'rgba(255,255,255,0.75)',
+    marginTop: 32,
+    fontSize: 14,
+    color: 'rgba(255,255,255,0.85)',
     textAlign: 'center',
-    maxWidth: 560,
-    lineHeight: 1.5,
+    maxWidth: 760,
+    lineHeight: 1.6,
   },
 }
 
