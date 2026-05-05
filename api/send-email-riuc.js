@@ -431,6 +431,46 @@ function buildPlainText({ subject, body, recipientName }) {
 }
 
 // ---------- PDF version of the email (attached to outgoing message) ----------
+function decodeHtmlEntities(s) {
+  return String(s == null ? '' : s)
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/&amp;/gi, '&')
+    .replace(/&lt;/gi, '<')
+    .replace(/&gt;/gi, '>')
+    .replace(/&quot;/gi, '"')
+    .replace(/&#39;/gi, "'");
+}
+
+// Extract CTA buttons (<a data-cta ...>) and other anchors from the body so we
+// can render them as real clickable elements inside the PDF. Returns the body
+// rewritten with placeholder tokens [[CTA:n]] / [[LINK:n|text]] that survive
+// htmlToPlain() and can be detected during layout.
+function extractInteractiveTokens(body) {
+  const ctas = [];   // [{ url, text }]
+  const links = [];  // [{ url, text }]
+  const raw = String(body == null ? '' : body);
+  if (!/<a\b/i.test(raw)) {
+    return { html: raw, ctas, links };
+  }
+  // Replace each <a> with a placeholder; keep CTAs and ordinary links separate.
+  const html = raw.replace(/<a\b([^>]*)>([\s\S]*?)<\/a>/gi, (m, attrs, inner) => {
+    const hrefMatch = /\bhref\s*=\s*("([^"]*)"|'([^']*)'|([^\s>]+))/i.exec(attrs || '');
+    const href = decodeHtmlEntities(hrefMatch ? (hrefMatch[2] || hrefMatch[3] || hrefMatch[4] || '') : '');
+    const text = decodeHtmlEntities(String(inner || '').replace(/<[^>]+>/g, '').trim());
+    if (!href || !text) return text || '';
+    const isCta = /\bdata-cta\b/i.test(attrs || '');
+    if (isCta) {
+      const idx = ctas.length;
+      ctas.push({ url: href, text });
+      return `\n\n[[CTA:${idx}]]\n\n`;
+    }
+    const idx = links.length;
+    links.push({ url: href, text });
+    return `[[LINK:${idx}]]`;
+  });
+  return { html, ctas, links };
+}
+
 function htmlToPlain(input) {
   const raw = String(input == null ? '' : input);
   if (!/<[a-z][\s\S]*>/i.test(raw)) return raw;
@@ -525,15 +565,15 @@ function buildEmailPdfBuffer({ subject, body, recipientName, logo }) {
   // ---- Subject ----
   let cursorY = 168;
   doc.setTextColor(grey[0], grey[1], grey[2]);
-  doc.setFontSize(8);
+  doc.setFontSize(9);
   doc.setFont('helvetica', 'bold');
   doc.text('SUBJECT', marginX, cursorY);
-  cursorY += 14;
+  cursorY += 22; // breathing room between label and subject line
   doc.setTextColor(navy[0], navy[1], navy[2]);
   doc.setFontSize(16);
   const subjLines = doc.splitTextToSize(String(subject || ''), contentW);
   doc.text(subjLines, marginX, cursorY);
-  cursorY += subjLines.length * 19 + 6;
+  cursorY += subjLines.length * 19 + 10;
   doc.setDrawColor(gold[0], gold[1], gold[2]);
   doc.setLineWidth(2);
   doc.line(marginX, cursorY, marginX + 56, cursorY);
@@ -550,7 +590,10 @@ function buildEmailPdfBuffer({ subject, body, recipientName, logo }) {
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(11);
   doc.setTextColor(dark[0], dark[1], dark[2]);
-  const plain = htmlToPlain(body);
+  // Pull CTAs and inline links out before flattening to plain text so we can
+  // render them as real clickable elements in the PDF.
+  const { html: bodyWithTokens, ctas, links } = extractInteractiveTokens(body);
+  const plain = htmlToPlain(bodyWithTokens);
   const paragraphs = plain.split(/\n{2,}/);
   const lineHeight = 15;
   const bottomMargin = 140;
@@ -562,13 +605,90 @@ function buildEmailPdfBuffer({ subject, body, recipientName, logo }) {
     }
   }
 
+  function drawCtaButton(cta) {
+    const padX = 18;
+    const padY = 12;
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(11);
+    const labelW = doc.getTextWidth(cta.text);
+    const btnW = Math.min(contentW, labelW + padX * 2);
+    const btnH = 38;
+    ensureSpace(4);
+    cursorY += 6;
+    // navy fill, gold underline
+    doc.setFillColor(navy[0], navy[1], navy[2]);
+    doc.roundedRect(marginX, cursorY, btnW, btnH, 4, 4, 'F');
+    doc.setFillColor(gold[0], gold[1], gold[2]);
+    doc.rect(marginX, cursorY + btnH - 3, btnW, 3, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.text(cta.text, marginX + btnW / 2, cursorY + padY + 11, { align: 'center' });
+    // Make the button clickable.
+    doc.link(marginX, cursorY, btnW, btnH, { url: cta.url });
+    cursorY += btnH + 14;
+    // restore body styling
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(11);
+    doc.setTextColor(dark[0], dark[1], dark[2]);
+  }
+
+  // Renders a single line that may contain [[LINK:n]] tokens, drawing each
+  // segment in sequence and wiring up doc.link() rectangles for the URLs.
+  function drawLineWithLinks(line) {
+    if (!line) { cursorY += lineHeight; return; }
+    const segments = line.split(/(\[\[LINK:\d+\]\])/g).filter(Boolean);
+    let xCursor = marginX;
+    const baselineY = cursorY + 11;
+    for (const seg of segments) {
+      const linkMatch = /^\[\[LINK:(\d+)\]\]$/.exec(seg);
+      if (linkMatch) {
+        const link = links[Number(linkMatch[1])];
+        if (link) {
+          const txt = link.text;
+          doc.setTextColor(navy[0], navy[1], navy[2]);
+          doc.setFont('helvetica', 'bold');
+          const w = doc.getTextWidth(txt);
+          doc.text(txt, xCursor, baselineY);
+          // underline
+          doc.setDrawColor(navy[0], navy[1], navy[2]);
+          doc.setLineWidth(0.6);
+          doc.line(xCursor, baselineY + 2, xCursor + w, baselineY + 2);
+          doc.link(xCursor, cursorY, w, lineHeight, { url: link.url });
+          xCursor += w;
+          // restore
+          doc.setFont('helvetica', 'normal');
+          doc.setTextColor(dark[0], dark[1], dark[2]);
+        }
+      } else {
+        doc.text(seg, xCursor, baselineY);
+        xCursor += doc.getTextWidth(seg);
+      }
+    }
+    cursorY += lineHeight;
+  }
+
   for (const para of paragraphs) {
+    const ctaMatch = /^\[\[CTA:(\d+)\]\]$/.exec(para.trim());
+    if (ctaMatch) {
+      const cta = ctas[Number(ctaMatch[1])];
+      if (cta) drawCtaButton(cta);
+      continue;
+    }
     const pieces = para.split(/\n/);
     for (const piece of pieces) {
-      const wrapped = doc.splitTextToSize(piece, contentW);
+      // For wrapping, treat the whole [[LINK:n]] token as one word — strip
+      // tokens for measurement, then re-inject when drawing each line.
+      const withSpacing = piece.replace(/\[\[LINK:(\d+)\]\]/g, (m, idx) => {
+        const link = links[Number(idx)];
+        // pad with sentinel that has roughly the same width as the visible text
+        return link ? `\u0001${idx}\u0002${link.text}\u0003` : '';
+      });
+      const wrapped = doc.splitTextToSize(withSpacing, contentW);
       ensureSpace(wrapped.length);
-      doc.text(wrapped, marginX, cursorY);
-      cursorY += wrapped.length * lineHeight;
+      for (const wline of wrapped) {
+        // Re-expand sentinel markers back to [[LINK:n]] tokens for rendering.
+        const expanded = wline.replace(/\u0001(\d+)\u0002[^\u0003]*\u0003/g, '[[LINK:$1]]');
+        drawLineWithLinks(expanded);
+      }
     }
     cursorY += 8; // paragraph gap
   }
