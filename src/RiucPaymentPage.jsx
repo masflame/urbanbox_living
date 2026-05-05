@@ -8,7 +8,9 @@ const BRAND = {
   gold:   '#C9A646',
   goldDk: '#A88732',
   grey:   '#5A5A5A',
+  greyDk: '#333740',
   light:  '#F4F6FB',
+  pageBg: '#EEF1F7',
   border: '#D4DAE6',
   white:  '#FFFFFF',
   dark:   '#1A1A1A',
@@ -17,6 +19,9 @@ const BRAND = {
 const FEE_AMOUNT = 3461.00
 const FEE_LABEL = 'R3,461.00'
 const ITEM_NAME = 'RIUC Application Fee'
+
+const SERIF = 'Georgia, "Times New Roman", "Liberation Serif", serif'
+const SANS  = '"Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif'
 
 function formatZar(amount) {
   return new Intl.NumberFormat('en-ZA', {
@@ -30,116 +35,253 @@ function formatZar(amount) {
 const styles = {
   page: {
     minHeight: '100vh',
-    background: `linear-gradient(160deg, ${BRAND.navyDk} 0%, ${BRAND.navy} 55%, #16306a 100%)`,
+    background: BRAND.pageBg,
+    fontFamily: SANS,
+    color: BRAND.dark,
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center',
-    padding: '48px 20px 72px',
-    fontFamily: '"Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
-    color: BRAND.dark,
   },
-  header: {
-    width: '100%',
-    maxWidth: 760,
+
+  // -------- Top utility bar --------
+  topBar: {
+    background: BRAND.navyDk,
+    color: BRAND.white,
+    fontSize: 13,
+    padding: '8px 0',
+    borderBottom: `3px solid ${BRAND.gold}`,
+  },
+  topBarInner: {
+    maxWidth: 1100,
+    margin: '0 auto',
+    padding: '0 24px',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    gap: 16,
+    flexWrap: 'wrap',
+  },
+  topBarLeft: {
+    letterSpacing: 0.4,
+    color: 'rgba(255,255,255,0.85)',
+  },
+  topBarRight: {
+    display: 'flex',
+    gap: 18,
+    color: 'rgba(255,255,255,0.85)',
+    flexWrap: 'wrap',
+  },
+
+  // -------- Masthead --------
+  masthead: {
+    background: BRAND.white,
+    borderBottom: `1px solid ${BRAND.border}`,
+    padding: '20px 0',
+  },
+  mastheadInner: {
+    maxWidth: 1100,
+    margin: '0 auto',
+    padding: '0 24px',
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center',
-    gap: 20,
-    marginBottom: 32,
+    gap: 22,
   },
-  logo: {
-    height: 88,
+  mastheadLogo: {
+    height: 78,
     width: 'auto',
-    filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.25))',
+    flexShrink: 0,
   },
-  brandText: {
-    color: BRAND.white,
-    lineHeight: 1.2,
+  mastheadText: {
+    borderLeft: `1px solid ${BRAND.border}`,
+    paddingLeft: 22,
   },
-  brandTitle: {
+  mastheadName: {
+    margin: 0,
+    fontFamily: SERIF,
     fontSize: 24,
     fontWeight: 700,
-    letterSpacing: 0.3,
-    margin: 0,
+    color: BRAND.navyDk,
+    letterSpacing: 0.2,
+    lineHeight: 1.2,
   },
-  brandTag: {
-    fontSize: 15,
-    color: BRAND.gold,
+  mastheadSub: {
     margin: '6px 0 0',
-    letterSpacing: 0.8,
+    fontSize: 13,
+    color: BRAND.grey,
     textTransform: 'uppercase',
+    letterSpacing: 1.6,
+    fontWeight: 600,
+  },
+
+  // -------- Sub header (breadcrumb / portal name) --------
+  subHeader: {
+    background: BRAND.navy,
+    color: BRAND.white,
+  },
+  subHeaderInner: {
+    maxWidth: 1100,
+    margin: '0 auto',
+    padding: '14px 24px',
+    display: 'flex',
+    alignItems: 'center',
+    gap: 12,
+    fontSize: 14,
+    letterSpacing: 0.6,
+  },
+  subHeaderTitle: {
+    fontWeight: 700,
+    textTransform: 'uppercase',
+    letterSpacing: 1.4,
+  },
+  subHeaderDivider: {
+    opacity: 0.5,
+  },
+
+  // -------- Content --------
+  main: {
+    flex: 1,
+    padding: '40px 20px 60px',
+    display: 'flex',
+    justifyContent: 'center',
   },
   card: {
     width: '100%',
-    maxWidth: 760,
+    maxWidth: 780,
     background: BRAND.white,
-    borderRadius: 18,
-    boxShadow: '0 28px 72px rgba(8, 18, 52, 0.4)',
+    border: `1px solid ${BRAND.border}`,
+    borderRadius: 4,
+    boxShadow: '0 4px 18px rgba(15, 35, 80, 0.08)',
     overflow: 'hidden',
-    border: `1px solid ${BRAND.border}`,
   },
-  cardTopBar: {
-    height: 8,
-    background: `linear-gradient(90deg, ${BRAND.gold} 0%, ${BRAND.goldDk} 100%)`,
-  },
-  cardBody: {
-    padding: '44px 48px 48px',
-  },
-  eyebrow: {
-    fontSize: 14,
-    letterSpacing: 1.8,
-    textTransform: 'uppercase',
-    color: BRAND.goldDk,
-    fontWeight: 700,
-    margin: 0,
-  },
-  heading: {
-    fontSize: 38,
-    color: BRAND.navyDk,
-    margin: '10px 0 6px',
-    fontWeight: 700,
-    lineHeight: 1.15,
-  },
-  feeBlock: {
+  cardHeader: {
     background: BRAND.light,
-    border: `1px solid ${BRAND.border}`,
-    borderRadius: 14,
-    padding: '26px 30px',
-    margin: '28px 0 32px',
+    borderBottom: `1px solid ${BRAND.border}`,
+    padding: '22px 36px',
     display: 'flex',
-    alignItems: 'baseline',
     justifyContent: 'space-between',
+    alignItems: 'center',
     flexWrap: 'wrap',
     gap: 12,
   },
-  feeLabel: {
-    fontSize: 18,
-    color: BRAND.grey,
+  cardTitle: {
     margin: 0,
-    fontWeight: 500,
+    fontFamily: SERIF,
+    fontSize: 26,
+    color: BRAND.navyDk,
+    fontWeight: 700,
+    letterSpacing: 0.3,
   },
-  feeValue: {
-    fontSize: 44,
+  cardRefBadge: {
+    fontSize: 12,
+    color: BRAND.grey,
+    letterSpacing: 1.2,
+    textTransform: 'uppercase',
+    fontWeight: 600,
+  },
+  cardBody: {
+    padding: '32px 36px 36px',
+  },
+  intro: {
+    margin: '0 0 24px',
+    fontSize: 16,
+    color: BRAND.greyDk,
+    lineHeight: 1.6,
+  },
+
+  // -------- Invoice-style fee table --------
+  feeTable: {
+    width: '100%',
+    borderCollapse: 'collapse',
+    border: `1px solid ${BRAND.border}`,
+    margin: '0 0 30px',
+    fontSize: 16,
+  },
+  feeTableHeadCell: {
+    background: BRAND.navyDk,
+    color: BRAND.white,
+    textAlign: 'left',
+    padding: '12px 16px',
+    fontSize: 12,
+    letterSpacing: 1.2,
+    textTransform: 'uppercase',
+    fontWeight: 700,
+  },
+  feeTableHeadCellRight: {
+    background: BRAND.navyDk,
+    color: BRAND.white,
+    textAlign: 'right',
+    padding: '12px 16px',
+    fontSize: 12,
+    letterSpacing: 1.2,
+    textTransform: 'uppercase',
+    fontWeight: 700,
+  },
+  feeTableCell: {
+    padding: '16px 18px',
+    borderTop: `1px solid ${BRAND.border}`,
+    color: BRAND.greyDk,
+  },
+  feeTableCellRight: {
+    padding: '16px 18px',
+    borderTop: `1px solid ${BRAND.border}`,
+    textAlign: 'right',
+    color: BRAND.greyDk,
+    fontVariantNumeric: 'tabular-nums',
+  },
+  feeTableTotalLabel: {
+    padding: '18px 18px',
+    borderTop: `2px solid ${BRAND.navyDk}`,
+    background: BRAND.light,
+    fontSize: 15,
+    letterSpacing: 1,
+    textTransform: 'uppercase',
+    fontWeight: 700,
+    color: BRAND.navyDk,
+  },
+  feeTableTotalValue: {
+    padding: '18px 18px',
+    borderTop: `2px solid ${BRAND.navyDk}`,
+    background: BRAND.light,
+    textAlign: 'right',
+    fontSize: 22,
     fontWeight: 800,
+    color: BRAND.navyDk,
+    fontFamily: SERIF,
+    fontVariantNumeric: 'tabular-nums',
+  },
+
+  // -------- Form --------
+  fieldset: {
+    border: `1px solid ${BRAND.border}`,
+    borderRadius: 3,
+    padding: '20px 22px 22px',
+    margin: '0 0 24px',
+  },
+  legend: {
+    padding: '0 8px',
+    fontSize: 12,
+    letterSpacing: 1.4,
+    textTransform: 'uppercase',
+    fontWeight: 700,
     color: BRAND.navy,
-    margin: 0,
-    letterSpacing: 0.5,
-    lineHeight: 1,
   },
   fieldLabel: {
     display: 'block',
-    fontSize: 18,
-    fontWeight: 700,
+    fontSize: 15,
+    fontWeight: 600,
     color: BRAND.navyDk,
-    marginBottom: 10,
-    letterSpacing: 0.3,
+    marginBottom: 8,
+  },
+  required: {
+    color: '#B33A3A',
+    marginLeft: 4,
   },
   input: {
     width: '100%',
-    padding: '18px 20px',
-    fontSize: 20,
-    border: `2px solid ${BRAND.border}`,
-    borderRadius: 12,
+    padding: '14px 16px',
+    fontSize: 17,
+    fontFamily: SANS,
+    border: `1px solid ${BRAND.border}`,
+    borderRadius: 3,
     outline: 'none',
     boxSizing: 'border-box',
     background: BRAND.white,
@@ -147,57 +289,121 @@ const styles = {
     transition: 'border-color 120ms ease, box-shadow 120ms ease',
   },
   fieldHint: {
-    fontSize: 15,
+    fontSize: 13,
     color: BRAND.grey,
-    margin: '10px 0 0',
+    margin: '8px 0 0',
     lineHeight: 1.5,
   },
   errorMsg: {
-    background: '#FDECEC',
-    color: '#9A1B1B',
-    border: '1px solid #F2BFBF',
-    padding: '14px 18px',
-    borderRadius: 10,
-    fontSize: 16,
-    marginTop: 22,
-    fontWeight: 500,
+    background: '#FBE9E9',
+    color: '#7A1414',
+    borderLeft: '4px solid #B33A3A',
+    padding: '12px 16px',
+    fontSize: 14,
+    margin: '0 0 20px',
+    lineHeight: 1.5,
+  },
+
+  // -------- Action --------
+  actionRow: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 14,
+    marginTop: 8,
   },
   button: {
-    marginTop: 30,
     width: '100%',
-    padding: '20px 22px',
-    fontSize: 19,
-    fontWeight: 800,
-    letterSpacing: 0.8,
+    padding: '16px 20px',
+    fontSize: 16,
+    fontWeight: 700,
+    letterSpacing: 1,
     textTransform: 'uppercase',
-    color: BRAND.navyDk,
-    background: `linear-gradient(180deg, ${BRAND.gold} 0%, ${BRAND.goldDk} 100%)`,
+    color: BRAND.white,
+    background: BRAND.navyDk,
     border: 'none',
-    borderRadius: 12,
+    borderRadius: 3,
     cursor: 'pointer',
-    boxShadow: '0 10px 28px rgba(201, 166, 70, 0.4)',
-    transition: 'transform 120ms ease, box-shadow 120ms ease, opacity 120ms ease',
+    fontFamily: SANS,
+    transition: 'background-color 120ms ease, opacity 120ms ease',
   },
   buttonDisabled: {
     cursor: 'not-allowed',
-    opacity: 0.7,
-    boxShadow: 'none',
+    opacity: 0.6,
   },
-  secureNote: {
-    marginTop: 20,
-    textAlign: 'center',
-    fontSize: 15,
-    color: BRAND.grey,
+
+  // -------- Security strip --------
+  securityStrip: {
+    marginTop: 24,
+    padding: '16px 18px',
+    background: BRAND.light,
+    border: `1px solid ${BRAND.border}`,
+    borderRadius: 3,
+    display: 'flex',
+    alignItems: 'center',
+    gap: 14,
+    fontSize: 13,
+    color: BRAND.greyDk,
     lineHeight: 1.5,
   },
+  lockIcon: {
+    flexShrink: 0,
+    color: BRAND.navy,
+  },
+
+  // -------- Footer --------
   footer: {
-    marginTop: 32,
-    fontSize: 14,
+    background: BRAND.navyDk,
     color: 'rgba(255,255,255,0.85)',
-    textAlign: 'center',
-    maxWidth: 760,
+    borderTop: `3px solid ${BRAND.gold}`,
+    padding: '28px 0 24px',
+    fontSize: 13,
     lineHeight: 1.6,
   },
+  footerInner: {
+    maxWidth: 1100,
+    margin: '0 auto',
+    padding: '0 24px',
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+    gap: 24,
+  },
+  footerHeading: {
+    margin: '0 0 8px',
+    color: BRAND.gold,
+    fontSize: 12,
+    letterSpacing: 1.4,
+    textTransform: 'uppercase',
+    fontWeight: 700,
+  },
+  footerCopy: {
+    maxWidth: 1100,
+    margin: '20px auto 0',
+    padding: '14px 24px 0',
+    borderTop: '1px solid rgba(255,255,255,0.12)',
+    fontSize: 12,
+    color: 'rgba(255,255,255,0.6)',
+  },
+}
+
+function LockIcon() {
+  return (
+    <svg
+      width="22"
+      height="22"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      style={styles.lockIcon}
+      aria-hidden="true"
+    >
+      <rect x="4" y="11" width="16" height="10" rx="1.5" />
+      <path d="M8 11V7a4 4 0 0 1 8 0v4" />
+      <circle cx="12" cy="16" r="1.2" fill="currentColor" />
+    </svg>
+  )
 }
 
 export default function RiucPaymentPage() {
@@ -212,12 +418,12 @@ export default function RiucPaymentPage() {
 
     const trimmedRef = reference.trim()
     if (!trimmedRef) {
-      setError('Please enter a reference before continuing.')
+      setError('Please enter a payment reference before continuing.')
       return
     }
 
     if (!isPayfastConfigured()) {
-      setError('Payment gateway is not configured. Please contact RIUC support.')
+      setError('Payment gateway is not configured. Please contact the RIUC Finance Office.')
       return
     }
 
@@ -243,83 +449,187 @@ export default function RiucPaymentPage() {
 
   return (
     <div style={styles.page}>
-      <div style={styles.header}>
-        <img
-          src="/riuc-logo-white.png"
-          alt="RIUC"
-          style={styles.logo}
-          onError={(event) => {
-            event.currentTarget.onerror = null
-            event.currentTarget.src = '/riuc-logo.png'
-          }}
-        />
-        <div style={styles.brandText}>
-          <p style={styles.brandTitle}>Rosebank International<br />University College</p>
-          <p style={styles.brandTag}>Fast Track Your Global Career</p>
+      {/* Utility bar */}
+      <div style={styles.topBar}>
+        <div style={styles.topBarInner}>
+          <span style={styles.topBarLeft}>
+            Rosebank International University College · Accra, Ghana
+          </span>
+          <span style={styles.topBarRight}>
+            <span>+233 307 007 800</span>
+            <span>info@riuc.edu.gh</span>
+          </span>
         </div>
       </div>
 
-      <form style={styles.card} onSubmit={handleSubmit} noValidate>
-        <div style={styles.cardTopBar} />
-        <div style={styles.cardBody}>
-          <p style={styles.eyebrow}>Secure Payment</p>
-          <h1 style={styles.heading}>Pay your fee</h1>
+      {/* Masthead */}
+      <header style={styles.masthead}>
+        <div style={styles.mastheadInner}>
+          <img
+            src="/riuc-logo.png"
+            alt="RIUC"
+            style={styles.mastheadLogo}
+            onError={(event) => {
+              event.currentTarget.onerror = null
+              event.currentTarget.src = '/riuc-logo-white.png'
+            }}
+          />
+          <div style={styles.mastheadText}>
+            <h1 style={styles.mastheadName}>
+              Rosebank International University College
+            </h1>
+            <p style={styles.mastheadSub}>Office of Finance · Online Payments</p>
+          </div>
+        </div>
+      </header>
 
-          <div style={styles.feeBlock}>
-            <p style={styles.feeLabel}>You are paying fee</p>
-            <p style={styles.feeValue}>{FEE_LABEL}</p>
+      {/* Section sub-header */}
+      <nav style={styles.subHeader} aria-label="Payment section">
+        <div style={styles.subHeaderInner}>
+          <span style={styles.subHeaderTitle}>Student Payment Portal</span>
+          <span style={styles.subHeaderDivider}>›</span>
+          <span>Pay Application / Tuition Fee</span>
+        </div>
+      </nav>
+
+      <main style={styles.main}>
+        <form style={styles.card} onSubmit={handleSubmit} noValidate>
+          <div style={styles.cardHeader}>
+            <h2 style={styles.cardTitle}>Fee Payment</h2>
+            <span style={styles.cardRefBadge}>Secure Transaction · ZAR</span>
           </div>
 
-          <label style={styles.fieldLabel} htmlFor="riuc-reference">
-            Reference
-          </label>
-          <input
-            id="riuc-reference"
-            type="text"
-            value={reference}
-            onChange={(event) => setReference(event.target.value)}
-            placeholder="e.g. Student ID or full name"
-            style={styles.input}
-            onFocus={(event) => {
-              event.currentTarget.style.borderColor = BRAND.gold
-              event.currentTarget.style.boxShadow = `0 0 0 3px rgba(201,166,70,0.18)`
-            }}
-            onBlur={(event) => {
-              event.currentTarget.style.borderColor = BRAND.border
-              event.currentTarget.style.boxShadow = 'none'
-            }}
-            autoComplete="off"
-            maxLength={100}
-            required
-          />
-          <p style={styles.fieldHint}>
-            Enter a reference so we can match this payment to your account.
-          </p>
+          <div style={styles.cardBody}>
+            <p style={styles.intro}>
+              Please review the fee summary below and enter your payment
+              reference. You will be redirected to our secure payment provider
+              to complete the transaction.
+            </p>
 
-          {error && <div style={styles.errorMsg} role="alert">{error}</div>}
+            {/* Invoice-style fee table */}
+            <table style={styles.feeTable}>
+              <thead>
+                <tr>
+                  <th style={styles.feeTableHeadCell}>Description</th>
+                  <th style={styles.feeTableHeadCellRight}>Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style={styles.feeTableCell}>{ITEM_NAME}</td>
+                  <td style={styles.feeTableCellRight}>{FEE_LABEL}</td>
+                </tr>
+                <tr>
+                  <td style={styles.feeTableTotalLabel}>Total Due</td>
+                  <td style={styles.feeTableTotalValue}>{FEE_LABEL}</td>
+                </tr>
+              </tbody>
+            </table>
 
-          <button
-            type="submit"
-            disabled={submitting}
-            style={{
-              ...styles.button,
-              ...(submitting ? styles.buttonDisabled : {}),
-            }}
-          >
-            {submitting ? 'Redirecting to Payfast…' : `Complete Payment · ${formatZar(FEE_AMOUNT)}`}
-          </button>
+            {/* Payer details */}
+            <fieldset style={styles.fieldset}>
+              <legend style={styles.legend}>Payer Details</legend>
 
-          <p style={styles.secureNote}>
-            Payments are processed securely by Payfast. You will be redirected to
-            complete your payment.
-          </p>
+              <label style={styles.fieldLabel} htmlFor="riuc-reference">
+                Payment Reference<span style={styles.required}>*</span>
+              </label>
+              <input
+                id="riuc-reference"
+                type="text"
+                value={reference}
+                onChange={(event) => setReference(event.target.value)}
+                placeholder="Student ID number or full name of student"
+                style={styles.input}
+                onFocus={(event) => {
+                  event.currentTarget.style.borderColor = BRAND.navy
+                  event.currentTarget.style.boxShadow = `0 0 0 3px rgba(27,58,119,0.15)`
+                }}
+                onBlur={(event) => {
+                  event.currentTarget.style.borderColor = BRAND.border
+                  event.currentTarget.style.boxShadow = 'none'
+                }}
+                autoComplete="off"
+                maxLength={100}
+                required
+              />
+              <p style={styles.fieldHint}>
+                Enter the student&apos;s ID number or full name so the Finance
+                Office can match this payment to the correct account.
+              </p>
+            </fieldset>
+
+            {error && (
+              <div style={styles.errorMsg} role="alert">
+                {error}
+              </div>
+            )}
+
+            <div style={styles.actionRow}>
+              <button
+                type="submit"
+                disabled={submitting}
+                style={{
+                  ...styles.button,
+                  ...(submitting ? styles.buttonDisabled : {}),
+                }}
+              >
+                {submitting
+                  ? 'Connecting to Secure Gateway…'
+                  : `Proceed to Secure Payment · ${formatZar(FEE_AMOUNT)}`}
+              </button>
+            </div>
+
+            <div style={styles.securityStrip}>
+              <LockIcon />
+              <span>
+                <strong>Secure 256-bit SSL transaction.</strong> Payments are
+                processed by Payfast, a registered South African payment
+                services provider. Your card details are never stored on our
+                servers.
+              </span>
+            </div>
+          </div>
+        </form>
+      </main>
+
+      <footer style={styles.footer}>
+        <div style={styles.footerInner}>
+          <div>
+            <p style={styles.footerHeading}>Office of Finance</p>
+            <p style={{ margin: 0 }}>
+              Opeibea House, No A177 Liberation Road
+              <br />
+              Airport Commercial Centre
+              <br />
+              Accra, Ghana
+            </p>
+          </div>
+          <div>
+            <p style={styles.footerHeading}>Contact</p>
+            <p style={{ margin: 0 }}>
+              Tel: +233 307 007 800
+              <br />
+              WhatsApp: +233 59 646 6466
+              <br />
+              Email: info@riuc.edu.gh
+            </p>
+          </div>
+          <div>
+            <p style={styles.footerHeading}>Online</p>
+            <p style={{ margin: 0 }}>
+              www.riuc.edu.gh
+              <br />
+              Student Payment Portal
+              <br />
+              Powered by Payfast
+            </p>
+          </div>
         </div>
-      </form>
-
-      <p style={styles.footer}>
-        © {new Date().getFullYear()} Rosebank International University College.
-        For payment queries contact <strong>info@riuc.edu.gh</strong>.
-      </p>
+        <div style={styles.footerCopy}>
+          © {new Date().getFullYear()} Rosebank International University
+          College. All rights reserved.
+        </div>
+      </footer>
     </div>
   )
 }
