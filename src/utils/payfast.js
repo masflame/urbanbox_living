@@ -72,8 +72,8 @@ export function submitPayfastCheckout(opts) {
   const data = {
     merchant_id: MERCHANT_ID,
     merchant_key: MERCHANT_KEY,
-    return_url: RETURN_URL,
-    cancel_url: CANCEL_URL,
+    return_url: opts.returnUrl || RETURN_URL,
+    cancel_url: opts.cancelUrl || CANCEL_URL,
     ...(NOTIFY_URL ? { notify_url: NOTIFY_URL } : {}),
     name_first: opts.firstName || "",
     name_last: opts.lastName || "",

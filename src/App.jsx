@@ -8,6 +8,8 @@ const CartPage = lazy(() => import('./CartPage'))
 const CheckoutPage = lazy(() => import('./CheckoutPage'))
 const DeliveryInfoPage = lazy(() => import('./DeliveryInfoPage'))
 const PaymentPage = lazy(() => import('./PaymentPage'))
+const RiucPaymentPage = lazy(() => import('./RiucPaymentPage'))
+const RiucPaymentResultPage = lazy(() => import('./RiucPaymentResultPage'))
 const CheckoutResultPage = lazy(() => import('./CheckoutResultPage'))
 const PlannerPage = lazy(() => import('./PlannerPage'))
 const PortfolioPage = lazy(() => import('./PortfolioPage'))
@@ -78,6 +80,10 @@ function AnimatedRoutes() {
           <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/checkout/delivery" element={<DeliveryInfoPage />} />
           <Route path="/checkout/payment" element={<PaymentPage />} />
+          <Route path="/payment" element={<RiucPaymentPage />} />
+          <Route path="/payment/success" element={<RiucPaymentResultPage status="success" />} />
+          <Route path="/payment/cancelled" element={<RiucPaymentResultPage status="cancelled" />} />
+          <Route path="/payment/failed" element={<RiucPaymentResultPage status="failed" />} />
           <Route path="/checkout/success" element={<CheckoutResultPage status="success" />} />
           <Route path="/checkout/cancelled" element={<CheckoutResultPage status="cancelled" />} />
           <Route path="/checkout/failed" element={<CheckoutResultPage status="failed" />} />
