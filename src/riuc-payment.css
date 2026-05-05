@@ -488,6 +488,18 @@
   font-size: 11px;
   color: rgba(255,255,255,0.6);
 }
+/* On phones wide enough to fit two short columns, sit Contact and Online
+   side-by-side underneath the address. */
+@media (min-width: 420px) and (max-width: 767px) {
+  .riuc-footer__inner {
+    grid-template-columns: 1fr 1fr;
+    column-gap: 18px;
+    row-gap: 22px;
+  }
+  .riuc-footer__inner > :first-child {
+    grid-column: 1 / -1;
+  }
+}
 @media (min-width: 768px) {
   .riuc-footer { padding: 28px 0 24px; }
   .riuc-footer__inner {
