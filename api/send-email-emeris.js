@@ -257,27 +257,22 @@ function buildEmailHtml({ subject, body, recipientName }) {
                style="width:660px;max-width:96%;background:${BRAND.white};border:1px solid ${BRAND.border};
                       box-shadow:0 8px 32px rgba(11,122,120,0.16);">
 
-          <!-- TOP BANNER (composite: emeris logo on left, image on right, dark teal bg) -->
+          <!-- TOP BANNER (composite: teal logo on left, students on right, white bg) -->
           <tr>
-            <td bgcolor="#115063" style="padding:0;background:#115063 !important;background-color:#115063;line-height:0;font-size:0;">
-              <table role="presentation" width="660" cellpadding="0" cellspacing="0" bgcolor="#115063" style="width:660px;max-width:660px;background:#115063 !important;background-color:#115063;">
+            <td bgcolor="#FFFFFF" style="padding:0;background:${BRAND.white} !important;background-color:${BRAND.white};line-height:0;font-size:0;border-bottom:4px solid ${BRAND.coral};">
+              <table role="presentation" width="660" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF" style="width:660px;max-width:660px;background:${BRAND.white} !important;background-color:${BRAND.white};">
                 <tr>
-                  <td width="230" align="center" valign="middle" bgcolor="#115063" style="width:230px;padding:12px 14px;background:#115063 !important;background-color:#115063;">
-                    <img src="${LOGO_URL}" alt="Emeris" width="200" bgcolor="#115063"
-                         style="display:block;width:200px;max-width:100%;height:auto;border:0;margin:0 auto;background:#115063 !important;background-color:#115063;" />
+                  <td width="230" align="center" valign="middle" bgcolor="#FFFFFF" style="width:230px;padding:12px 14px;background:${BRAND.white} !important;background-color:${BRAND.white};">
+                    <img src="${TEAL_URL}" alt="Emeris" width="200" bgcolor="#FFFFFF"
+                         style="display:block;width:200px;max-width:100%;height:auto;border:0;margin:0 auto;background:${BRAND.white} !important;background-color:${BRAND.white};" />
                   </td>
-                  <td width="430" align="right" valign="middle" bgcolor="#115063" style="width:430px;background:#115063 !important;background-color:#115063;padding:0;">
-                    <img src="${BANNER_URL}" alt="Emeris — Be Your Best" width="430" height="110" bgcolor="#115063"
-                         style="display:block;width:430px;height:110px;max-width:430px;object-fit:cover;border:0;background:#115063 !important;background-color:#115063;" />
+                  <td width="430" align="right" valign="middle" bgcolor="#FFFFFF" style="width:430px;background:${BRAND.white} !important;background-color:${BRAND.white};padding:0;">
+                    <img src="${BANNER_URL}" alt="Emeris — Be Your Best" width="430" height="110" bgcolor="#FFFFFF"
+                         style="display:block;width:430px;height:110px;max-width:430px;object-fit:cover;border:0;background:${BRAND.white} !important;background-color:${BRAND.white};" />
                   </td>
                 </tr>
               </table>
             </td>
-          </tr>
-
-          <!-- CORAL ACCENT STRIPE (3px) -->
-          <tr>
-            <td style="height:3px;background:${BRAND.coral};line-height:3px;font-size:0;">&nbsp;</td>
           </tr>
 
           <!-- UNIFIED INFO BAR: date + contact -->
