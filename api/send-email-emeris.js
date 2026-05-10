@@ -356,19 +356,19 @@ function buildEmailHtml({ subject, body, recipientName }) {
             <td background="${BOTTOM_BANNER_URL}" bgcolor="${BRAND.tealDp}" valign="top"
                 style="background-image:url('${BOTTOM_BANNER_URL}');background-color:${BRAND.tealDp};background-repeat:no-repeat;background-position:center center;background-size:100% 100%;border-top:3px solid ${BRAND.coral};">
               <!--[if gte mso 9]>
-              <v:rect xmlns:v="urn:schemas-microsoft-com:vml" fill="true" stroke="false" style="width:660px;height:140px;">
+              <v:rect xmlns:v="urn:schemas-microsoft-com:vml" fill="true" stroke="false" style="width:660px;height:115px;">
                 <v:fill type="frame" src="${BOTTOM_BANNER_URL}" color="${BRAND.tealDp}" />
                 <v:textbox inset="0,0,0,0"><![endif]-->
               <table role="presentation" width="660" cellpadding="0" cellspacing="0" style="width:660px;max-width:100%;">
                 <tr>
-                  <td valign="top" align="left" height="140" style="height:140px;padding:90px 200px 0 32px;font-family:'Inter','Helvetica Neue',Helvetica,Arial,sans-serif;">
-                    <div style="color:#6BC0E6;font-family:'Inter','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:18px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;line-height:1;margin:0;">
+                  <td valign="top" align="left" height="115" style="height:115px;padding:55px 200px 0 32px;font-family:'Inter','Helvetica Neue',Helvetica,Arial,sans-serif;overflow:hidden;white-space:nowrap;">
+                    <div style="color:#6BC0E6;font-family:'Inter','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:22px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;line-height:1;margin:0;white-space:nowrap;">
                       Office of the Registrar
                     </div>
-                    <div style="color:#FFFFFF;font-family:'Inter','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:12px;margin:4px 0 0 0;letter-spacing:0.01em;line-height:1.2;font-weight:400;">
+                    <div style="color:#FFFFFF;font-family:'Inter','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;margin:4px 0 0 0;letter-spacing:0.01em;line-height:1.2;font-weight:400;white-space:nowrap;">
                       ${CONTACT.tagline} &middot; 12 campuses across South Africa
                     </div>
-                    <div style="color:#FFFFFF;font-family:'Inter','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:12px;margin:1px 0 0 0;letter-spacing:0.01em;line-height:1.2;font-weight:400;">
+                    <div style="color:#FFFFFF;font-family:'Inter','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;margin:0;letter-spacing:0.01em;line-height:1.2;font-weight:400;white-space:nowrap;">
                       ${escapeHtml(CONTACT.address.split(',').slice(0,2).join(','))} &middot; <span style="color:#6BC0E6;font-weight:600;">${CONTACT.email}</span>
                     </div>
                   </td>
@@ -528,34 +528,24 @@ function buildEmailPdfBuffer({ subject, body, recipientName, logo }) {
   const grey   = hexToRgb(BRAND.grey);
   const dark   = hexToRgb(BRAND.dark);
 
-  // ---- Header band ----
-  doc.setFillColor(teal[0], teal[1], teal[2]);
+  // ---- Header band (matches email top banner: solid #115063 with swoosh+logo in top-right) ----
+  const headerBg = hexToRgb('#115063');
+  doc.setFillColor(headerBg[0], headerBg[1], headerBg[2]);
   doc.rect(0, 0, pageW, 96, 'F');
   doc.setFillColor(coral[0], coral[1], coral[2]);
   doc.rect(0, 96, pageW, 4, 'F');
 
-  // Decorative swoosh (large translucent ellipse on the left side)
+  // Decorative swoosh (translucent ellipse) in the top-right corner
   doc.setFillColor(tealDp[0], tealDp[1], tealDp[2]);
-  doc.ellipse(-30, 50, 180, 90, 'F');
+  doc.ellipse(pageW + 30, 50, 180, 90, 'F');
 
-  // Logo at top-right of the header
+  // Logo overlaid on top of the swoosh (top-right)
   if (logo) {
     try {
       const dataUrl = `data:image/png;base64,${logo.toString('base64')}`;
-      doc.addImage(dataUrl, 'PNG', pageW - marginX - 130, 22, 130, 52);
+      doc.addImage(dataUrl, 'PNG', pageW - marginX - 160, 22, 160, 52);
     } catch { /* ignore image errors */ }
   }
-
-  doc.setTextColor(255, 255, 255);
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(20);
-  doc.text('EMERIS', marginX, 50);
-  doc.setFont('helvetica', 'normal');
-  doc.setFontSize(10);
-  doc.setTextColor(255, 255, 255);
-  doc.text(CONTACT.tagline, marginX, 68);
-  doc.setFontSize(9);
-  doc.text(`${CONTACT.phone}  |  ${CONTACT.email}  |  ${CONTACT.web}`, marginX, 84);
 
   // ---- Date + reference strip ----
   const today = new Date().toLocaleDateString('en-GB', {
