@@ -555,7 +555,11 @@ function buildEmailPdfBuffer({ subject, body, recipientName, logo, banner }) {
     } catch { /* ignore image errors */ }
   }
 
-  // Left cell: white emeris logo, centered (mirrors 200px logo in 230px cell)
+  // Left cell: decorative swoosh in the top-left corner with logo overlaid on top
+  // (mirrors the original PDF design treatment, repositioned to the left)
+  doc.setFillColor(tealDp[0], tealDp[1], tealDp[2]);
+  doc.ellipse(-30, 50, 180, 90, 'F');
+
   if (logo) {
     try {
       const logoW = pageW * (200 / 660);
@@ -571,15 +575,26 @@ function buildEmailPdfBuffer({ subject, body, recipientName, logo, banner }) {
   doc.setFillColor(coral[0], coral[1], coral[2]);
   doc.rect(0, HEADER_H, pageW, 3, 'F');
 
-  // ---- Date + reference strip ----
+  // ---- Date + reference strip (matches email's light info bar with subtle border) ----
+  const stripY = HEADER_H + 3;
+  const stripH = 28;
+  const lightBg = hexToRgb(BRAND.light);
+  const borderC = hexToRgb(BRAND.border);
+  doc.setFillColor(lightBg[0], lightBg[1], lightBg[2]);
+  doc.rect(0, stripY, pageW, stripH, 'F');
+  doc.setDrawColor(borderC[0], borderC[1], borderC[2]);
+  doc.setLineWidth(0.5);
+  doc.line(0, stripY + stripH, pageW, stripY + stripH);
+
   const today = new Date().toLocaleDateString('en-GB', {
     day: '2-digit', month: 'long', year: 'numeric',
   });
-  doc.setTextColor(grey[0], grey[1], grey[2]);
-  doc.setFont('helvetica', 'normal');
-  doc.setFontSize(10);
-  doc.text(today, marginX, 130);
-  doc.text(CONTACT.address, pageW - marginX, 130, { align: 'right' });
+  doc.setTextColor(tealDp[0], tealDp[1], tealDp[2]);
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(9);
+  const stripTextY = stripY + stripH / 2 + 3;
+  doc.text(String(today).toUpperCase(), marginX, stripTextY);
+  doc.text(CONTACT.address, pageW - marginX, stripTextY, { align: 'right' });
 
   // ---- Subject ----
   let cursorY = 168;
