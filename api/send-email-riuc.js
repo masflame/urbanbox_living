@@ -820,6 +820,32 @@ export default async function handler(req, res) {
   const replyTo       = payload.replyTo ? String(payload.replyTo).trim() : '';
   const important     = payload.important === undefined ? true : Boolean(payload.important);
   const userAttachments = Array.isArray(payload.attachments) ? payload.attachments : [];
+  const previewPdf      = Boolean(payload.previewPdf);
+
+  // PDF preview short-circuit: build the same letter PDF and return it directly
+  // without sending any email. Used by the dashboard preview switch.
+  if (previewPdf) {
+    if (!subject || !body) {
+      res.statusCode = 400;
+      res.setHeader('Content-Type', 'application/json');
+      return res.end(JSON.stringify({ error: 'Missing required fields: subject, body' }));
+    }
+    try {
+      const [logo, goldLogo, , letterheadLogo] = await Promise.all([
+        loadLogo(req), loadGoldLogo(req), loadStudents(req), loadLetterheadLogo(req)
+      ]);
+      const pdfBuffer = buildEmailPdfBuffer({ subject, body, recipientName, logo: letterheadLogo || goldLogo || logo });
+      res.statusCode = 200;
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', `inline; filename="${safePdfFilename(subject)}"`);
+      return res.end(pdfBuffer);
+    } catch (err) {
+      console.error('RIUC PDF preview failed:', err);
+      res.statusCode = 500;
+      res.setHeader('Content-Type', 'application/json');
+      return res.end(JSON.stringify({ error: 'PDF preview failed', detail: String(err && err.message || err) }));
+    }
+  }
 
   if (!to || !subject || !body) {
     res.statusCode = 400;

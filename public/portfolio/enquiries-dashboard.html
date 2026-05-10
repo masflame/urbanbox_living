@@ -236,6 +236,11 @@
     .email-preview-card { min-height: 520px; }
     .email-preview-frame { flex: 1; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; background: #EEEAE0; min-height: 480px; }
     .email-preview-frame iframe { width: 100%; height: 100%; min-height: 480px; border: 0; display: block; background: #EEEAE0; }
+    .preview-mode-toggle { display: inline-flex; gap: 0; border: 1px solid var(--border); border-radius: 999px; overflow: hidden; background: #fff; }
+    .preview-mode-toggle button { all: unset; cursor: pointer; padding: 6px 14px; font: 600 11px/1 'Inter', system-ui, sans-serif; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-muted, #6B7280); transition: background .15s, color .15s; }
+    .preview-mode-toggle button.active { background: var(--accent, #1AA39C); color: #fff; }
+    .preview-mode-toggle button:hover:not(.active) { background: #F3F4F6; }
+    .email-card-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
     @media (max-width: 980px) {
       .email-grid { grid-template-columns: 1fr; }
       .email-row.two { grid-template-columns: 1fr; }
@@ -777,6 +782,10 @@
                 <div class="email-card-title">Live preview</div>
                 <div class="email-card-sub">This is roughly how the recipient will see your message.</div>
               </div>
+              <div class="preview-mode-toggle" id="email2PreviewToggle">
+                <button type="button" class="active" data-mode="email">Email</button>
+                <button type="button" data-mode="pdf">PDF</button>
+              </div>
             </div>
             <div class="email-preview-frame">
               <iframe id="email2PreviewFrame" title="Email preview" sandbox></iframe>
@@ -893,6 +902,10 @@
               <div>
                 <div class="email-card-title">Live preview</div>
                 <div class="email-card-sub">This is roughly how the recipient will see your message.</div>
+              </div>
+              <div class="preview-mode-toggle" id="email3PreviewToggle">
+                <button type="button" class="active" data-mode="email">Email</button>
+                <button type="button" data-mode="pdf">PDF</button>
               </div>
             </div>
             <div class="email-preview-frame">
@@ -2460,12 +2473,18 @@
           return (bodyInput.textContent || '').trim();
         }
         function updatePreview() {
+          if (previewMode === 'pdf') {
+            renderPdfPreview();
+            return;
+          }
           const html = buildPreviewHtml({
             subject: subjectInput.value.trim(),
             body: getBodyHtml(),
             recipientName: recipientName.value.trim(),
           });
           try {
+            if (previewBlobUrl) { URL.revokeObjectURL(previewBlobUrl); previewBlobUrl = null; }
+            previewFrame.removeAttribute('src');
             previewFrame.removeAttribute('srcdoc');
             previewFrame.srcdoc = html;
           }
@@ -2476,6 +2495,68 @@
         }
         // Expose so switchTab can call it on first activation.
         window.updateEmail2Preview = updatePreview;
+
+        // ----- PDF preview mode -----
+        let previewMode = 'email';
+        let previewBlobUrl = null;
+        let pdfReqSeq = 0;
+        async function renderPdfPreview() {
+          const subject = subjectInput.value.trim();
+          const body    = getBodyHtml();
+          if (!subject || !body) {
+            previewFrame.removeAttribute('src');
+            previewFrame.srcdoc = '<html><body style="font-family:system-ui;padding:24px;color:#666;background:#EEEAE0;">Add a subject and body to preview the PDF letter.</body></html>';
+            return;
+          }
+          const seq = ++pdfReqSeq;
+          previewFrame.removeAttribute('src');
+          previewFrame.srcdoc = '<html><body style="font-family:system-ui;padding:24px;color:#666;background:#EEEAE0;">Generating PDF preview\u2026</body></html>';
+          try {
+            const token = getAdminToken();
+            const res = await fetch('/api/send-email-riuc', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', 'x-admin-token': token || '' },
+              body: JSON.stringify({
+                subject, body,
+                recipientName: recipientName.value.trim(),
+                previewPdf: true,
+              }),
+            });
+            if (seq !== pdfReqSeq) return;
+            if (!res.ok) {
+              let msg = res.statusText;
+              try { const j = await res.json(); msg = j.error || msg; } catch {}
+              previewFrame.srcdoc = `<html><body style="font-family:system-ui;padding:24px;color:#b91c1c;background:#EEEAE0;">PDF preview failed: ${msg}</body></html>`;
+              return;
+            }
+            const blob = await res.blob();
+            if (seq !== pdfReqSeq) return;
+            if (previewBlobUrl) URL.revokeObjectURL(previewBlobUrl);
+            previewBlobUrl = URL.createObjectURL(blob);
+            previewFrame.removeAttribute('srcdoc');
+            previewFrame.removeAttribute('sandbox');
+            previewFrame.src = previewBlobUrl;
+          } catch (err) {
+            if (seq !== pdfReqSeq) return;
+            previewFrame.srcdoc = `<html><body style="font-family:system-ui;padding:24px;color:#b91c1c;background:#EEEAE0;">PDF preview error: ${err && err.message || err}</body></html>`;
+          }
+        }
+
+        const previewToggle = document.getElementById('email2PreviewToggle');
+        if (previewToggle) {
+          previewToggle.addEventListener('click', (e) => {
+            const btn = e.target.closest('button[data-mode]');
+            if (!btn) return;
+            const mode = btn.dataset.mode;
+            if (mode === previewMode) return;
+            previewMode = mode;
+            previewToggle.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
+            if (mode === 'email') {
+              previewFrame.setAttribute('sandbox', '');
+            }
+            updatePreview();
+          });
+        }
 
         let previewTimer;
         function schedulePreview() {
@@ -2936,12 +3017,19 @@
           return (bodyInput.textContent || '').trim();
         }
         function updatePreview() {
+          if (previewMode === 'pdf') {
+            renderPdfPreview();
+            return;
+          }
           const html = buildPreviewHtml({
             subject: subjectInput.value.trim(),
             body: getBodyHtml(),
             recipientName: recipientName.value.trim(),
           });
           try {
+            // Clear any blob URL from previous PDF mode
+            if (previewBlobUrl) { URL.revokeObjectURL(previewBlobUrl); previewBlobUrl = null; }
+            previewFrame.removeAttribute('src');
             previewFrame.removeAttribute('srcdoc');
             previewFrame.srcdoc = html;
           }
@@ -2951,6 +3039,70 @@
           }
         }
         window.updateEmail3Preview = updatePreview;
+
+        // ----- PDF preview mode -----
+        let previewMode = 'email';
+        let previewBlobUrl = null;
+        let pdfReqSeq = 0;
+        async function renderPdfPreview() {
+          const subject = subjectInput.value.trim();
+          const body    = getBodyHtml();
+          if (!subject || !body) {
+            // Fall back to email preview if there's nothing to render yet.
+            previewFrame.removeAttribute('src');
+            previewFrame.srcdoc = '<html><body style="font-family:system-ui;padding:24px;color:#666;background:#EEEAE0;">Add a subject and body to preview the PDF letter.</body></html>';
+            return;
+          }
+          const seq = ++pdfReqSeq;
+          previewFrame.removeAttribute('src');
+          previewFrame.srcdoc = '<html><body style="font-family:system-ui;padding:24px;color:#666;background:#EEEAE0;">Generating PDF preview\u2026</body></html>';
+          try {
+            const token = getAdminToken();
+            const res = await fetch('/api/send-email-emeris', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', 'x-admin-token': token || '' },
+              body: JSON.stringify({
+                subject, body,
+                recipientName: recipientName.value.trim(),
+                previewPdf: true,
+              }),
+            });
+            if (seq !== pdfReqSeq) return;
+            if (!res.ok) {
+              let msg = res.statusText;
+              try { const j = await res.json(); msg = j.error || msg; } catch {}
+              previewFrame.srcdoc = `<html><body style="font-family:system-ui;padding:24px;color:#b91c1c;background:#EEEAE0;">PDF preview failed: ${msg}</body></html>`;
+              return;
+            }
+            const blob = await res.blob();
+            if (seq !== pdfReqSeq) return;
+            if (previewBlobUrl) URL.revokeObjectURL(previewBlobUrl);
+            previewBlobUrl = URL.createObjectURL(blob);
+            previewFrame.removeAttribute('srcdoc');
+            previewFrame.removeAttribute('sandbox');
+            previewFrame.src = previewBlobUrl;
+          } catch (err) {
+            if (seq !== pdfReqSeq) return;
+            previewFrame.srcdoc = `<html><body style="font-family:system-ui;padding:24px;color:#b91c1c;background:#EEEAE0;">PDF preview error: ${err && err.message || err}</body></html>`;
+          }
+        }
+
+        const previewToggle = document.getElementById('email3PreviewToggle');
+        if (previewToggle) {
+          previewToggle.addEventListener('click', (e) => {
+            const btn = e.target.closest('button[data-mode]');
+            if (!btn) return;
+            const mode = btn.dataset.mode;
+            if (mode === previewMode) return;
+            previewMode = mode;
+            previewToggle.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
+            if (mode === 'email') {
+              // Re-add sandbox for HTML preview safety.
+              previewFrame.setAttribute('sandbox', '');
+            }
+            updatePreview();
+          });
+        }
 
         let previewTimer;
         function schedulePreview() {
