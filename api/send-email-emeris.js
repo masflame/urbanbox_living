@@ -27,7 +27,7 @@ const BRAND = {
   teal:    '#1AA39C',  // primary Emeris teal
   tealDk:  '#0B7A78',  // header band
   tealDp:  '#064E4E',  // deepest teal for footer band
-  coral:   '#F4793B',  // warm "Active Learning" accent
+  coral:   '#115063',  // accent (teal, replaces previous warm tone)
   coralDk: '#D55F26',
   grey:    '#5A5A5A',
   light:   '#EFF8F7',
