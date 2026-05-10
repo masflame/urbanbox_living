@@ -217,6 +217,10 @@ function buildEmailHtml({ subject, body, recipientName }) {
   const ref = `RIUC-${Date.now().toString(36).toUpperCase().slice(-6)}`;
   const greeting = recipientName ? `Dear ${escapeHtml(recipientName)},` : 'Dear Student,';
 
+  // Swoosh background with curved left edge and 2 accent curves (navy w/ gold accents).
+  const swooshSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 430 110" preserveAspectRatio="none"><defs><linearGradient id="g" x1="1" y1="0" x2="0" y2="0"><stop offset="0" stop-color="${BRAND.navyDk}"/><stop offset=".55" stop-color="${BRAND.navy}"/><stop offset="1" stop-color="#FFFFFF"/></linearGradient></defs><rect width="430" height="110" fill="#FFFFFF"/><path d="M430,0 L430,110 L80,110 C200,80 200,30 80,0 Z" fill="url(#g)"/><path d="M95,110 C215,80 215,30 95,0" fill="none" stroke="${BRAND.gold}" stroke-width="1.5" stroke-opacity=".75"/><path d="M115,110 C235,80 235,30 115,0" fill="none" stroke="#FFFFFF" stroke-width="1" stroke-opacity=".35"/></svg>`;
+  const swooshUri = `data:image/svg+xml;utf8,${encodeURIComponent(swooshSvg)}`;
+
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -249,9 +253,9 @@ function buildEmailHtml({ subject, body, recipientName }) {
                     <img src="${GOLD_LOGO_URL}" alt="RIUC" width="200" bgcolor="#FFFFFF"
                          style="display:block;width:200px;max-width:100%;height:auto;border:0;margin:0 auto;background:${BRAND.white} !important;background-color:${BRAND.white};" />
                   </td>
-                  <td width="430" align="right" valign="middle" bgcolor="#FFFFFF" style="width:430px;background:${BRAND.white} !important;background-color:${BRAND.white};padding:0;">
-                    <img src="${STUDENTS_URL}" alt="RIUC Students" width="430" height="110" bgcolor="#FFFFFF"
-                         style="display:block;width:430px;height:110px;max-width:430px;object-fit:cover;border:0;background:${BRAND.white} !important;background-color:${BRAND.white};" />
+                  <td width="430" align="right" valign="middle" bgcolor="#F4F6FB" style="width:430px;padding:0;background-color:${BRAND.light};background-image:url('${swooshUri}'), linear-gradient(245deg, ${BRAND.navyDk} 0%, ${BRAND.navy} 35%, ${BRAND.light} 80%, #FFFFFF 100%);background-repeat:no-repeat,no-repeat;background-size:cover,cover;background-position:center,center;">
+                    <img src="${STUDENTS_URL}" alt="RIUC Students" width="430" height="110"
+                         style="display:block;width:430px;height:110px;max-width:430px;object-fit:cover;border:0;position:relative;" />
                   </td>
                 </tr>
               </table>
