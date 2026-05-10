@@ -112,6 +112,10 @@ async function loadBanner(req) {
   const base = buildBaseUrl(req);
   BANNER_BUFFER = await fetchFirst([
     process.env.EMERIS_BANNER_URL,
+    // Use the same students photo as RIUC's top banner
+    base ? `${base}/riuc-students.png` : null,
+    process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}/riuc-students.png` : null,
+    // Legacy fallback to the previous brand banner if students image is missing
     base ? `${base}/new-brand-homepage-banner.jpg` : null,
     process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}/new-brand-homepage-banner.jpg` : null,
   ]);
