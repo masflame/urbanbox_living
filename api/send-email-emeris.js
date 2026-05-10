@@ -580,8 +580,7 @@ function buildEmailPdfBuffer({ subject, body, recipientName, logo, banner }) {
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(9);
   const stripTextY = stripY + stripH / 2 + 3;
-  // Date is shifted right so it clears the top-left swoosh that overlays this strip
-  doc.text(String(today).toUpperCase(), 180, stripTextY);
+  doc.text(String(today).toUpperCase(), marginX, stripTextY);
   doc.text(CONTACT.address, pageW - marginX, stripTextY, { align: 'right' });
 
   // ---- Top-left swoosh + logo overlay ----
@@ -603,6 +602,12 @@ function buildEmailPdfBuffer({ subject, body, recipientName, logo, banner }) {
       doc.addImage(dataUrl, 'PNG', logoX, logoY, logoW, logoH);
     } catch { /* ignore image errors */ }
   }
+
+  // Re-draw the date in white on top of the swoosh so it remains readable.
+  doc.setTextColor(255, 255, 255);
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(9);
+  doc.text(String(today).toUpperCase(), marginX, stripTextY);
 
   // ---- Subject ----
   let cursorY = 168;
