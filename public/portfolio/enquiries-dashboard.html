@@ -2947,6 +2947,8 @@
             ? bodyToHtml(body)
             : '<p style="margin:0;color:#6E7E7C;font-style:italic;font-size:14px;">Your message body will appear here…</p>';
           const B = EMS_BRAND, C = EMS_CONTACT;
+          const swooshSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 430 110" preserveAspectRatio="none"><defs><linearGradient id="g" x1="1" y1="0" x2="0" y2="0"><stop offset="0" stop-color="${B.tealDp}"/><stop offset=".45" stop-color="${B.tealDk}"/><stop offset=".75" stop-color="${B.teal}"/><stop offset="1" stop-color="#FFFFFF"/></linearGradient></defs><rect width="430" height="110" fill="#FFFFFF"/><path d="M430,0 L430,110 L150,110 C260,80 260,30 150,0 Z" fill="url(#g)"/><path d="M165,110 C275,80 275,30 165,0" fill="none" stroke="#FFFFFF" stroke-width="1.5" stroke-opacity=".55"/><path d="M185,110 C295,80 295,30 185,0" fill="none" stroke="#FFFFFF" stroke-width="1" stroke-opacity=".3"/></svg>`;
+          const swooshUri = `data:image/svg+xml;utf8,${encodeURIComponent(swooshSvg)}`;
           return `<!DOCTYPE html><html><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/></head>
 <body style="margin:0;padding:0;background:#E6EFEE;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="padding:24px 0;">
@@ -2957,7 +2959,7 @@
       <td width="230" align="center" valign="middle" bgcolor="#FFFFFF" style="width:230px;padding:12px 14px;background:${B.white} !important;background-color:${B.white};">
         <img src="${EMS_TEAL_LOGO_URL}" alt="Emeris" width="200" bgcolor="#FFFFFF" style="display:block;width:200px;max-width:100%;height:auto;border:0;margin:0 auto;background:${B.white} !important;background-color:${B.white};" />
       </td>
-      <td width="430" align="right" valign="middle" bgcolor="#EFF8F7" style="width:430px;padding:0;background-color:${B.light};background-image:linear-gradient(245deg, ${B.tealDp} 0%, ${B.tealDk} 30%, ${B.teal} 55%, ${B.light} 80%, #FFFFFF 100%);background-repeat:no-repeat;background-size:cover;">
+      <td width="430" align="right" valign="middle" bgcolor="#EFF8F7" style="width:430px;padding:0;background-color:${B.light};background-image:url('${swooshUri}'), linear-gradient(245deg, ${B.tealDp} 0%, ${B.tealDk} 30%, ${B.teal} 55%, ${B.light} 80%, #FFFFFF 100%);background-repeat:no-repeat,no-repeat;background-size:cover,cover;background-position:center,center;">
         <img src="${EMS_BANNER_URL}" alt="Emeris — Be Your Best" width="430" height="110" style="display:block;width:430px;height:110px;max-width:430px;object-fit:cover;border:0;position:relative;" />
       </td>
     </tr></table>
