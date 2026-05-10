@@ -852,37 +852,48 @@ function buildEmailPdfBuffer({ subject, body, recipientName, logo, banner }) {
     doc.rect(0, bannerY - 4, pageW, 4, 'F');
 
     // Swoosh (clipped to ellipse + banner rect) on the left of the bottom band
-    // Decorative wave-blade across the left half of the bottom banner.
-    // Built from two overlapping elongated ellipses staggered vertically -- the
-    // overlap creates an organic wave silhouette. Each is clipped to the banner
-    // rect and filled with the same #a5c785 -> transparent gradient image used
-    // in the previous design, so the styling/colour treatment is consistent.
+    // Decorative angled blade across the left half of the bottom banner.
+    // Built from a rectangular gradient + an angled "cut" mask:
+    //   1) Lay down a gradient (#a5c785 -> transparent) across the left half.
+    //   2) Cover the right portion with a teal triangle whose hypotenuse forms
+    //      the diagonal trailing edge -- this gives the gradient a clean
+    //      slanted edge without needing custom path/clip APIs.
+    //   3) Add a thin secondary blade on top for a layered look.
     const halfW   = pageW * 0.5;
+    const slantX  = bannerH * 1.6; // how far the diagonal trailing edge slants
     const gradPng = makeHorizontalFadePng('#a5c785', 512);
 
-    const blades = [
-      { cx: halfW * 0.12, cy: bannerY + bannerH * 0.30, rx: halfW * 0.95, ry: bannerH * 0.85 },
-      { cx: halfW * 0.32, cy: bannerY + bannerH * 0.78, rx: halfW * 0.85, ry: bannerH * 0.70 },
-    ];
+    // Main blade: full-height gradient
+    try {
+      doc.addImage(gradPng, 'PNG', 0, bannerY, halfW, bannerH);
+    } catch { /* ignore */ }
+    // Mask: triangle in the banner's teal colour to slice the trailing edge
+    doc.setFillColor(tealDp[0], tealDp[1], tealDp[2]);
+    doc.triangle(
+      halfW - slantX, bannerY,
+      halfW,          bannerY,
+      halfW - slantX, bannerY + bannerH,
+      'F'
+    );
 
-    for (const b of blades) {
-      doc.saveGraphicsState();
-      doc.ellipse(b.cx, b.cy, b.rx, b.ry, null);
-      doc.clip();
-      doc.discardPath();
-      // Constrain to the banner rect so the blades never bleed above/below.
-      doc.rect(0, bannerY, pageW, bannerH);
-      doc.clip();
-      doc.discardPath();
-      try {
-        // Anchor the gradient to the banner's left edge so the bright end always
-        // starts at x = 0 regardless of which blade is being drawn. Stretch it
-        // across the whole left half so the fade reaches transparent right at
-        // the banner's mid-line.
-        doc.addImage(gradPng, 'PNG', 0, bannerY, halfW, bannerH);
-      } catch { /* ignore */ }
-      doc.restoreGraphicsState();
-    }
+    // Secondary thin highlight blade, offset upward, slimmer slant
+    const accentY = bannerY + bannerH * 0.18;
+    const accentH = Math.max(2, bannerH * 0.22);
+    const accentW = halfW * 0.78;
+    const accentSlant = slantX * 0.55;
+    doc.saveGraphicsState();
+    doc.setGState(new doc.GState({ opacity: 0.6 }));
+    try {
+      doc.addImage(gradPng, 'PNG', 0, accentY, accentW, accentH);
+    } catch { /* ignore */ }
+    doc.setFillColor(tealDp[0], tealDp[1], tealDp[2]);
+    doc.triangle(
+      accentW - accentSlant, accentY,
+      accentW,               accentY,
+      accentW - accentSlant, accentY + accentH,
+      'F'
+    );
+    doc.restoreGraphicsState();
 
     // Tagline text on top of the banner (right side)
     doc.setTextColor(255, 255, 255);
