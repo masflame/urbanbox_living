@@ -2395,7 +2395,7 @@
             ? bodyToHtml(body)
             : '<p style="margin:0;color:#6E7891;font-style:italic;font-size:14px;">Your message body will appear here…</p>';
           const B = RIUC_BRAND, C = RIUC_CONTACT;
-          const swooshSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 430 110" preserveAspectRatio="none"><defs><linearGradient id="g" x1="1" y1="0" x2="0" y2="0"><stop offset="0" stop-color="${B.navyDk}"/><stop offset=".55" stop-color="${B.navy}"/><stop offset="1" stop-color="#FFFFFF"/></linearGradient></defs><rect width="430" height="110" fill="#FFFFFF"/><path d="M430,0 L430,110 L80,110 C200,80 200,30 80,0 Z" fill="url(#g)"/><path d="M95,110 C215,80 215,30 95,0" fill="none" stroke="${B.gold}" stroke-width="1.5" stroke-opacity=".75"/><path d="M115,110 C235,80 235,30 115,0" fill="none" stroke="#FFFFFF" stroke-width="1" stroke-opacity=".35"/></svg>`;
+          const swooshSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 430 110" preserveAspectRatio="none"><defs><linearGradient id="g" x1="1" y1="0" x2="0" y2="0"><stop offset="0" stop-color="${B.navy}"/><stop offset=".55" stop-color="${B.navy}"/><stop offset="1" stop-color="#FFFFFF"/></linearGradient></defs><rect width="430" height="110" fill="#FFFFFF"/><path d="M430,0 L430,110 L80,110 C200,80 200,30 80,0 Z" fill="url(#g)"/><path d="M95,110 C215,80 215,30 95,0" fill="none" stroke="${B.gold}" stroke-width="1.5" stroke-opacity=".75"/><path d="M115,110 C235,80 235,30 115,0" fill="none" stroke="#FFFFFF" stroke-width="1" stroke-opacity=".35"/></svg>`;
           const swooshUri = `data:image/svg+xml;utf8,${encodeURIComponent(swooshSvg)}`;
           return `<!DOCTYPE html><html><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/></head>
 <body style="margin:0;padding:0;background:#EAEEF6;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">
@@ -2408,7 +2408,7 @@
         <td width="230" align="center" valign="middle" bgcolor="#FFFFFF" style="width:230px;padding:12px 14px;background:${B.white} !important;background-color:${B.white};">
           <img src="${RIUC_GOLD_LOGO_URL}" alt="RIUC" width="200" bgcolor="#FFFFFF" style="display:block;width:200px;max-width:100%;height:auto;border:0;margin:0 auto;background:${B.white} !important;background-color:${B.white};" />
         </td>
-        <td width="430" align="right" valign="middle" bgcolor="#F4F6FB" style="width:430px;padding:0;background-color:${B.light};background-image:url('${swooshUri}'), linear-gradient(245deg, ${B.navyDk} 0%, ${B.navy} 35%, ${B.light} 80%, #FFFFFF 100%);background-repeat:no-repeat,no-repeat;background-size:cover,cover;background-position:center,center;">
+        <td width="430" align="right" valign="middle" bgcolor="#F4F6FB" style="width:430px;padding:0;background-color:${B.light};background-image:url('${swooshUri}'), linear-gradient(245deg, ${B.navy} 0%, ${B.navy} 35%, ${B.light} 80%, #FFFFFF 100%);background-repeat:no-repeat,no-repeat;background-size:cover,cover;background-position:center,center;">
           <img src="${RIUC_STUDENTS_URL}" alt="RIUC Students" width="430" height="110" style="display:block;width:430px;height:110px;max-width:430px;object-fit:cover;border:0;position:relative;" />
         </td>
       </tr>
