@@ -852,29 +852,37 @@ function buildEmailPdfBuffer({ subject, body, recipientName, logo, banner }) {
     doc.rect(0, bannerY - 4, pageW, 4, 'F');
 
     // Swoosh (clipped to ellipse + banner rect) on the left of the bottom band
-    const bSwooshCx = -10;
-    const bSwooshCy = bannerY + bannerH / 2;
-    const bSwooshRx = 170;
-    const bSwooshRy = bannerH / 2;
-    doc.saveGraphicsState();
-    doc.ellipse(bSwooshCx, bSwooshCy, bSwooshRx, bSwooshRy, null);
-    doc.clip();
-    doc.discardPath();
-    doc.rect(0, bannerY, pageW, bannerH);
-    doc.clip();
-    doc.discardPath();
-    try {
-      const gradPng = makeHorizontalFadePng('#a5c785', 512);
-      doc.addImage(
-        gradPng,
-        'PNG',
-        bSwooshCx - bSwooshRx,
-        bSwooshCy - bSwooshRy,
-        bSwooshRx * 2,
-        bSwooshRy * 2
-      );
-    } catch { /* ignore */ }
-    doc.restoreGraphicsState();
+    // Decorative wave-blade across the left half of the bottom banner.
+    // Built from two overlapping elongated ellipses staggered vertically -- the
+    // overlap creates an organic wave silhouette. Each is clipped to the banner
+    // rect and filled with the same #a5c785 -> transparent gradient image used
+    // in the previous design, so the styling/colour treatment is consistent.
+    const halfW   = pageW * 0.5;
+    const gradPng = makeHorizontalFadePng('#a5c785', 512);
+
+    const blades = [
+      { cx: halfW * 0.12, cy: bannerY + bannerH * 0.30, rx: halfW * 0.95, ry: bannerH * 0.85 },
+      { cx: halfW * 0.32, cy: bannerY + bannerH * 0.78, rx: halfW * 0.85, ry: bannerH * 0.70 },
+    ];
+
+    for (const b of blades) {
+      doc.saveGraphicsState();
+      doc.ellipse(b.cx, b.cy, b.rx, b.ry, null);
+      doc.clip();
+      doc.discardPath();
+      // Constrain to the banner rect so the blades never bleed above/below.
+      doc.rect(0, bannerY, pageW, bannerH);
+      doc.clip();
+      doc.discardPath();
+      try {
+        // Anchor the gradient to the banner's left edge so the bright end always
+        // starts at x = 0 regardless of which blade is being drawn. Stretch it
+        // across the whole left half so the fade reaches transparent right at
+        // the banner's mid-line.
+        doc.addImage(gradPng, 'PNG', 0, bannerY, halfW, bannerH);
+      } catch { /* ignore */ }
+      doc.restoreGraphicsState();
+    }
 
     // Tagline text on top of the banner (right side)
     doc.setTextColor(255, 255, 255);
