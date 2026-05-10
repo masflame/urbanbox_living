@@ -644,35 +644,7 @@ function buildEmailPdfBuffer({ subject, body, recipientName, logo, banner }) {
   doc.text(String(today).toUpperCase(), marginX, stripTextY);
   doc.text(CONTACT.address, pageW - marginX, stripTextY, { align: 'right' });
 
-  // ---- Top-left swoosh + logo overlay ----
-  // Sits entirely inside the header banner.
-  const swooshCx = -10;
-  const swooshCy = HEADER_H / 2;
-  const swooshRx = 170;
-  const swooshRy = HEADER_H / 2; // exactly the banner height -> never bleeds out
-
-  doc.saveGraphicsState();
-  doc.ellipse(swooshCx, swooshCy, swooshRx, swooshRy, null);
-  doc.clip();
-  doc.discardPath();
-  // Also clip to the banner rect so the ellipse can't extend above/below it
-  doc.rect(0, 0, pageW, HEADER_H);
-  doc.clip();
-  doc.discardPath();
-
-  try {
-    const gradPng = makeHorizontalFadePng('#a5c785', 512);
-    doc.addImage(
-      gradPng,
-      'PNG',
-      swooshCx - swooshRx,
-      swooshCy - swooshRy,
-      swooshRx * 2,
-      swooshRy * 2
-    );
-  } catch { /* ignore image errors */ }
-
-  doc.restoreGraphicsState();
+  // (Top-left swoosh moved to the bottom banner — see footer drawing below.)
 
   if (logo) {
     try {
@@ -855,10 +827,50 @@ function buildEmailPdfBuffer({ subject, body, recipientName, logo, banner }) {
     doc.setFontSize(8);
     doc.setTextColor(grey[0], grey[1], grey[2]);
     doc.text(`Page ${p} of ${totalPages}`, pageW - marginX, fy + 42, { align: 'right' });
+
+    // ---- Bottom banner: solid teal band with left-side gradient swoosh ----
+    const bannerH = 30;
+    const bannerY = pageH - bannerH;
     doc.setFillColor(tealDp[0], tealDp[1], tealDp[2]);
-    doc.rect(0, pageH - 14, pageW, 14, 'F');
+    doc.rect(0, bannerY, pageW, bannerH, 'F');
     doc.setFillColor(coral[0], coral[1], coral[2]);
-    doc.rect(0, pageH - 18, pageW, 4, 'F');
+    doc.rect(0, bannerY - 4, pageW, 4, 'F');
+
+    // Swoosh (clipped to ellipse + banner rect) on the left of the bottom band
+    const bSwooshCx = -10;
+    const bSwooshCy = bannerY + bannerH / 2;
+    const bSwooshRx = 170;
+    const bSwooshRy = bannerH / 2;
+    doc.saveGraphicsState();
+    doc.ellipse(bSwooshCx, bSwooshCy, bSwooshRx, bSwooshRy, null);
+    doc.clip();
+    doc.discardPath();
+    doc.rect(0, bannerY, pageW, bannerH);
+    doc.clip();
+    doc.discardPath();
+    try {
+      const gradPng = makeHorizontalFadePng('#a5c785', 512);
+      doc.addImage(
+        gradPng,
+        'PNG',
+        bSwooshCx - bSwooshRx,
+        bSwooshCy - bSwooshRy,
+        bSwooshRx * 2,
+        bSwooshRy * 2
+      );
+    } catch { /* ignore */ }
+    doc.restoreGraphicsState();
+
+    // Tagline text on top of the banner (right side)
+    doc.setTextColor(255, 255, 255);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(9);
+    doc.text(
+      `${CONTACT.tagline}  ·  12 campuses across South Africa`,
+      pageW - marginX,
+      bannerY + bannerH / 2 + 3,
+      { align: 'right' }
+    );
   }
 
   const arrayBuffer = doc.output('arraybuffer');
