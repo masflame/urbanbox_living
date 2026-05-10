@@ -531,12 +531,22 @@ function makeHorizontalFadePng(hex, width = 256) {
   raw[0] = 0;
   for (let x = 0; x < width; x++) {
     const t = x / (width - 1);
-    const a = Math.round(255 * Math.max(0, 1 - t));
+    // Hold the color near full opacity for the first ~40% of the width, then
+    // ease out smoothly to fully transparent. Makes the swoosh feel solid on
+    // the left without losing the soft fade on the right.
+    let a;
+    if (t < 0.4) {
+      a = 1;
+    } else {
+      const u = (t - 0.4) / 0.6; // 0..1 across the fade region
+      // smoothstep-ish ease-out
+      a = 1 - (u * u * (3 - 2 * u));
+    }
     const off = 1 + x * 4;
     raw[off]     = r;
     raw[off + 1] = g;
     raw[off + 2] = b;
-    raw[off + 3] = a;
+    raw[off + 3] = Math.round(255 * Math.max(0, Math.min(1, a)));
   }
   const idat = zlib.deflateSync(raw);
 
