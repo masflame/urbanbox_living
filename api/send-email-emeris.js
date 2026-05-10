@@ -580,20 +580,24 @@ function buildEmailPdfBuffer({ subject, body, recipientName, logo, banner }) {
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(9);
   const stripTextY = stripY + stripH / 2 + 3;
-  doc.text(String(today).toUpperCase(), marginX, stripTextY);
+  // Date is shifted right so it clears the top-left swoosh that overlays this strip
+  doc.text(String(today).toUpperCase(), 180, stripTextY);
   doc.text(CONTACT.address, pageW - marginX, stripTextY, { align: 'right' });
 
-  // ---- Top-left swoosh + logo overlay (small accent in the top-left corner) ----
+  // ---- Top-left swoosh + logo overlay ----
+  // Sized to span both the header band and the date strip below it.
   // Uses brand teal #1AA39C — complements the #115063 header band.
   const tealMain = hexToRgb(BRAND.teal);
   doc.setFillColor(tealMain[0], tealMain[1], tealMain[2]);
-  doc.ellipse(-10, 50, 130, 65, 'F');
+  // Center y placed roughly halfway between top and the bottom of the date strip
+  // (HEADER_H + 3 + 28 = 146pt). ry = 95 so the ellipse reaches all the way down.
+  doc.ellipse(-10, 50, 170, 100, 'F');
 
   if (logo) {
     try {
-      const logoW = pageW * (170 / 660);
+      const logoW = pageW * (190 / 660);
       const logoH = logoW * 0.26;
-      const logoX = 18;
+      const logoX = 22;
       const logoY = (HEADER_H - logoH) / 2;
       const dataUrl = `data:image/png;base64,${logo.toString('base64')}`;
       doc.addImage(dataUrl, 'PNG', logoX, logoY, logoW, logoH);
