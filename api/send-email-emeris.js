@@ -266,10 +266,10 @@ function buildEmailHtml({ subject, body, recipientName }) {
                     <img src="${TEAL_URL}" alt="Emeris" width="200" bgcolor="#FFFFFF"
                          style="display:block;width:200px;max-width:100%;height:auto;border:0;margin:0 auto;background:${BRAND.white} !important;background-color:${BRAND.white};" />
                   </td>
-                  <td width="430" align="right" valign="middle" bgcolor="#EFF8F7" style="width:430px;padding:0;background-color:${BRAND.light};background-image:linear-gradient(245deg, ${BRAND.tealDp} 0%, ${BRAND.tealDk} 35%, ${BRAND.teal} 60%, ${BRAND.light} 95%);background-repeat:no-repeat;background-size:cover;">
+                  <td width="430" align="right" valign="middle" bgcolor="#EFF8F7" style="width:430px;padding:0;background-color:${BRAND.light};background-image:linear-gradient(245deg, ${BRAND.tealDp} 0%, ${BRAND.tealDk} 30%, ${BRAND.teal} 55%, ${BRAND.light} 80%, #FFFFFF 100%);background-repeat:no-repeat;background-size:cover;">
                     <!--[if gte mso 9]>
                     <v:rect xmlns:v="urn:schemas-microsoft-com:vml" fill="true" stroke="false" style="width:430px;height:110px;position:absolute;left:0;top:0;">
-                      <v:fill type="gradient" color="${BRAND.light}" color2="${BRAND.tealDp}" angle="115" />
+                      <v:fill type="gradient" color="#FFFFFF" color2="${BRAND.tealDp}" angle="115" />
                     </v:rect>
                     <![endif]-->
                     <img src="${BANNER_URL}" alt="Emeris — Be Your Best" width="430" height="110"
