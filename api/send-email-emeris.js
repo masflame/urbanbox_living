@@ -642,7 +642,22 @@ function buildEmailPdfBuffer({ subject, body, recipientName, logo, banner }) {
   doc.setFontSize(9);
   const stripTextY = stripY + stripH / 2 + 3;
   doc.text(String(today).toUpperCase(), marginX, stripTextY);
-  doc.text(CONTACT.address, pageW - marginX, stripTextY, { align: 'right' });
+  // (Address moved into the top banner — see overlay below.)
+
+  // Address overlay: a slim translucent dark bar across the bottom of the header
+  // banner, with the office address in white. Reads cleanly over the hero image
+  // and matches the brand colour of the banner band.
+  const addrBarH = 18;
+  const addrBarY = HEADER_H - addrBarH;
+  doc.saveGraphicsState();
+  doc.setGState(new doc.GState({ opacity: 0.55 }));
+  doc.setFillColor(0, 0, 0);
+  doc.rect(0, addrBarY, pageW, addrBarH, 'F');
+  doc.restoreGraphicsState();
+  doc.setTextColor(255, 255, 255);
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(8);
+  doc.text(CONTACT.address, pageW - 18, addrBarY + addrBarH / 2 + 2.5, { align: 'right' });
 
   // (Top-left swoosh moved to the bottom banner — see footer drawing below.)
 
