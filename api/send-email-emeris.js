@@ -515,7 +515,12 @@ function hexToRgb(hex) {
   return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
 }
 
-function buildEmailPdfBuffer({ subject, body, recipientName, logo }) {
+function looksLikePng(buf) {
+  return Buffer.isBuffer(buf) && buf.length > 8 &&
+    buf[0] === 0x89 && buf[1] === 0x50 && buf[2] === 0x4E && buf[3] === 0x47;
+}
+
+function buildEmailPdfBuffer({ subject, body, recipientName, logo, banner }) {
   const doc = new jsPDF({ unit: 'pt', format: 'a4' });
   const pageW = doc.internal.pageSize.getWidth();
   const pageH = doc.internal.pageSize.getHeight();
@@ -528,24 +533,43 @@ function buildEmailPdfBuffer({ subject, body, recipientName, logo }) {
   const grey   = hexToRgb(BRAND.grey);
   const dark   = hexToRgb(BRAND.dark);
 
-  // ---- Header band (matches email top banner: solid #115063 with swoosh+logo in top-right) ----
+  // ---- Header band (matches email top banner exactly: solid #115063 band with
+  // white logo on the left and the brand hero banner image on the right) ----
+  const HEADER_H = 115; // mirrors the 115px tall HTML row
   const headerBg = hexToRgb('#115063');
   doc.setFillColor(headerBg[0], headerBg[1], headerBg[2]);
-  doc.rect(0, 0, pageW, 96, 'F');
-  doc.setFillColor(coral[0], coral[1], coral[2]);
-  doc.rect(0, 96, pageW, 4, 'F');
+  doc.rect(0, 0, pageW, HEADER_H, 'F');
 
-  // Decorative swoosh (translucent ellipse) in the top-right corner
-  doc.setFillColor(tealDp[0], tealDp[1], tealDp[2]);
-  doc.ellipse(pageW + 30, 50, 180, 90, 'F');
+  // Mirror email proportions: left cell 230/660, right cell 430/660
+  const leftCellW  = pageW * (230 / 660);
+  const rightCellW = pageW - leftCellW;
 
-  // Logo overlaid on top of the swoosh (top-right)
-  if (logo) {
+  // Right cell: brand hero banner (object-fit: cover ~ stretch, ratios match closely)
+  if (banner) {
     try {
-      const dataUrl = `data:image/png;base64,${logo.toString('base64')}`;
-      doc.addImage(dataUrl, 'PNG', pageW - marginX - 160, 22, 160, 52);
+      const bannerH = HEADER_H - 5; // mirror email's 110px image inside 115px row
+      const bannerY = (HEADER_H - bannerH) / 2;
+      const bannerFmt = looksLikePng(banner) ? 'PNG' : 'JPEG';
+      const dataUrl = `data:image/${bannerFmt === 'PNG' ? 'png' : 'jpeg'};base64,${banner.toString('base64')}`;
+      doc.addImage(dataUrl, bannerFmt, leftCellW, bannerY, rightCellW, bannerH);
     } catch { /* ignore image errors */ }
   }
+
+  // Left cell: white emeris logo, centered (mirrors 200px logo in 230px cell)
+  if (logo) {
+    try {
+      const logoW = pageW * (200 / 660);
+      const logoH = logoW * 0.26; // approx logo aspect (matches the white wordmark)
+      const logoX = (leftCellW - logoW) / 2;
+      const logoY = (HEADER_H - logoH) / 2;
+      const dataUrl = `data:image/png;base64,${logo.toString('base64')}`;
+      doc.addImage(dataUrl, 'PNG', logoX, logoY, logoW, logoH);
+    } catch { /* ignore image errors */ }
+  }
+
+  // Coral accent stripe (3px in email)
+  doc.setFillColor(coral[0], coral[1], coral[2]);
+  doc.rect(0, HEADER_H, pageW, 3, 'F');
 
   // ---- Date + reference strip ----
   const today = new Date().toLocaleDateString('en-GB', {
@@ -809,8 +833,8 @@ export default async function handler(req, res) {
       return res.end(JSON.stringify({ error: 'Missing required fields: subject, body' }));
     }
     try {
-      const [logo, tealLogo] = await Promise.all([loadLogo(req), loadTealLogo(req)]);
-      const pdfBuffer = buildEmailPdfBuffer({ subject, body, recipientName, logo: tealLogo || logo });
+      const [logo, banner] = await Promise.all([loadLogo(req), loadBanner(req)]);
+      const pdfBuffer = buildEmailPdfBuffer({ subject, body, recipientName, logo, banner });
       res.statusCode = 200;
       res.setHeader('Content-Type', 'application/pdf');
       res.setHeader('Content-Disposition', `inline; filename="${safePdfFilename(subject)}"`);
@@ -907,7 +931,7 @@ export default async function handler(req, res) {
 
   // Generate a PDF version of this email and attach it.
   try {
-    const pdfBuffer = buildEmailPdfBuffer({ subject, body, recipientName, logo: tealLogo || logo });
+    const pdfBuffer = buildEmailPdfBuffer({ subject, body, recipientName, logo, banner });
     if (pdfBuffer && pdfBuffer.length) {
       attachments.push({
         filename: safePdfFilename(subject),

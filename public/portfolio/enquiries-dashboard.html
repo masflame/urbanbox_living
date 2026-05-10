@@ -805,15 +805,15 @@
                 <div class="email-card-sub">Used for Student Accounts, Admissions, Bursary &amp; Open-Day notices. Sends with the Emeris signature swoosh banner, teal letterhead and brand footer.</div>
               </div>
             </div>
-            <form id="email3Form" class="email-form" autocomplete="off">
+            <form id="email3Form" class="email-form">
               <div class="email-row two">
                 <label class="email-field">
                   <span class="email-label">Recipient email <span class="email-req">*</span></span>
-                  <input type="email" id="email3To" placeholder="student@example.com" required />
+                  <input type="email" id="email3To" name="email" autocomplete="email" placeholder="student@example.com" required />
                 </label>
                 <label class="email-field">
                   <span class="email-label">Recipient name (optional)</span>
-                  <input type="text" id="email3RecipientName" placeholder="e.g. Thando Nkosi" />
+                  <input type="text" id="email3RecipientName" name="name" autocomplete="name" placeholder="e.g. Thando Nkosi" />
                 </label>
               </div>
               <div class="email-row two">
