@@ -218,7 +218,7 @@ function buildEmailHtml({ subject, body, recipientName }) {
   const greeting = recipientName ? `Dear ${escapeHtml(recipientName)},` : 'Dear Student,';
 
   // Swoosh background with curved left edge and 2 accent curves (navy w/ gold accents).
-  const swooshSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 430 110" preserveAspectRatio="none"><defs><linearGradient id="g" x1="1" y1="0" x2="0" y2="0"><stop offset="0" stop-color="${BRAND.navy}"/><stop offset=".55" stop-color="${BRAND.navy}"/><stop offset="1" stop-color="#FFFFFF"/></linearGradient></defs><rect width="430" height="110" fill="#FFFFFF"/><path d="M430,0 L430,110 L80,110 C200,80 200,30 80,0 Z" fill="url(#g)"/><path d="M95,110 C215,80 215,30 95,0" fill="none" stroke="${BRAND.gold}" stroke-width="1.5" stroke-opacity=".75"/><path d="M115,110 C235,80 235,30 115,0" fill="none" stroke="#FFFFFF" stroke-width="1" stroke-opacity=".35"/></svg>`;
+  const swooshSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 430 110" preserveAspectRatio="none"><defs><linearGradient id="g" x1="1" y1="0" x2="0" y2="0"><stop offset="0" stop-color="${BRAND.navy}"/><stop offset=".55" stop-color="${BRAND.navy}"/><stop offset="1" stop-color="#FFFFFF"/></linearGradient></defs><rect width="430" height="110" fill="#FFFFFF"/><path d="M430,0 L430,110 L80,110 C200,80 200,30 80,0 Z" fill="url(#g)"/><path d="M95,110 C215,80 215,30 95,0" fill="none" stroke="${BRAND.gold}" stroke-width="1.5" stroke-opacity=".75"/></svg>`;
   const swooshUri = `data:image/svg+xml;utf8,${encodeURIComponent(swooshSvg)}`;
 
   return `<!DOCTYPE html>
