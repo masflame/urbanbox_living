@@ -555,21 +555,8 @@ function buildEmailPdfBuffer({ subject, body, recipientName, logo, banner }) {
     } catch { /* ignore image errors */ }
   }
 
-  // Left cell: decorative swoosh in the top-left corner with logo overlaid on top
-  // (mirrors the original PDF design treatment, repositioned to the left)
-  doc.setFillColor(tealDp[0], tealDp[1], tealDp[2]);
-  doc.ellipse(-30, 50, 180, 90, 'F');
-
-  if (logo) {
-    try {
-      const logoW = pageW * (200 / 660);
-      const logoH = logoW * 0.26; // approx logo aspect (matches the white wordmark)
-      const logoX = (leftCellW - logoW) / 2;
-      const logoY = (HEADER_H - logoH) / 2;
-      const dataUrl = `data:image/png;base64,${logo.toString('base64')}`;
-      doc.addImage(dataUrl, 'PNG', logoX, logoY, logoW, logoH);
-    } catch { /* ignore image errors */ }
-  }
+  // Left cell: (swoosh + logo are drawn LAST so they overlay both the header band
+  // AND the date strip below it.)
 
   // Coral accent stripe (3px in email)
   doc.setFillColor(coral[0], coral[1], coral[2]);
@@ -593,8 +580,24 @@ function buildEmailPdfBuffer({ subject, body, recipientName, logo, banner }) {
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(9);
   const stripTextY = stripY + stripH / 2 + 3;
-  doc.text(String(today).toUpperCase(), marginX, stripTextY);
+  // Date is shifted right so it clears the top-left swoosh that is drawn over this strip
+  doc.text(String(today).toUpperCase(), 250, stripTextY);
   doc.text(CONTACT.address, pageW - marginX, stripTextY, { align: 'right' });
+
+  // ---- Top-left swoosh + logo overlay (covers header band AND date strip) ----
+  doc.setFillColor(tealDp[0], tealDp[1], tealDp[2]);
+  doc.ellipse(-20, 70, 260, 150, 'F');
+
+  if (logo) {
+    try {
+      const logoW = pageW * (220 / 660);
+      const logoH = logoW * 0.26;
+      const logoX = 22;
+      const logoY = (HEADER_H - logoH) / 2;
+      const dataUrl = `data:image/png;base64,${logo.toString('base64')}`;
+      doc.addImage(dataUrl, 'PNG', logoX, logoY, logoW, logoH);
+    } catch { /* ignore image errors */ }
+  }
 
   // ---- Subject ----
   let cursorY = 168;
