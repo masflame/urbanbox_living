@@ -218,7 +218,7 @@ function buildEmailHtml({ subject, body, recipientName }) {
   const greeting = recipientName ? `Dear ${escapeHtml(recipientName)},` : 'Dear Student,';
 
   // RIUC unique swoosh: dynamic wave with double-arc edge (distinct from Emeris S-curve).
-  const swooshSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 430 110" preserveAspectRatio="none"><defs><linearGradient id="g" x1="1" y1="0" x2="0" y2="0"><stop offset="0" stop-color="#052456"/><stop offset=".45" stop-color="#093c82"/><stop offset=".75" stop-color="#093c82"/><stop offset="1" stop-color="#FFFFFF"/></linearGradient></defs><rect width="430" height="110" fill="#FFFFFF"/><path d="M430,0 L430,110 L60,110 Q140,90 100,55 Q60,20 140,0 Z" fill="url(#g)"/></svg>`;
+  const swooshSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 430 110" preserveAspectRatio="none"><defs><linearGradient id="g" x1="1" y1="0" x2="0" y2="0"><stop offset="0" stop-color="#052456"/><stop offset=".45" stop-color="#093c82"/><stop offset=".75" stop-color="#093c82"/><stop offset="1" stop-color="#FFFFFF"/></linearGradient></defs><rect width="430" height="110" fill="#FFFFFF"/><path d="M430,0 L430,110 L60,110 Q140,90 100,55 Q60,20 140,0 Z" fill="url(#g)"/><path d="M75,110 Q155,90 115,55 Q75,20 155,0" fill="none" stroke="#FFFFFF" stroke-width="1.5" stroke-opacity=".55"/><path d="M95,110 Q175,90 135,55 Q95,20 175,0" fill="none" stroke="#FFFFFF" stroke-width="1" stroke-opacity=".3"/></svg>`;
   const swooshUri = `data:image/svg+xml;utf8,${encodeURIComponent(swooshSvg)}`;
 
   return `<!DOCTYPE html>
