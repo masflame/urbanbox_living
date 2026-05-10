@@ -112,14 +112,22 @@ async function loadBanner(req) {
   const base = buildBaseUrl(req);
   BANNER_BUFFER = await fetchFirst([
     process.env.EMERIS_BANNER_URL,
-    // Use the same students photo as RIUC's top banner
-    base ? `${base}/riuc-students.png` : null,
-    process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}/riuc-students.png` : null,
-    // Legacy fallback to the previous brand banner if students image is missing
     base ? `${base}/new-brand-homepage-banner.jpg` : null,
     process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}/new-brand-homepage-banner.jpg` : null,
   ]);
   return BANNER_BUFFER;
+}
+
+let STUDENTS_BUFFER = null;
+async function loadStudents(req) {
+  if (STUDENTS_BUFFER) return STUDENTS_BUFFER;
+  const base = buildBaseUrl(req);
+  STUDENTS_BUFFER = await fetchFirst([
+    process.env.EMERIS_STUDENTS_URL,
+    base ? `${base}/riuc-students.png` : null,
+    process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}/riuc-students.png` : null,
+  ]);
+  return STUDENTS_BUFFER;
 }
 
 async function loadBottomBanner(req) {
@@ -1045,8 +1053,8 @@ export default async function handler(req, res) {
 
   const html = buildEmailHtml({ subject, body, recipientName });
   const text = buildPlainText({ subject, body, recipientName });
-  const [logo, tealLogo, banner, bottomBanner] = await Promise.all([
-    loadLogo(req), loadTealLogo(req), loadBanner(req), loadBottomBanner(req),
+  const [logo, tealLogo, banner, bottomBanner, students] = await Promise.all([
+    loadLogo(req), loadTealLogo(req), loadBanner(req), loadBottomBanner(req), loadStudents(req),
   ]);
 
   const attachments = [];
@@ -1066,12 +1074,17 @@ export default async function handler(req, res) {
       contentType: 'image/png',
     });
   }
-  if (banner) {
+  // For the EMAIL, use the students cutout in the top-banner right cell. The
+  // PDF still uses `banner` (the brand hero image) below. They share the
+  // BANNER_CID slot for the email <img>.
+  const emailBannerImg = students || banner;
+  const emailBannerIsPng = looksLikePng(emailBannerImg);
+  if (emailBannerImg) {
     attachments.push({
-      filename: 'emeris-banner.jpg',
-      content: banner,
+      filename: emailBannerIsPng ? 'emeris-banner.png' : 'emeris-banner.jpg',
+      content: emailBannerImg,
       cid: BANNER_CID,
-      contentType: 'image/jpeg',
+      contentType: emailBannerIsPng ? 'image/png' : 'image/jpeg',
     });
   }
   if (bottomBanner) {
