@@ -585,12 +585,38 @@ function buildEmailPdfBuffer({ subject, body, recipientName, logo, banner }) {
 
   // ---- Top-left swoosh + logo overlay ----
   // Sized to span both the header band and the date strip below it.
-  // Uses brand teal #1AA39C — complements the #115063 header band.
-  const tealMain = hexToRgb(BRAND.teal);
-  doc.setFillColor(tealMain[0], tealMain[1], tealMain[2]);
-  // Center y placed roughly halfway between top and the bottom of the date strip
-  // (HEADER_H + 3 + 28 = 146pt). ry = 95 so the ellipse reaches all the way down.
-  doc.ellipse(-10, 50, 170, 100, 'F');
+  // Gradient fades from #a5c785 on the left into the page background.
+  // jsPDF has no native gradients, so we emulate one by clipping to the ellipse
+  // shape and drawing a series of thin vertical bands with decreasing opacity.
+  const swooshCx = -10;
+  const swooshCy = 50;
+  const swooshRx = 170;
+  const swooshRy = 100;
+  const gradStart = hexToRgb('#a5c785');
+
+  doc.saveGraphicsState();
+  // Build the ellipse path and clip to it
+  doc.ellipse(swooshCx, swooshCy, swooshRx, swooshRy, null);
+  doc.clip();
+  doc.discardPath();
+
+  doc.setFillColor(gradStart[0], gradStart[1], gradStart[2]);
+  const bandLeft  = swooshCx - swooshRx;
+  const bandRight = swooshCx + swooshRx;
+  const totalW    = bandRight - bandLeft;
+  const bandH     = swooshRy * 2 + 4;
+  const bandTop   = swooshCy - swooshRy - 2;
+  const STEPS = 80;
+  const stepW = totalW / STEPS;
+  for (let i = 0; i < STEPS; i++) {
+    // Opacity goes from 1.0 at the far left to 0 at the far right
+    const t = i / (STEPS - 1);
+    const opacity = Math.max(0, 1 - t);
+    if (opacity <= 0) continue;
+    doc.setGState(new doc.GState({ opacity }));
+    doc.rect(bandLeft + i * stepW, bandTop, stepW + 0.6, bandH, 'F');
+  }
+  doc.restoreGraphicsState();
 
   if (logo) {
     try {
@@ -602,12 +628,6 @@ function buildEmailPdfBuffer({ subject, body, recipientName, logo, banner }) {
       doc.addImage(dataUrl, 'PNG', logoX, logoY, logoW, logoH);
     } catch { /* ignore image errors */ }
   }
-
-  // Re-draw the date in white on top of the swoosh so it remains readable.
-  doc.setTextColor(255, 255, 255);
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(9);
-  doc.text(String(today).toUpperCase(), marginX, stripTextY);
 
   // ---- Subject ----
   let cursorY = 168;
