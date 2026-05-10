@@ -645,17 +645,18 @@ function buildEmailPdfBuffer({ subject, body, recipientName, logo, banner }) {
   doc.text(CONTACT.address, pageW - marginX, stripTextY, { align: 'right' });
 
   // ---- Top-left swoosh + logo overlay ----
-  // Sized to span both the header band and the date strip below it.
-  // The fill is a real raster gradient (PNG) that goes from #a5c785 (opaque) on
-  // the left to fully transparent on the right — clipped to the ellipse shape
-  // so it looks like a soft swoosh that blends into the page background.
+  // Sits entirely inside the header banner.
   const swooshCx = -10;
-  const swooshCy = 50;
+  const swooshCy = HEADER_H / 2;
   const swooshRx = 170;
-  const swooshRy = 100;
+  const swooshRy = HEADER_H / 2; // exactly the banner height -> never bleeds out
 
   doc.saveGraphicsState();
   doc.ellipse(swooshCx, swooshCy, swooshRx, swooshRy, null);
+  doc.clip();
+  doc.discardPath();
+  // Also clip to the banner rect so the ellipse can't extend above/below it
+  doc.rect(0, 0, pageW, HEADER_H);
   doc.clip();
   doc.discardPath();
 
