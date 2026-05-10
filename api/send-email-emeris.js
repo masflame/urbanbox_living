@@ -15,6 +15,7 @@
 
 import nodemailer from 'nodemailer';
 import { jsPDF } from 'jspdf';
+import zlib from 'node:zlib';
 
 export const config = {
   api: {
@@ -520,6 +521,56 @@ function looksLikePng(buf) {
     buf[0] === 0x89 && buf[1] === 0x50 && buf[2] === 0x4E && buf[3] === 0x47;
 }
 
+// Build a tiny PNG (width px wide, 1 px tall, RGBA) of a horizontal gradient that
+// fades from `hex` (fully opaque on the left) to fully transparent on the right.
+// Returned as a base64 data URL ready for jsPDF.addImage(...).
+function makeHorizontalFadePng(hex, width = 256) {
+  const [r, g, b] = hexToRgb(hex);
+  // Raw scanline: 1 filter byte (0 = None) + width * 4 RGBA bytes
+  const raw = Buffer.alloc(1 + width * 4);
+  raw[0] = 0;
+  for (let x = 0; x < width; x++) {
+    const t = x / (width - 1);
+    const a = Math.round(255 * Math.max(0, 1 - t));
+    const off = 1 + x * 4;
+    raw[off]     = r;
+    raw[off + 1] = g;
+    raw[off + 2] = b;
+    raw[off + 3] = a;
+  }
+  const idat = zlib.deflateSync(raw);
+
+  function chunk(type, data) {
+    const len = Buffer.alloc(4);
+    len.writeUInt32BE(data.length, 0);
+    const typeBuf = Buffer.from(type, 'ascii');
+    const crcBuf = Buffer.alloc(4);
+    // CRC32 over type + data
+    let c = 0xffffffff;
+    const all = Buffer.concat([typeBuf, data]);
+    for (let i = 0; i < all.length; i++) {
+      c = c ^ all[i];
+      for (let k = 0; k < 8; k++) {
+        c = (c & 1) ? (0xedb88320 ^ (c >>> 1)) : (c >>> 1);
+      }
+    }
+    crcBuf.writeUInt32BE((c ^ 0xffffffff) >>> 0, 0);
+    return Buffer.concat([len, typeBuf, data, crcBuf]);
+  }
+
+  const sig = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
+  const ihdr = Buffer.alloc(13);
+  ihdr.writeUInt32BE(width, 0);
+  ihdr.writeUInt32BE(1, 4);
+  ihdr[8]  = 8;   // bit depth
+  ihdr[9]  = 6;   // color type RGBA
+  ihdr[10] = 0;
+  ihdr[11] = 0;
+  ihdr[12] = 0;
+  const png = Buffer.concat([sig, chunk('IHDR', ihdr), chunk('IDAT', idat), chunk('IEND', Buffer.alloc(0))]);
+  return `data:image/png;base64,${png.toString('base64')}`;
+}
+
 function buildEmailPdfBuffer({ subject, body, recipientName, logo, banner }) {
   const doc = new jsPDF({ unit: 'pt', format: 'a4' });
   const pageW = doc.internal.pageSize.getWidth();
@@ -585,37 +636,31 @@ function buildEmailPdfBuffer({ subject, body, recipientName, logo, banner }) {
 
   // ---- Top-left swoosh + logo overlay ----
   // Sized to span both the header band and the date strip below it.
-  // Gradient fades from #a5c785 on the left into the page background.
-  // jsPDF has no native gradients, so we emulate one by clipping to the ellipse
-  // shape and drawing a series of thin vertical bands with decreasing opacity.
+  // The fill is a real raster gradient (PNG) that goes from #a5c785 (opaque) on
+  // the left to fully transparent on the right — clipped to the ellipse shape
+  // so it looks like a soft swoosh that blends into the page background.
   const swooshCx = -10;
   const swooshCy = 50;
   const swooshRx = 170;
   const swooshRy = 100;
-  const gradStart = hexToRgb('#a5c785');
 
   doc.saveGraphicsState();
-  // Build the ellipse path and clip to it
   doc.ellipse(swooshCx, swooshCy, swooshRx, swooshRy, null);
   doc.clip();
   doc.discardPath();
 
-  doc.setFillColor(gradStart[0], gradStart[1], gradStart[2]);
-  const bandLeft  = swooshCx - swooshRx;
-  const bandRight = swooshCx + swooshRx;
-  const totalW    = bandRight - bandLeft;
-  const bandH     = swooshRy * 2 + 4;
-  const bandTop   = swooshCy - swooshRy - 2;
-  const STEPS = 80;
-  const stepW = totalW / STEPS;
-  for (let i = 0; i < STEPS; i++) {
-    // Opacity goes from 1.0 at the far left to 0 at the far right
-    const t = i / (STEPS - 1);
-    const opacity = Math.max(0, 1 - t);
-    if (opacity <= 0) continue;
-    doc.setGState(new doc.GState({ opacity }));
-    doc.rect(bandLeft + i * stepW, bandTop, stepW + 0.6, bandH, 'F');
-  }
+  try {
+    const gradPng = makeHorizontalFadePng('#a5c785', 512);
+    doc.addImage(
+      gradPng,
+      'PNG',
+      swooshCx - swooshRx,
+      swooshCy - swooshRy,
+      swooshRx * 2,
+      swooshRy * 2
+    );
+  } catch { /* ignore image errors */ }
+
   doc.restoreGraphicsState();
 
   if (logo) {
