@@ -920,3 +920,397 @@
     width: 100%;
   }
 }
+
+/* ==========================================================================
+   Planner — Dark Mode (scoped to .planner-page only)
+   A proper, blended dark theme: deep neutral surfaces, layered elevations,
+   high-contrast text, brightened sage accent, and focus / hover states.
+   ========================================================================== */
+.planner-page {
+  /* Scoped tokens */
+  --pl-bg:        #0e1014;
+  --pl-bg-grad:   radial-gradient(1200px 600px at 18% -10%, #1a1f27 0%, transparent 60%),
+                  radial-gradient(900px 500px at 100% 0%, #161b22 0%, transparent 55%),
+                  #0e1014;
+  --pl-surface-1: #161a20;   /* panels */
+  --pl-surface-2: #1d2229;   /* cards, inputs */
+  --pl-surface-3: #232a32;   /* hover / nested */
+  --pl-surface-4: #2b333d;   /* highest elevation */
+  --pl-border:        rgba(255,255,255,0.08);
+  --pl-border-strong: rgba(255,255,255,0.16);
+  --pl-text:          #e9ebef;
+  --pl-text-dim:      rgba(233,235,239,0.72);
+  --pl-text-faint:    rgba(233,235,239,0.5);
+  --pl-accent:        #b6c9a3;   /* brightened sage for AA contrast on dark */
+  --pl-accent-strong: #cdddb9;
+  --pl-accent-soft:   rgba(182,201,163,0.14);
+  --pl-accent-line:   rgba(182,201,163,0.45);
+  --pl-danger:        #f0a3a3;
+  --pl-shadow-1:      0 1px 2px rgba(0,0,0,0.4);
+  --pl-shadow-2:      0 8px 24px rgba(0,0,0,0.45);
+
+  background: var(--pl-bg-grad);
+  color: var(--pl-text);
+  color-scheme: dark;
+}
+
+/* Scoped scrollbars */
+.planner-page ::-webkit-scrollbar { width: 10px; height: 10px; }
+.planner-page ::-webkit-scrollbar-track { background: transparent; }
+.planner-page ::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.12);
+  border-radius: 8px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+.planner-page ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.22); background-clip: content-box; }
+.planner-page { scrollbar-color: rgba(255,255,255,0.18) transparent; scrollbar-width: thin; }
+
+/* Headings & body text */
+.planner-page .planner-header {
+  border-bottom-color: var(--pl-border);
+}
+.planner-page .planner-header h1 { color: var(--pl-text); }
+.planner-page .planner-header p  { color: var(--pl-text-dim); }
+.planner-page .planner-header-label,
+.planner-page .planner-subhead,
+.planner-page .form-group label  { color: var(--pl-accent); }
+.planner-page .back-link {
+  color: var(--pl-accent);
+  border-color: var(--pl-accent-line);
+  background: var(--pl-accent-soft);
+}
+.planner-page .back-link:hover {
+  background: rgba(182,201,163,0.22);
+  border-color: var(--pl-accent);
+}
+
+/* Step indicator */
+.planner-page .step-item {
+  border-color: var(--pl-border);
+  background: var(--pl-surface-1);
+}
+.planner-page .step-item span {
+  border-color: var(--pl-border-strong);
+  color: var(--pl-text-dim);
+  background: var(--pl-surface-2);
+}
+.planner-page .step-item small { color: var(--pl-text-dim); }
+.planner-page .step-item.is-active {
+  border-color: var(--pl-accent-line);
+  background: linear-gradient(180deg, rgba(182,201,163,0.12), rgba(182,201,163,0.04));
+  box-shadow: var(--pl-shadow-1);
+}
+.planner-page .step-item.is-active span,
+.planner-page .step-item.is-done span {
+  border-color: var(--pl-accent);
+  color: var(--pl-accent-strong);
+  background: rgba(182,201,163,0.12);
+}
+.planner-page .step-item.is-done {
+  border-color: rgba(182,201,163,0.28);
+}
+
+/* Panels */
+.planner-page .panel {
+  background: var(--pl-surface-1);
+  border-color: var(--pl-border);
+  border-radius: 12px;
+  box-shadow: var(--pl-shadow-2);
+}
+.planner-page .panel-head h2 { color: var(--pl-text); }
+
+/* Project tiles */
+.planner-page .project-tile {
+  background: var(--pl-surface-2);
+  border-color: var(--pl-border);
+  color: var(--pl-text-dim);
+  border-radius: 10px;
+}
+.planner-page .project-tile strong { color: var(--pl-text); }
+.planner-page .project-tile:hover {
+  background: var(--pl-surface-3);
+  border-color: var(--pl-border-strong);
+  transform: translateY(-2px);
+  box-shadow: var(--pl-shadow-1);
+}
+.planner-page .project-tile.is-active {
+  background: linear-gradient(180deg, rgba(182,201,163,0.14), rgba(182,201,163,0.04));
+  border-color: var(--pl-accent);
+  box-shadow: inset 0 0 0 1px rgba(182,201,163,0.25), var(--pl-shadow-1);
+}
+.planner-page .project-tile.is-active strong { color: var(--pl-accent-strong); }
+
+/* Form controls */
+.planner-page .form-group input,
+.planner-page .form-group textarea,
+.planner-page .form-group select {
+  background: var(--pl-surface-2);
+  border-color: var(--pl-border);
+  color: var(--pl-text);
+  border-radius: 8px;
+  caret-color: var(--pl-accent);
+}
+.planner-page .form-group input::placeholder,
+.planner-page .form-group textarea::placeholder { color: var(--pl-text-faint); }
+.planner-page .form-group input:hover,
+.planner-page .form-group textarea:hover,
+.planner-page .form-group select:hover { border-color: var(--pl-border-strong); }
+.planner-page .form-group input:focus,
+.planner-page .form-group textarea:focus,
+.planner-page .form-group select:focus {
+  border-color: var(--pl-accent);
+  background: var(--pl-surface-3);
+  box-shadow: 0 0 0 3px rgba(182,201,163,0.18);
+}
+.planner-page .form-group input[type="file"] { padding: 10px 14px; color: var(--pl-text-dim); }
+.planner-page .form-group input[type="file"]::-webkit-file-upload-button,
+.planner-page .form-group input[type="file"]::file-selector-button {
+  background: var(--pl-accent);
+  color: #14181d;
+  border: none;
+  padding: 6px 12px;
+  margin-right: 12px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.planner-page .form-group select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 14 14'%3E%3Cpath d='M3 5.25L7 9.25L11 5.25' fill='none' stroke='%23b6c9a3' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+.planner-page .form-group select option {
+  background: #1d2229;
+  color: var(--pl-text);
+}
+.planner-page .field-note { color: var(--pl-text-faint); }
+
+/* Toggle cards */
+.planner-page .toggle-card {
+  background: var(--pl-surface-2);
+  border-color: var(--pl-border);
+  color: var(--pl-text-dim);
+  border-radius: 8px;
+}
+.planner-page .toggle-card:hover {
+  border-color: var(--pl-border-strong);
+  background: var(--pl-surface-3);
+}
+.planner-page .toggle-card input { accent-color: var(--pl-accent); }
+
+/* Result cards */
+.planner-page .result-card {
+  background: var(--pl-surface-2);
+  border-color: var(--pl-border);
+  border-radius: 10px;
+}
+.planner-page .result-card span { color: var(--pl-text-faint); }
+.planner-page .result-card h3   { color: var(--pl-text); }
+.planner-page .result-card-gold {
+  background: linear-gradient(135deg, rgba(182,201,163,0.18), rgba(182,201,163,0.04));
+  border-color: var(--pl-accent);
+  box-shadow: inset 0 0 0 1px rgba(182,201,163,0.25);
+}
+.planner-page .result-card-gold h3 { color: var(--pl-accent-strong); }
+
+/* Milestones */
+.planner-page .milestones {
+  background: var(--pl-surface-2);
+  border-color: var(--pl-border);
+  border-radius: 10px;
+}
+.planner-page .milestones h4 { color: var(--pl-accent); }
+.planner-page .milestones li { border-bottom-color: var(--pl-border); }
+.planner-page .milestones li span { color: var(--pl-text-dim); }
+.planner-page .milestones li strong { color: var(--pl-text); }
+.planner-page .milestones-note { color: var(--pl-text-dim); }
+
+/* Payment plan + finance */
+.planner-page .payment-plan-card.is-selected {
+  border-color: var(--pl-accent);
+  background: linear-gradient(180deg, rgba(182,201,163,0.12), rgba(182,201,163,0.03));
+  box-shadow: inset 0 0 0 1px rgba(182,201,163,0.28);
+}
+.planner-page .finance-options { border-top-color: var(--pl-border); }
+.planner-page .finance-options h5 { color: var(--pl-accent); }
+.planner-page .finance-options li {
+  background: rgba(182,201,163,0.08);
+  border-color: rgba(182,201,163,0.28);
+}
+.planner-page .finance-options li span { color: var(--pl-text-dim); }
+.planner-page .finance-options li strong { color: var(--pl-text); }
+
+/* Design gallery */
+.planner-page .design-gallery-wrap {
+  background: var(--pl-surface-2);
+  border-color: var(--pl-border);
+  border-radius: 10px;
+}
+.planner-page .design-gallery-head strong { color: var(--pl-text); }
+.planner-page .design-gallery-head span   { color: var(--pl-accent); }
+.planner-page .design-gallery-item {
+  background: var(--pl-surface-3);
+  border-color: var(--pl-border);
+  color: var(--pl-text-dim);
+  border-radius: 8px;
+}
+.planner-page .design-gallery-item:hover {
+  border-color: var(--pl-accent-line);
+  transform: translateY(-2px);
+  box-shadow: var(--pl-shadow-1);
+}
+.planner-page .design-gallery-item img { filter: none; }
+.planner-page .design-gallery-actions span { color: var(--pl-text-faint); }
+.planner-page .design-gallery-select {
+  background-color: var(--pl-surface-4);
+  border-color: var(--pl-accent-line);
+  color: var(--pl-accent-strong);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 14 14'%3E%3Cpath d='M3 5.25L7 9.25L11 5.25' fill='none' stroke='%23cdddb9' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+.planner-page .design-gallery-select:hover:not(:disabled) {
+  background-color: var(--pl-accent);
+  color: #14181d;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 14 14'%3E%3Cpath d='M3 5.25L7 9.25L11 5.25' fill='none' stroke='%2314181d' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+.planner-page .design-gallery-item.is-selected {
+  border-color: var(--pl-accent);
+  background: linear-gradient(180deg, rgba(182,201,163,0.16), rgba(182,201,163,0.04));
+  box-shadow: inset 0 0 0 1px rgba(182,201,163,0.35);
+}
+.planner-page .design-gallery-item.is-selected span { color: var(--pl-accent-strong); }
+.planner-page .design-gallery-empty { color: var(--pl-text-dim); }
+
+/* Lightbox */
+.planner-page .planner-lightbox { background: rgba(5,7,10,0.92); }
+.planner-page .planner-lightbox-dialog {
+  background: var(--pl-surface-1);
+  border-color: var(--pl-border-strong);
+  border-radius: 12px;
+}
+.planner-page .planner-lightbox-image { background: #0a0c10; }
+.planner-page .planner-lightbox-close {
+  background: rgba(20,24,29,0.85);
+  border-color: var(--pl-border-strong);
+  color: var(--pl-text);
+  border-radius: 50%;
+}
+.planner-page .planner-lightbox-close:hover { background: rgba(40,46,54,0.95); }
+.planner-page .planner-lightbox-nav {
+  background: rgba(20,24,29,0.85);
+  border-color: var(--pl-accent-line);
+  color: var(--pl-accent-strong);
+  border-radius: 50%;
+}
+.planner-page .planner-lightbox-nav:hover { background: var(--pl-accent); color: #14181d; }
+.planner-page .planner-lightbox-foot {
+  background: var(--pl-surface-2);
+  border-top-color: var(--pl-border);
+}
+.planner-page .planner-lightbox-foot span { color: var(--pl-text-dim); }
+
+/* Buttons */
+.planner-page .btn-primary {
+  background: var(--pl-accent);
+  color: #14181d;
+  border-radius: 8px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  transition: background 0.2s, transform 0.15s;
+}
+.planner-page .btn-primary:hover:not(:disabled) {
+  background: var(--pl-accent-strong);
+  transform: translateY(-1px);
+}
+.planner-page .btn-ghost {
+  background: var(--pl-surface-2);
+  border: 1px solid var(--pl-border-strong);
+  color: var(--pl-text);
+  border-radius: 8px;
+}
+.planner-page .btn-ghost:hover {
+  background: var(--pl-surface-3);
+  border-color: var(--pl-accent-line);
+  color: var(--pl-accent-strong);
+}
+.planner-page .btn-text {
+  color: var(--pl-text-dim);
+  border-radius: 8px;
+}
+.planner-page .btn-text:hover {
+  color: var(--pl-text);
+  background: var(--pl-surface-2);
+}
+
+/* Footer */
+.planner-page .planner-footer {
+  background: rgba(14,16,20,0.92);
+  border-top: 1px solid var(--pl-border);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Selection */
+.planner-page ::selection {
+  background: rgba(182,201,163,0.35);
+  color: #14181d;
+}
+
+/* ---- Theme the surrounding AppShell when on the planner route ---------- */
+body:has(.planner-page) {
+  background: #0e1014;
+}
+body:has(.planner-page) .commerce-shell { background: transparent; color: #e9ebef; }
+body:has(.planner-page) .site-header {
+  background: rgba(14,16,20,0.78) !important;
+  border-bottom: 1px solid rgba(255,255,255,0.08) !important;
+  color: #e9ebef;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+body:has(.planner-page) .site-header.is-scrolled {
+  background: rgba(14,16,20,0.92) !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.45);
+}
+body:has(.planner-page) .site-brand,
+body:has(.planner-page) .shell-nav-links a {
+  color: #e9ebef !important;
+}
+body:has(.planner-page) .shell-nav-links a:hover,
+body:has(.planner-page) .shell-nav-links a.active { color: #cdddb9 !important; }
+body:has(.planner-page) .shell-nav-links a:hover::after,
+body:has(.planner-page) .shell-nav-links a.active::after { background: #b6c9a3 !important; }
+body:has(.planner-page) .nav-cta {
+  background: #b6c9a3 !important;
+  color: #14181d !important;
+  border-color: #b6c9a3 !important;
+}
+body:has(.planner-page) .nav-cta:hover,
+body:has(.planner-page) .nav-cta.active {
+  background: #cdddb9 !important;
+  color: #14181d !important;
+}
+body:has(.planner-page) .cart-badge {
+  background: #14181d !important;
+  color: #b6c9a3 !important;
+}
+body:has(.planner-page) .site-menu-toggle { color: #e9ebef; }
+body:has(.planner-page) .mobile-nav-panel {
+  background: #161a20 !important;
+  color: #e9ebef !important;
+  border-color: rgba(255,255,255,0.08) !important;
+}
+body:has(.planner-page) .mobile-nav-panel a { color: #e9ebef !important; }
+
+/* Page banner above the planner */
+body:has(.planner-page) .page-banner h1 { color: #e9ebef !important; }
+body:has(.planner-page) .page-banner p { color: rgba(233,235,239,0.72) !important; }
+body:has(.planner-page) .page-eyebrow { color: #b6c9a3 !important; }
+
+/* Footer */
+body:has(.planner-page) .site-footer {
+  background: #0a0c10 !important;
+  color: rgba(233,235,239,0.72) !important;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+body:has(.planner-page) .site-footer a { color: #cdddb9 !important; }
+body:has(.planner-page) .site-footer-copy { color: rgba(233,235,239,0.5) !important; }
+
