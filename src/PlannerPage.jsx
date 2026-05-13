@@ -13,6 +13,9 @@ const projectTypes = [
   { id: 'storage', label: 'Storage Unit', description: 'Secure storage, archive rooms and utilities.' },
   { id: 'retail', label: 'Retail Kiosk', description: 'Pop-up stores, salons and food service points.' },
   { id: 'cabin', label: 'Off-Grid Cabin', description: 'Remote living, tourism and weekend retreats.' },
+  { id: 'pool', label: 'Pool Unit', description: 'Container pools, plunge pools and lifestyle pool decks.' },
+  { id: 'ablution', label: 'Ablution Block', description: 'Toilet blocks, restrooms and shower facilities.' },
+  { id: 'guard', label: 'Guard Booth', description: 'Security booths, gatehouses and bullet-proof guard cabins.' },
 ]
 
 const templatesByProject = {
@@ -45,6 +48,21 @@ const templatesByProject = {
     { id: 'cabin-lite', label: 'Cabin Starter', summary: 'Weekend cabin with compact amenities.' },
     { id: 'cabin-solar', label: 'Off-Grid Solar Cabin', summary: 'Solar-ready package for remote locations.' },
     { id: 'custom', label: 'Custom Cabin Layout', summary: 'Adapt sleeping, decking and utility zones.' },
+  ],
+  pool: [
+    { id: 'pool-plunge', label: 'Plunge Pool Pod', summary: '20ft container pool with viewing window.' },
+    { id: 'pool-lap', label: '40ft Lap Pool', summary: 'Full lap pool with deck and pump housing.' },
+    { id: 'custom', label: 'Custom Pool Layout', summary: 'Tailor depth, glass panels and deck integration.' },
+  ],
+  ablution: [
+    { id: 'abl-single', label: 'Single Ablution Block', summary: 'Compact restroom with shower and basin.' },
+    { id: 'abl-multi', label: 'Multi-User Ablution', summary: 'Multiple stalls, urinals and accessible cubicle.' },
+    { id: 'custom', label: 'Custom Ablution Layout', summary: 'Configure stalls, showers and changing rooms.' },
+  ],
+  guard: [
+    { id: 'guard-basic', label: 'Standard Guard Booth', summary: 'Compact security booth with desk and window.' },
+    { id: 'guard-armoured', label: 'Bullet-Proof Guard Cabin', summary: 'Armoured guard cabin for high-security sites.' },
+    { id: 'custom', label: 'Custom Guard Booth', summary: 'Configure restroom, kitchenette and access controls.' },
   ],
 }
 
@@ -97,6 +115,20 @@ const portfolioDesigns = [
   'Double Unit Container Home',
   'Flagship Container Home',
   'Office / Workspace Unit',
+  'Custom Urban Home',
+  'Modern Villa Container',
+  'Customized Villa Layout',
+  '3-Bedroom Modular Home',
+  'Pool Container',
+  'Guard Booth',
+  'Ablution Block',
+  'Bettys Bay Project',
+  'Brits Project',
+  'Dairy Den Retail Build',
+  'Grootbraak Mossel Bay Project',
+  'Klein Karoo Lodge',
+  'Tesselaarsdal Cabin',
+  'Wiesenhof Office Park',
   'Custom on Request',
 ]
 
@@ -182,6 +214,20 @@ const designToProjectType = {
   'Double Unit Container Home': 'home',
   'Flagship Container Home': 'home',
   'Office / Workspace Unit': 'office',
+  'Custom Urban Home': 'home',
+  'Modern Villa Container': 'home',
+  'Customized Villa Layout': 'home',
+  '3-Bedroom Modular Home': 'home',
+  'Pool Container': 'pool',
+  'Guard Booth': 'guard',
+  'Ablution Block': 'ablution',
+  'Bettys Bay Project': 'home',
+  'Brits Project': 'home',
+  'Dairy Den Retail Build': 'retail',
+  'Grootbraak Mossel Bay Project': 'home',
+  'Klein Karoo Lodge': 'cabin',
+  'Tesselaarsdal Cabin': 'cabin',
+  'Wiesenhof Office Park': 'office',
   'Custom on Request': 'home',
 }
 
@@ -192,7 +238,7 @@ function estimateProject(form) {
   const rooms = Math.max(1, Number(form.rooms) || 1)
   const bathrooms = Math.max(0, Number(form.bathrooms) || 0)
   const baseSizeCost = { '10ft': 110000, '20ft': 195000, '40ft': 345000 }[form.unitSize]
-  const projectMultiplier = { home: 1.18, office: 1.04, classroom: 1.1, storage: 0.82, retail: 1.09, cabin: 1.15 }[form.projectType]
+  const projectMultiplier = { home: 1.18, office: 1.04, classroom: 1.1, storage: 0.82, retail: 1.09, cabin: 1.15, pool: 1.32, ablution: 0.94, guard: 0.78 }[form.projectType]
   const terrainCost = { flat: 0, sloped: 28000, rural: 18000, coastal: 22000 }[form.terrain]
   const accessCost = { easy: 0, moderate: 16000, restricted: 38000 }[form.access]
   const fitOutCost = finishLevels[form.finishLevel].surcharge * units
@@ -234,6 +280,9 @@ function estimateProject(form) {
     storage: 'Prioritize security, shelving load and door positioning in the first review.',
     retail: 'Test the customer-facing facade, service counters and power loads early.',
     cabin: 'Position utilities, off-grid allowance and transport logistics as the main decisions.',
+    pool: 'Confirm water-proofing, pump housing and crane access before scheduling delivery.',
+    ablution: 'Lock in plumbing routes, septic / sewer connection and ventilation as the first decisions.',
+    guard: 'Confirm sight-lines, glazing spec (standard or bullet-proof) and access controls upfront.',
   }
 
   const paymentPlan = form.paymentPlan || 'flexible'
