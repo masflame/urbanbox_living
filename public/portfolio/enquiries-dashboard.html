@@ -1522,16 +1522,28 @@
         detailPlaceholder.style.display = '';
         detailContent.style.display = 'none';
 
-        const { data, error } = await supabase
+        // 10s timeout so the inbox never sits on "Loading…" forever.
+        const queryPromise = supabase
           .from(SUPABASE_TABLE)
           .select('*')
           .order('created_at', { ascending: false });
+        const timeoutPromise = new Promise((resolve) =>
+          setTimeout(() => resolve({ data: null, error: { message: 'Request timed out after 10s. Check network / Supabase status.' } }), 10000)
+        );
+
+        let data, error;
+        try {
+          ({ data, error } = await Promise.race([queryPromise, timeoutPromise]));
+        } catch (e) {
+          error = { message: (e && e.message) ? e.message : String(e) };
+        }
 
         if (error) {
           inboxList.innerHTML = `<div class="empty-state">
             <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
             <div class="empty-title">Failed to load</div>
             <span>${esc(error.message)}</span>
+            <button class="btn" type="button" style="margin-top:12px;" onclick="window.location.reload()">Retry</button>
           </div>`;
           renderStats([]);
           return;
