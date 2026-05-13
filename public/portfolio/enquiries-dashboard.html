@@ -925,6 +925,7 @@
       const SUPABASE_PROJECT_URL     = 'https://pzmphwkeailqpeteiexc.supabase.co';
       const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_xjjSHPFIuek8uf1bmSbyuQ_8rED0Lys';
       const SUPABASE_TABLE           = 'enquiries';
+      const SUPABASE_ENQUIRY_ATTACHMENTS_TABLE = 'urbanbox_enquiry_attachments';
       const READ_STATE_KEY           = 'ubl_enquiry_read_state_v1';
 
       const supabase = window.supabase.createClient(SUPABASE_PROJECT_URL, SUPABASE_PUBLISHABLE_KEY);
@@ -1145,10 +1146,77 @@
         detailPhone.textContent = item.phone || 'No phone provided';
         detailMessage.textContent = item.message || 'No message provided.';
         toggleReadBtn.textContent = read ? 'Mark as Unread' : 'Mark as Read';
-        
-        // Fetch and render attachments
-        fetchAndRenderAttachments(item);
+
+        // Synchronous attachment render — uses item.attachments (prefetched
+        // in loadEnquiries) with fallback to URLs scraped from the message.
+        renderAttachmentsSync(item);
       }
+
+      // ---- Working attachment helpers (restored from pre-May rewrite) ----
+      function isImageLink(link) {
+        return /\.(jpg|jpeg|png|webp|gif|bmp|svg|avif)(\?|#|$)/i.test(link || '');
+      }
+
+      function extractAttachmentLinks(message) {
+        const source = String(message || '');
+        const links = source.match(/https?:\/\/[^\s)"']+/g) || [];
+        return links
+          .filter(link => link.includes('/storage/v1/object/public/enquiry_files/'))
+          .map(link => link.trim());
+      }
+
+      function getAttachmentItems(item) {
+        if (Array.isArray(item.attachments) && item.attachments.length) {
+          return item.attachments.map((entry) => ({
+            url: entry.public_url,
+            label: entry.file_name || 'Uploaded file',
+            role: entry.attachment_role || 'attachment',
+          }));
+        }
+        return extractAttachmentLinks(item.message).map((url, index) => ({
+          url,
+          label: `Uploaded file ${index + 1}`,
+          role: 'attachment',
+        }));
+      }
+
+      function renderAttachmentsSync(item) {
+        const block = document.getElementById('attachmentsBlock');
+        const list  = document.getElementById('attachmentsList');
+        if (!block || !list) return;
+
+        const items = getAttachmentItems(item).filter(e => Boolean(e.url));
+        if (!items.length) {
+          block.style.display = 'none';
+          list.innerHTML = '';
+          return;
+        }
+
+        block.style.display = 'block';
+        list.innerHTML = items.map((entry, index) => {
+          const url = String(entry.url || '');
+          const fileName = entry.label || url.split('/').pop() || 'Attachment';
+          const isImg = isImageLink(url);
+          const roleLabel = entry.role === 'planner-image' ? 'Planner Image' : 'Uploaded File';
+
+          let html = '';
+          if (isImg) {
+            html += `<img src="${esc(url)}" alt="${esc(fileName)}" class="attachment-image" style="max-height:200px;object-fit:cover;">`;
+          }
+          html += `<div class="attachment-item">
+            <div class="attachment-icon">${isImg ? 'IMG' : 'FILE'}</div>
+            <div class="attachment-info">
+              <div class="attachment-name">${esc(fileName)}</div>
+              <div class="attachment-role">${esc(roleLabel)}</div>
+            </div>
+            <div class="attachment-actions">
+              <button class="attachment-btn" type="button" onclick="window.open('${esc(url)}', '_blank')">Open</button>
+            </div>
+          </div>`;
+          return html;
+        }).join('');
+      }
+      // ---- End attachment helpers ----
 
       function tryParseMaybeJson(value) {
         if (typeof value !== 'string') return value;
@@ -1458,6 +1526,38 @@
         }
 
         enquiries = data || [];
+
+        // Batch-fetch all attachments in ONE query (working pattern from
+        // pre-May rewrite). Hang/error here just means no attachments shown —
+        // the inbox still renders.
+        const enquiryRefs = Array.from(new Set(enquiries.map(item => item.enquiry_ref).filter(Boolean)));
+        if (enquiryRefs.length) {
+          try {
+            const { data: attachmentData, error: attachmentError } = await supabase
+              .from(SUPABASE_ENQUIRY_ATTACHMENTS_TABLE)
+              .select('enquiry_ref,attachment_role,public_url,file_name,created_at')
+              .in('enquiry_ref', enquiryRefs)
+              .order('created_at', { ascending: true });
+
+            if (!attachmentError && Array.isArray(attachmentData)) {
+              const grouped = attachmentData.reduce((acc, row) => {
+                const key = row.enquiry_ref;
+                if (!acc[key]) acc[key] = [];
+                acc[key].push(row);
+                return acc;
+              }, {});
+              enquiries = enquiries.map((item) => ({
+                ...item,
+                attachments: grouped[item.enquiry_ref] || [],
+              }));
+            } else if (attachmentError) {
+              console.warn('[enquiries] attachments batch fetch error:', attachmentError.message);
+            }
+          } catch (e) {
+            console.warn('[enquiries] attachments batch fetch threw:', e);
+          }
+        }
+
         renderAll();
       }
 
