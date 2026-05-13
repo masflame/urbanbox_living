@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { jsPDF } from 'jspdf'
 import galleryConfig from './data/design-gallery.json'
+import { allUnits } from './data/unitsCatalog'
 import AppShell from './components/AppShell'
 import QuantityStepper from './components/QuantityStepper'
 import './App.css'
@@ -135,9 +136,73 @@ const portfolioDesigns = [
 const galleryAssets = galleryConfig.galleryAssets || []
 const designGalleryMetadata = galleryConfig.designGalleryMetadata || {}
 
+// Map unit catalog category -> planner project type id
+const categoryToProjectType = {
+  Homes: 'home',
+  Cabins: 'cabin',
+  Pools: 'pool',
+  Toilets: 'ablution',
+  Offices: 'office',
+  Retail: 'retail',
+  Storage: 'storage',
+  Classrooms: 'classroom',
+  'Guard Booths': 'guard',
+}
+
+// Wire EVERY unit from the listings/catalog into the planner so users can
+// pick any container we sell. We dedupe by name (keeping the first occurrence)
+// and group by category for the <optgroup> dropdown.
+const unitDesignEntries = (() => {
+  const seen = new Set()
+  const list = []
+  for (const unit of allUnits) {
+    const name = (unit.name || '').trim()
+    if (!name || seen.has(name)) continue
+    seen.add(name)
+    list.push({
+      name,
+      slug: unit.slug,
+      category: unit.category,
+      projectType: categoryToProjectType[unit.category] || 'home',
+      gallery: Array.isArray(unit.gallery) ? unit.gallery.filter(Boolean) : [],
+      coverImage: unit.coverImage || null,
+    })
+  }
+  return list
+})()
+
+const unitDesignByName = Object.fromEntries(unitDesignEntries.map((u) => [u.name, u]))
+
+// Group unit entries by category for the <optgroup> output. Order matches
+// the planner project-type order so the dropdown reads predictably.
+const CATEGORY_GROUP_ORDER = ['Homes', 'Cabins', 'Offices', 'Retail', 'Classrooms', 'Storage', 'Pools', 'Toilets', 'Guard Booths']
+const unitDesignsByCategory = (() => {
+  const groups = new Map()
+  for (const entry of unitDesignEntries) {
+    const arr = groups.get(entry.category) || []
+    arr.push(entry)
+    groups.set(entry.category, arr)
+  }
+  for (const arr of groups.values()) arr.sort((a, b) => a.name.localeCompare(b.name))
+  const ordered = []
+  for (const cat of CATEGORY_GROUP_ORDER) {
+    if (groups.has(cat)) ordered.push([cat, groups.get(cat)])
+  }
+  for (const [cat, arr] of groups) {
+    if (!CATEGORY_GROUP_ORDER.includes(cat)) ordered.push([cat, arr])
+  }
+  return ordered
+})()
+
 function getDesignGallery(design) {
+  // 1) If the selected design is a unit from the catalog, use its own gallery.
+  const unitEntry = unitDesignByName[design]
+  if (unitEntry && unitEntry.gallery && unitEntry.gallery.length) {
+    return unitEntry.gallery.slice(0, 12)
+  }
+
   const metadata = designGalleryMetadata[design]
-  if (!metadata) return []
+  if (!metadata) return unitEntry && unitEntry.coverImage ? [unitEntry.coverImage] : []
 
   const required = metadata.required || []
   const preferred = metadata.preferred || []
@@ -704,10 +769,13 @@ function App() {
     const projectParam = params.get('project') || ''
     if (!designParam && !projectParam) return
 
-    const matchingDesign = portfolioDesigns.includes(designParam) ? designParam : ''
+    const matchingDesign =
+      portfolioDesigns.includes(designParam)
+        ? designParam
+        : (unitDesignByName[designParam] ? designParam : '')
     const mappedProject =
       (projectParam && templatesByProject[projectParam] ? projectParam : '') ||
-      (matchingDesign ? designToProjectType[matchingDesign] : '') ||
+      (matchingDesign ? (designToProjectType[matchingDesign] || (unitDesignByName[matchingDesign]?.projectType) || '') : '') ||
       ''
 
     setForm((current) => {
@@ -759,6 +827,15 @@ function App() {
       }
       if (name === 'selectedDesign') {
         next.selectedGalleryImages = []
+        // Auto-switch project type when the design implies one (catalog unit
+        // or a curated portfolio entry) so templates + estimates align.
+        const inferred =
+          designToProjectType[value] || unitDesignByName[value]?.projectType || ''
+        if (inferred && inferred !== current.projectType && templatesByProject[inferred]) {
+          next.projectType = inferred
+          const nextTemplates = templatesByProject[inferred]
+          next.templateId = nextTemplates[0] ? nextTemplates[0].id : ''
+        }
       }
       return next
     })
@@ -967,8 +1044,17 @@ function App() {
                 <label>Select a portfolio design</label>
                 <select value={form.selectedDesign} onChange={(event) => updateField('selectedDesign', event.target.value)}>
                   <option value="">Choose from portfolio options...</option>
-                  {portfolioDesigns.map((design) => (
-                    <option key={design} value={design}>{design}</option>
+                  <optgroup label="Featured Portfolio Designs">
+                    {portfolioDesigns.map((design) => (
+                      <option key={design} value={design}>{design}</option>
+                    ))}
+                  </optgroup>
+                  {unitDesignsByCategory.map(([category, units]) => (
+                    <optgroup key={category} label={`${category} (${units.length})`}>
+                      {units.map((u) => (
+                        <option key={u.slug || u.name} value={u.name}>{u.name}</option>
+                      ))}
+                    </optgroup>
                   ))}
                 </select>
               </div>

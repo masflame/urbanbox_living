@@ -133,15 +133,15 @@
   display: flex;
   flex-wrap: wrap;
   list-style: none;
-  gap: 1.7rem;
+  gap: 1.9rem;
 }
 
 .shell-nav-links a {
   color: rgba(79,76,79,0.9);
   text-decoration: none;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
-  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  font-size: 0.95rem;
   font-weight: 500;
   position: relative;
   transition: color 0.3s ease;
@@ -184,11 +184,11 @@
   display: inline-flex;
   align-items: center;
   gap: 0.6rem;
-  border: 1.2px solid var(--brass);
+  border: 1.5px solid var(--brass);
   color: var(--brass);
-  padding: 0.8rem 1.4rem;
-  font-size: 0.72rem;
-  letter-spacing: 0.12em;
+  padding: 0.85rem 1.6rem;
+  font-size: 0.95rem;
+  letter-spacing: 0.1em;
   font-weight: 600;
   text-transform: uppercase;
   text-decoration: none;
