@@ -1304,11 +1304,19 @@
         try {
           // NOTE: must match the table the submission form writes to
           // (see public/portfolio/index.html -> SUPABASE_ENQUIRY_ATTACHMENTS_TABLE)
-          const { data, error } = await supabase
+          // Race the query against a 4s timeout so a hung/blocked request
+          // never leaves the UI stuck on "Loading attachments...".
+          const queryPromise = supabase
             .from('urbanbox_enquiry_attachments')
             .select('public_url,file_name,attachment_role,created_at,bucket_id,storage_path,mime_type')
             .eq('enquiry_ref', enquiryRef)
             .order('created_at', { ascending: true });
+
+          const timeoutPromise = new Promise((resolve) =>
+            setTimeout(() => resolve({ data: null, error: { message: 'Attachments table request timed out' } }), 4000)
+          );
+
+          const { data, error } = await Promise.race([queryPromise, timeoutPromise]);
 
           if (error) errMessage = error.message || '';
           dbAttachments = (data || []).map((row) => {
@@ -1329,7 +1337,9 @@
         }
 
         const merged = dedupeAttachments([...dbAttachments, ...inlineAttachments, ...messageAttachments]);
-        renderAttachments(merged, errMessage);
+        // If we have any attachments from any source, don't show the error message —
+        // the user has what they need from inline/message-derived URLs.
+        renderAttachments(merged, merged.length ? '' : errMessage);
       }
 
       function renderAttachments(attachments, errorMessage) {
