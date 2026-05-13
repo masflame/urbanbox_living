@@ -43,6 +43,15 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html { font-size: 14px; -webkit-font-smoothing: antialiased; }
     body { font-family: var(--font-sans); background: var(--bg); color: var(--text-primary); min-height: 100vh; display: flex; overflow: hidden; }
+
+    /* === Readability boost: scale up the whole admin UI on desktop === */
+    /* Mobile keeps its own responsive sizing (see @media 860px block below). */
+    @media (min-width: 861px) {
+      body { zoom: 1.18; }
+    }
+    @media (min-width: 1500px) {
+      body { zoom: 1.22; }
+    }
     ::-webkit-scrollbar { width: 4px; height: 4px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 99px; }
@@ -53,8 +62,8 @@
     .brand-mark svg { width: 14px; height: 14px; fill: #fff; }
     .brand-name { font-size: 13px; font-weight: 600; color: var(--text-primary); letter-spacing: -0.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .sidebar-section { padding: 20px 10px 8px; }
-    .sidebar-section-label { font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-tertiary); padding: 0 8px; margin-bottom: 6px; }
-    .nav-item { display: flex; align-items: center; gap: 9px; padding: 8px 10px; border-radius: var(--radius); color: var(--text-secondary); font-size: 13px; font-weight: 500; cursor: pointer; transition: background var(--transition), color var(--transition); user-select: none; }
+    .sidebar-section-label { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-tertiary); padding: 0 8px; margin-bottom: 8px; }
+    .nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: var(--radius); color: var(--text-secondary); font-size: 14px; font-weight: 500; cursor: pointer; transition: background var(--transition), color var(--transition); user-select: none; }
     .nav-item:hover { background: var(--surface-2); color: var(--text-primary); }
     .nav-item.active { background: var(--accent-dim); color: var(--accent); }
     .nav-item svg { width: 15px; height: 15px; stroke: currentColor; stroke-width: 1.7; fill: none; flex-shrink: 0; stroke-linecap: round; stroke-linejoin: round; }
@@ -68,7 +77,7 @@
     .user-role { font-size: 11px; color: var(--text-tertiary); }
     .main { margin-left: var(--sidebar-w); flex: 1; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
     .header { height: var(--header-h); background: var(--surface-0); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 20px; gap: 16px; flex-shrink: 0; position: sticky; top: 0; z-index: 50; }
-    .breadcrumb { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text-tertiary); }
+    .breadcrumb { display: flex; align-items: center; gap: 6px; font-size: 14px; color: var(--text-tertiary); }
     .breadcrumb-sep { color: var(--text-tertiary); font-size: 15px; line-height: 1; }
     .breadcrumb-current { color: var(--text-primary); font-weight: 500; }
     .header-search { margin-left: auto; display: flex; align-items: center; background: var(--surface-1); border: 1px solid var(--border); border-radius: var(--radius); padding: 0 10px; gap: 8px; height: 32px; width: 260px; transition: border-color var(--transition); }
@@ -77,7 +86,7 @@
     .header-search input { background: none; border: none; outline: none; color: var(--text-primary); font-size: 12.5px; font-family: var(--font-sans); width: 100%; }
     .header-search input::placeholder { color: var(--text-tertiary); }
     .header-actions { display: flex; align-items: center; gap: 8px; }
-    .btn { display: inline-flex; align-items: center; gap: 6px; padding: 0 12px; height: 32px; border-radius: var(--radius); font-size: 12.5px; font-weight: 500; font-family: var(--font-sans); cursor: pointer; transition: background var(--transition), border-color var(--transition), color var(--transition); border: 1px solid var(--border); background: var(--surface-2); color: var(--text-primary); white-space: nowrap; }
+    .btn { display: inline-flex; align-items: center; gap: 6px; padding: 0 14px; height: 36px; border-radius: var(--radius); font-size: 13.5px; font-weight: 500; font-family: var(--font-sans); cursor: pointer; transition: background var(--transition), border-color var(--transition), color var(--transition); border: 1px solid var(--border); background: var(--surface-2); color: var(--text-primary); white-space: nowrap; }
     .btn:hover { background: var(--surface-hover); border-color: var(--border-strong); }
     .btn svg { width: 13px; height: 13px; stroke: currentColor; stroke-width: 1.8; fill: none; stroke-linecap: round; stroke-linejoin: round; }
     .btn-ghost { background: transparent; border-color: transparent; color: var(--text-secondary); }
@@ -86,10 +95,10 @@
     .stats-strip { display: grid; grid-template-columns: repeat(4, 1fr); border-bottom: 1px solid var(--border); flex-shrink: 0; }
     .stat-item { padding: 16px 22px; border-right: 1px solid var(--border); display: flex; flex-direction: column; gap: 4px; animation: fadeUp 0.4s ease both; }
     .stat-item:last-child { border-right: none; }
-    .stat-label { font-size: 11px; font-weight: 500; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.06em; }
+    .stat-label { font-size: 12px; font-weight: 600; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.06em; }
     .stat-row { display: flex; align-items: baseline; gap: 8px; }
-    .stat-value { font-family: var(--font-mono); font-size: 26px; font-weight: 500; color: var(--text-primary); line-height: 1.1; }
-    .stat-sub { font-size: 11px; color: var(--text-tertiary); }
+    .stat-value { font-family: var(--font-mono); font-size: 30px; font-weight: 500; color: var(--text-primary); line-height: 1.1; }
+    .stat-sub { font-size: 12px; color: var(--text-tertiary); }
     .workspace { flex: 1; display: grid; grid-template-columns: 340px 1fr; overflow: hidden; }
     .inbox-col { border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; background: var(--surface-0); }
     .inbox-toolbar { padding: 12px 14px; border-bottom: 1px solid var(--border); display: flex; flex-direction: column; gap: 8px; flex-shrink: 0; }
@@ -113,12 +122,12 @@
     .item-row1 { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
     .item-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; transition: opacity var(--transition); }
     .item-dot.read { opacity: 0; }
-    .item-name { font-size: 13px; font-weight: 600; color: var(--text-primary); flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: -0.01em; }
-    .item-time { font-size: 11px; font-family: var(--font-mono); color: var(--text-tertiary); flex-shrink: 0; }
+    .item-name { font-size: 14px; font-weight: 600; color: var(--text-primary); flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: -0.01em; }
+    .item-time { font-size: 12px; font-family: var(--font-mono); color: var(--text-tertiary); flex-shrink: 0; }
     .item-row2 { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; padding-left: 14px; }
-    .item-tag { display: inline-flex; align-items: center; gap: 4px; font-size: 10.5px; font-weight: 500; padding: 2px 7px; border-radius: var(--radius-sm); background: var(--surface-2); border: 1px solid var(--border); color: var(--text-secondary); }
-    .item-email { font-size: 11.5px; color: var(--text-tertiary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .item-preview { font-size: 12px; color: var(--text-secondary); line-height: 1.55; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; padding-left: 14px; }
+    .item-tag { display: inline-flex; align-items: center; gap: 4px; font-size: 11.5px; font-weight: 500; padding: 3px 8px; border-radius: var(--radius-sm); background: var(--surface-2); border: 1px solid var(--border); color: var(--text-secondary); }
+    .item-email { font-size: 12.5px; color: var(--text-tertiary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .item-preview { font-size: 13px; color: var(--text-secondary); line-height: 1.55; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; padding-left: 14px; }
     .detail-col { display: flex; flex-direction: column; overflow: hidden; background: var(--bg); }
     .detail-header { padding: 18px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; background: var(--surface-0); flex-shrink: 0; }
     .detail-header-left { flex: 1; min-width: 0; }
@@ -134,20 +143,20 @@
     .detail-body { flex: 1; overflow-y: auto; padding: 20px 24px; display: flex; flex-direction: column; gap: 16px; }
     .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     .field-block { background: var(--surface-0); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; }
-    .field-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-tertiary); margin-bottom: 6px; }
-    .field-value { font-size: 13.5px; color: var(--text-primary); font-weight: 500; word-break: break-all; }
-    .field-value.mono { font-family: var(--font-mono); font-size: 12.5px; }
+    .field-label { font-size: 11.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-tertiary); margin-bottom: 8px; }
+    .field-value { font-size: 15px; color: var(--text-primary); font-weight: 500; word-break: break-all; }
+    .field-value.mono { font-family: var(--font-mono); font-size: 14px; }
     .message-block { background: var(--surface-0); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; }
-    .message-text { font-size: 13.5px; line-height: 1.75; color: var(--text-secondary); white-space: pre-wrap; word-break: break-word; }
+    .message-text { font-size: 15px; line-height: 1.75; color: var(--text-secondary); white-space: pre-wrap; word-break: break-word; }
     .attachments-block { background: var(--surface-0); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; }
     .attachment-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: var(--surface-1); border: 1px solid var(--border); border-radius: var(--radius-sm); margin-bottom: 8px; }
     .attachment-item:last-child { margin-bottom: 0; }
     .attachment-icon { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; background: var(--accent-dim); border-radius: 4px; flex-shrink: 0; color: var(--accent); font-size: 12px; font-weight: 600; }
     .attachment-info { flex: 1; min-width: 0; }
-    .attachment-name { font-size: 12px; font-weight: 500; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .attachment-role { font-size: 10px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.04em; margin-top: 2px; }
+    .attachment-name { font-size: 13.5px; font-weight: 500; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .attachment-role { font-size: 11px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.04em; margin-top: 3px; }
     .attachment-actions { display: flex; gap: 6px; flex-shrink: 0; }
-    .attachment-btn { padding: 4px 10px; background: var(--accent); color: #fff; border: none; border-radius: var(--radius-sm); cursor: pointer; font-size: 11px; font-weight: 600; transition: background 0.2s; }
+    .attachment-btn { padding: 6px 14px; background: var(--accent); color: #fff; border: none; border-radius: var(--radius-sm); cursor: pointer; font-size: 12.5px; font-weight: 600; transition: background 0.2s; }
     .attachment-btn:hover { background: #1992A0; }
     .attachment-image { max-width: 100%; height: auto; border-radius: var(--radius); margin-bottom: 12px; }
     .tab-analytics { display: none; padding: 20px 24px; overflow-y: auto; gap: 14px; flex-direction: column; }
