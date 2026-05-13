@@ -1145,9 +1145,24 @@
         detailPhone.textContent = item.phone || 'No phone provided';
         detailMessage.textContent = item.message || 'No message provided.';
         toggleReadBtn.textContent = read ? 'Mark as Unread' : 'Mark as Read';
-        
-        // Fetch and render attachments
-        fetchAndRenderAttachments(item);
+
+        // Always reveal the attachments section as soon as an enquiry is selected,
+        // so it stays visible even if the fetch below errors or hangs.
+        const attachBlock = document.getElementById('attachmentsBlock');
+        const attachList  = document.getElementById('attachmentsList');
+        if (attachBlock) attachBlock.style.display = 'block';
+        if (attachList)  attachList.innerHTML = '<div class="empty-state" style="padding:20px 12px;min-height:0;align-items:flex-start;text-align:left;"><span>Loading attachments...</span></div>';
+
+        // Fetch and render attachments (guarded so a thrown error never hides the block)
+        Promise.resolve()
+          .then(() => fetchAndRenderAttachments(item))
+          .catch((err) => {
+            console.error('[enquiries] fetchAndRenderAttachments failed:', err);
+            try { renderAttachments([], err && err.message ? err.message : 'Failed to load attachments.'); }
+            catch (_) {
+              if (attachList) attachList.innerHTML = '<div class="empty-state" style="padding:20px 12px;min-height:0;align-items:flex-start;text-align:left;"><div class="empty-title">Could not load attachments</div><span>' + esc(String(err && err.message || err || 'Unknown error')) + '</span></div>';
+            }
+          });
       }
 
       function tryParseMaybeJson(value) {
@@ -1267,9 +1282,16 @@
       }
 
       async function fetchAndRenderAttachments(item) {
-        const enquiryRef = resolveEnquiryRef(item);
-        const inlineAttachments = extractInlineAttachments(item);
-        const messageAttachments = extractMessageAttachments(item.message);
+        let inlineAttachments = [];
+        let messageAttachments = [];
+        let enquiryRef = '';
+        try {
+          enquiryRef = resolveEnquiryRef(item) || '';
+          inlineAttachments = extractInlineAttachments(item) || [];
+          messageAttachments = extractMessageAttachments(item.message) || [];
+        } catch (e) {
+          console.warn('[enquiries] attachment extraction failed:', e);
+        }
 
         if (!enquiryRef) {
           const mergedWithoutRef = dedupeAttachments([...inlineAttachments, ...messageAttachments]);
@@ -1277,27 +1299,37 @@
           return;
         }
 
-        const { data, error } = await supabase
-          .from('enquiry_attachments')
-          .select('public_url,file_name,attachment_role,created_at,bucket_id,storage_path,mime_type')
-          .eq('enquiry_ref', enquiryRef)
-          .order('created_at', { ascending: true });
+        let dbAttachments = [];
+        let errMessage = '';
+        try {
+          // NOTE: must match the table the submission form writes to
+          // (see public/portfolio/index.html -> SUPABASE_ENQUIRY_ATTACHMENTS_TABLE)
+          const { data, error } = await supabase
+            .from('urbanbox_enquiry_attachments')
+            .select('public_url,file_name,attachment_role,created_at,bucket_id,storage_path,mime_type')
+            .eq('enquiry_ref', enquiryRef)
+            .order('created_at', { ascending: true });
 
-        const dbAttachments = (data || []).map((row) => {
-          let url = row.public_url || '';
-          if (!url && row.bucket_id && row.storage_path) {
-            const maybePublic = supabase.storage.from(row.bucket_id).getPublicUrl(row.storage_path);
-            url = maybePublic && maybePublic.data ? maybePublic.data.publicUrl : '';
-          }
-          return {
-            public_url: url,
-            file_name: row.file_name || (url ? url.split('/').pop() : 'Attachment'),
-            attachment_role: row.attachment_role || (/planner-images/i.test(url) ? 'planner-image' : 'uploaded-file')
-          };
-        }).filter((entry) => Boolean(entry.public_url));
+          if (error) errMessage = error.message || '';
+          dbAttachments = (data || []).map((row) => {
+            let url = row.public_url || '';
+            if (!url && row.bucket_id && row.storage_path) {
+              const maybePublic = supabase.storage.from(row.bucket_id).getPublicUrl(row.storage_path);
+              url = maybePublic && maybePublic.data ? maybePublic.data.publicUrl : '';
+            }
+            return {
+              public_url: url,
+              file_name: row.file_name || (url ? url.split('/').pop() : 'Attachment'),
+              attachment_role: row.attachment_role || (/planner-images/i.test(url) ? 'planner-image' : 'uploaded-file')
+            };
+          }).filter((entry) => Boolean(entry.public_url));
+        } catch (e) {
+          console.error('[enquiries] supabase enquiry_attachments fetch threw:', e);
+          errMessage = (e && e.message) ? e.message : 'Could not reach attachments table.';
+        }
 
         const merged = dedupeAttachments([...dbAttachments, ...inlineAttachments, ...messageAttachments]);
-        renderAttachments(merged, error ? error.message : '');
+        renderAttachments(merged, errMessage);
       }
 
       function renderAttachments(attachments, errorMessage) {
