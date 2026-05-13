@@ -43,20 +43,11 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html { font-size: 14px; -webkit-font-smoothing: antialiased; }
     body { font-family: var(--font-sans); background: var(--bg); color: var(--text-primary); min-height: 100vh; display: flex; overflow: hidden; }
-
-    /* === Readability boost: scale up the whole admin UI on desktop === */
-    /* Mobile keeps its own responsive sizing (see @media 860px block below). */
-    @media (min-width: 861px) {
-      body { zoom: 1.12; }
-    }
-    @media (min-width: 1500px) {
-      body { zoom: 1.18; }
-    }
     ::-webkit-scrollbar { width: 4px; height: 4px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 99px; }
     ::-webkit-scrollbar-thumb:hover { background: var(--text-tertiary); }
-    .sidebar { width: var(--sidebar-w); flex-shrink: 0; background: var(--surface-0); border-right: 1px solid var(--border); display: flex; flex-direction: column; height: 100vh; position: fixed; left: 0; top: 0; z-index: 100; overflow-y: auto; }
+    .sidebar { width: var(--sidebar-w); flex-shrink: 0; background: var(--surface-0); border-right: 1px solid var(--border); display: flex; flex-direction: column; height: 100vh; position: fixed; left: 0; top: 0; z-index: 100; }
     .sidebar-brand { padding: 0 16px; height: var(--header-h); display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--border); }
     .brand-mark { width: 28px; height: 28px; background: var(--accent); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
     .brand-mark svg { width: 14px; height: 14px; fill: #fff; }
