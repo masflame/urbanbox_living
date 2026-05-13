@@ -1146,21 +1146,39 @@
         detailMessage.textContent = item.message || 'No message provided.';
         toggleReadBtn.textContent = read ? 'Mark as Unread' : 'Mark as Read';
 
-        // Always reveal the attachments section as soon as an enquiry is selected,
-        // so it stays visible even if the fetch below errors or hangs.
+        // Always reveal the attachments section as soon as an enquiry is selected.
         const attachBlock = document.getElementById('attachmentsBlock');
         const attachList  = document.getElementById('attachmentsList');
         if (attachBlock) attachBlock.style.display = 'block';
-        if (attachList)  attachList.innerHTML = '<div class="empty-state" style="padding:20px 12px;min-height:0;align-items:flex-start;text-align:left;"><span>Loading attachments...</span></div>';
 
-        // Fetch and render attachments (guarded so a thrown error never hides the block)
+        // STEP 1 (synchronous, instant): render whatever URLs we can pull from the
+        // record itself (inline fields + URLs scraped from the message body).
+        // This guarantees the section never sits stuck on "Loading..." even if
+        // every Supabase call hangs or fails.
+        let immediate = [];
+        try {
+          const inline  = extractInlineAttachments(item)  || [];
+          const fromMsg = extractMessageAttachments(item.message) || [];
+          immediate = dedupeAttachments([...inline, ...fromMsg]);
+        } catch (e) { console.warn('[enquiries] sync attachment extract failed:', e); }
+
+        if (immediate.length) {
+          renderAttachments(immediate, '');
+        } else if (attachList) {
+          attachList.innerHTML = '<div class="empty-state" style="padding:20px 12px;min-height:0;align-items:flex-start;text-align:left;"><span>Loading attachments...</span></div>';
+        }
+
+        // STEP 2 (async): try to merge in DB rows from urbanbox_enquiry_attachments.
+        // Any failure is swallowed — the synchronous render above is the source of truth.
         Promise.resolve()
-          .then(() => fetchAndRenderAttachments(item))
+          .then(() => fetchAndRenderAttachments(item, immediate))
           .catch((err) => {
             console.error('[enquiries] fetchAndRenderAttachments failed:', err);
-            try { renderAttachments([], err && err.message ? err.message : 'Failed to load attachments.'); }
-            catch (_) {
-              if (attachList) attachList.innerHTML = '<div class="empty-state" style="padding:20px 12px;min-height:0;align-items:flex-start;text-align:left;"><div class="empty-title">Could not load attachments</div><span>' + esc(String(err && err.message || err || 'Unknown error')) + '</span></div>';
+            if (!immediate.length) {
+              try { renderAttachments([], err && err.message ? err.message : 'Failed to load attachments.'); }
+              catch (_) {
+                if (attachList) attachList.innerHTML = '<div class="empty-state" style="padding:20px 12px;min-height:0;align-items:flex-start;text-align:left;"><div class="empty-title">Could not load attachments</div><span>' + esc(String(err && err.message || err || 'Unknown error')) + '</span></div>';
+              }
             }
           });
       }
@@ -1281,7 +1299,7 @@
         });
       }
 
-      async function fetchAndRenderAttachments(item) {
+      async function fetchAndRenderAttachments(item, alreadyRendered) {
         let inlineAttachments = [];
         let messageAttachments = [];
         let enquiryRef = '';
@@ -1293,53 +1311,73 @@
           console.warn('[enquiries] attachment extraction failed:', e);
         }
 
+        const baseList = dedupeAttachments([...inlineAttachments, ...messageAttachments]);
+
         if (!enquiryRef) {
-          const mergedWithoutRef = dedupeAttachments([...inlineAttachments, ...messageAttachments]);
-          renderAttachments(mergedWithoutRef, 'No enquiry reference was found for this record.');
+          // Only re-render if we don't already have something on screen
+          if (!(alreadyRendered && alreadyRendered.length)) {
+            renderAttachments(baseList, baseList.length ? '' : 'No enquiry reference was found for this record.');
+          }
           return;
         }
 
+        // Try both the new and legacy table names. Whichever returns data first wins.
+        const tablesToTry = ['urbanbox_enquiry_attachments', 'enquiry_attachments'];
         let dbAttachments = [];
         let errMessage = '';
-        try {
-          // NOTE: must match the table the submission form writes to
-          // (see public/portfolio/index.html -> SUPABASE_ENQUIRY_ATTACHMENTS_TABLE)
-          // Race the query against a 4s timeout so a hung/blocked request
-          // never leaves the UI stuck on "Loading attachments...".
-          const queryPromise = supabase
-            .from('urbanbox_enquiry_attachments')
-            .select('public_url,file_name,attachment_role,created_at,bucket_id,storage_path,mime_type')
-            .eq('enquiry_ref', enquiryRef)
-            .order('created_at', { ascending: true });
 
-          const timeoutPromise = new Promise((resolve) =>
-            setTimeout(() => resolve({ data: null, error: { message: 'Attachments table request timed out' } }), 4000)
-          );
+        for (const tableName of tablesToTry) {
+          try {
+            const queryPromise = supabase
+              .from(tableName)
+              .select('public_url,file_name,attachment_role,created_at,bucket_id,storage_path,mime_type')
+              .eq('enquiry_ref', enquiryRef)
+              .order('created_at', { ascending: true });
 
-          const { data, error } = await Promise.race([queryPromise, timeoutPromise]);
+            const timeoutPromise = new Promise((resolve) =>
+              setTimeout(() => resolve({ data: null, error: { message: 'Attachments query timed out (' + tableName + ')' } }), 4000)
+            );
 
-          if (error) errMessage = error.message || '';
-          dbAttachments = (data || []).map((row) => {
-            let url = row.public_url || '';
-            if (!url && row.bucket_id && row.storage_path) {
-              const maybePublic = supabase.storage.from(row.bucket_id).getPublicUrl(row.storage_path);
-              url = maybePublic && maybePublic.data ? maybePublic.data.publicUrl : '';
+            const { data, error } = await Promise.race([queryPromise, timeoutPromise]);
+
+            if (error) {
+              errMessage = error.message || '';
+              continue;
             }
-            return {
-              public_url: url,
-              file_name: row.file_name || (url ? url.split('/').pop() : 'Attachment'),
-              attachment_role: row.attachment_role || (/planner-images/i.test(url) ? 'planner-image' : 'uploaded-file')
-            };
-          }).filter((entry) => Boolean(entry.public_url));
-        } catch (e) {
-          console.error('[enquiries] supabase enquiry_attachments fetch threw:', e);
-          errMessage = (e && e.message) ? e.message : 'Could not reach attachments table.';
+            dbAttachments = (data || []).map((row) => {
+              let url = row.public_url || '';
+              if (!url && row.bucket_id && row.storage_path) {
+                try {
+                  const maybePublic = supabase.storage.from(row.bucket_id).getPublicUrl(row.storage_path);
+                  url = maybePublic && maybePublic.data ? maybePublic.data.publicUrl : '';
+                } catch (_) { /* ignore */ }
+              }
+              return {
+                public_url: url,
+                file_name: row.file_name || (url ? url.split('/').pop() : 'Attachment'),
+                attachment_role: row.attachment_role || (/planner-images/i.test(url) ? 'planner-image' : 'uploaded-file')
+              };
+            }).filter((entry) => Boolean(entry.public_url));
+
+            if (dbAttachments.length) break; // success
+          } catch (e) {
+            console.warn('[enquiries] supabase fetch from ' + tableName + ' threw:', e);
+            errMessage = (e && e.message) ? e.message : 'Could not reach ' + tableName;
+          }
         }
 
         const merged = dedupeAttachments([...dbAttachments, ...inlineAttachments, ...messageAttachments]);
-        // If we have any attachments from any source, don't show the error message —
-        // the user has what they need from inline/message-derived URLs.
-        renderAttachments(merged, merged.length ? '' : errMessage);
+
+        // Only re-render if the DB actually added something new beyond what's
+        // already on screen (avoids replacing real attachments with an empty state).
+        const haveOnScreen = (alreadyRendered && alreadyRendered.length) || 0;
+        if (merged.length > haveOnScreen) {
+          renderAttachments(merged, '');
+        } else if (!haveOnScreen && !merged.length) {
+          renderAttachments(merged, errMessage);
+        }
+        // else: keep what's already shown.
+      }
       }
 
       function renderAttachments(attachments, errorMessage) {
