@@ -258,9 +258,9 @@ function buildEmailHtml({ subject, body, recipientName }) {
           </td>
         </tr>
 
-        <!-- Forest green strip with date + contact -->
+        <!-- Mustard strip with date + contact -->
         <tr>
-          <td bgcolor="${BRAND.green}" style="background-color:${BRAND.green};padding:10px 32px;font-family:Arial,Helvetica,sans-serif;border-bottom:1px solid ${BRAND.greenDk};">
+          <td bgcolor="${BRAND.mustard}" style="background-color:${BRAND.mustard};padding:10px 32px;font-family:Arial,Helvetica,sans-serif;">
             <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
               <td valign="middle" style="color:${BRAND.white};font-size:11px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;">
                 ${today}
@@ -334,11 +334,15 @@ function buildEmailHtml({ subject, body, recipientName }) {
           </td>
         </tr>
 
-        <!-- BOTTOM BRAND BAND: forest green with white IIE boiler banner full-width -->
+        <!-- BOTTOM BRAND BAND: white, thin, centered IIE wordmark -->
         <tr>
-          <td bgcolor="${BRAND.green}" style="background-color:${BRAND.green};border-top:4px solid ${BRAND.mustard};padding:0;">
-            <img src="${BOILER_URL}" alt="The Independent Institute of Education" width="660"
-                 style="display:block;width:100%;max-width:660px;height:auto;border:0;" />
+          <td bgcolor="${BRAND.white}" align="center" style="background-color:${BRAND.white};border-top:2px solid ${BRAND.mustard};border-bottom:1px solid ${BRAND.border};padding:10px 32px;font-family:Arial,Helvetica,sans-serif;">
+            <div style="color:${BRAND.dark};font-size:10px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;line-height:1.4;">
+              The Independent Institute of Education (IIE)
+            </div>
+            <div style="color:${BRAND.grey};font-size:9px;font-weight:600;letter-spacing:0.10em;text-transform:uppercase;margin-top:2px;line-height:1.4;">
+              Registered with DHET &middot; Reg. No. 2007/HE07/002
+            </div>
           </td>
         </tr>
 
@@ -558,14 +562,11 @@ function buildEmailPdfBuffer({ subject, body, recipientName, logo, boiler, emeri
   doc.setFillColor(green[0], green[1], green[2]);
   doc.rect(0, HERO_H, pageW, accentH, 'F');
 
-  // Forest green info strip with date + contact
+  // Mustard info strip with date + contact
   const stripY = HERO_H + accentH;
   const stripH = 24;
-  doc.setFillColor(green[0], green[1], green[2]);
+  doc.setFillColor(mustard[0], mustard[1], mustard[2]);
   doc.rect(0, stripY, pageW, stripH, 'F');
-  doc.setDrawColor(greenDk[0], greenDk[1], greenDk[2]);
-  doc.setLineWidth(0.5);
-  doc.line(0, stripY + stripH, pageW, stripY + stripH);
 
   const today = new Date().toLocaleDateString('en-GB', {
     day: '2-digit', month: 'long', year: 'numeric',
@@ -731,8 +732,8 @@ function buildEmailPdfBuffer({ subject, body, recipientName, logo, boiler, emeri
   for (let p = 1; p <= totalPages; p++) {
     doc.setPage(p);
 
-    // Boiler band: forest green strip with white IIE boiler banner image full-width
-    const boilerH = 42;
+    // Boiler band: thin white strip with dark IIE wordmark
+    const boilerH = 22;
     const emerisH = 26;
     const legalH  = 16;
     const accentBottomH = 4;
@@ -758,37 +759,24 @@ function buildEmailPdfBuffer({ subject, body, recipientName, logo, boiler, emeri
     );
     doc.text(`Page ${p} of ${totalPages}`, pageW - marginX, fy + 42, { align: 'right' });
 
-    // Forest green band with white boiler image
-    doc.setFillColor(green[0], green[1], green[2]);
+    // White band with dark IIE wordmark + thin mustard accent above + hairline below
+    doc.setFillColor(255, 255, 255);
     doc.rect(0, bandTopY, pageW, boilerH, 'F');
     doc.setFillColor(mustard[0], mustard[1], mustard[2]);
-    doc.rect(0, bandTopY - 4, pageW, 4, 'F');
+    doc.rect(0, bandTopY - 2, pageW, 2, 'F');
+    doc.setDrawColor(borderC[0], borderC[1], borderC[2]);
+    doc.setLineWidth(0.4);
+    doc.line(0, bandTopY + boilerH, pageW, bandTopY + boilerH);
 
-    if (boiler && (looksLikePng(boiler) || (!looksLikeSvg(boiler)))) {
-      try {
-        const fmt = looksLikePng(boiler) ? 'PNG' : 'JPEG';
-        const mime = fmt === 'PNG' ? 'png' : 'jpeg';
-        const dataUrl = `data:image/${mime};base64,${boiler.toString('base64')}`;
-        let ratio = 12;
-        try {
-          const props = doc.getImageProperties(dataUrl);
-          if (props && props.width && props.height) ratio = props.width / props.height;
-        } catch { /* ignore */ }
-        const imgW = pageW - 40;
-        let imgH = imgW / ratio;
-        if (imgH > boilerH - 8) {
-          imgH = boilerH - 8;
-        }
-        const imgX = (pageW - imgW) / 2;
-        const imgY = bandTopY + (boilerH - imgH) / 2;
-        doc.addImage(dataUrl, fmt, imgX, imgY, imgW, imgH);
-      } catch { /* ignore */ }
-    } else {
-      doc.setTextColor(255, 255, 255);
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(9);
-      doc.text('THE INDEPENDENT INSTITUTE OF EDUCATION (IIE)', pageW / 2, bandTopY + boilerH / 2 + 3, { align: 'center' });
-    }
+    doc.setTextColor(dark[0], dark[1], dark[2]);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(8);
+    doc.text(
+      'T H E   I N D E P E N D E N T   I N S T I T U T E   O F   E D U C A T I O N   ( I I E )',
+      pageW / 2,
+      bandTopY + boilerH / 2 + 2.5,
+      { align: 'center' }
+    );
 
     // Emeris parent strip
     const emerisY = bandTopY + boilerH;
