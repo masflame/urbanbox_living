@@ -334,15 +334,11 @@ function buildEmailHtml({ subject, body, recipientName }) {
           </td>
         </tr>
 
-        <!-- BOTTOM BRAND BAND: white, thin, centered IIE wordmark -->
+        <!-- BOTTOM BRAND BAND: white background with IIE boiler banner, thinner height -->
         <tr>
-          <td bgcolor="${BRAND.white}" align="center" style="background-color:${BRAND.white};border-top:2px solid ${BRAND.mustard};border-bottom:1px solid ${BRAND.border};padding:10px 32px;font-family:Arial,Helvetica,sans-serif;">
-            <div style="color:${BRAND.dark};font-size:10px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;line-height:1.4;">
-              The Independent Institute of Education (IIE)
-            </div>
-            <div style="color:${BRAND.grey};font-size:9px;font-weight:600;letter-spacing:0.10em;text-transform:uppercase;margin-top:2px;line-height:1.4;">
-              Registered with DHET &middot; Reg. No. 2007/HE07/002
-            </div>
+          <td bgcolor="${BRAND.white}" align="center" style="background-color:${BRAND.white};border-top:2px solid ${BRAND.mustard};border-bottom:1px solid ${BRAND.border};padding:8px 32px;">
+            <img src="${BOILER_URL}" alt="The Independent Institute of Education" width="360"
+                 style="display:block;width:100%;max-width:360px;height:auto;border:0;margin:0 auto;" />
           </td>
         </tr>
 
@@ -732,8 +728,8 @@ function buildEmailPdfBuffer({ subject, body, recipientName, logo, boiler, emeri
   for (let p = 1; p <= totalPages; p++) {
     doc.setPage(p);
 
-    // Boiler band: thin white strip with dark IIE wordmark
-    const boilerH = 22;
+    // Boiler band: thin white strip with centered IIE boiler image
+    const boilerH = 28;
     const emerisH = 26;
     const legalH  = 16;
     const accentBottomH = 4;
@@ -759,7 +755,7 @@ function buildEmailPdfBuffer({ subject, body, recipientName, logo, boiler, emeri
     );
     doc.text(`Page ${p} of ${totalPages}`, pageW - marginX, fy + 42, { align: 'right' });
 
-    // White band with dark IIE wordmark + thin mustard accent above + hairline below
+    // White band with centered boiler image + thin mustard accent above + hairline below
     doc.setFillColor(255, 255, 255);
     doc.rect(0, bandTopY, pageW, boilerH, 'F');
     doc.setFillColor(mustard[0], mustard[1], mustard[2]);
@@ -768,15 +764,25 @@ function buildEmailPdfBuffer({ subject, body, recipientName, logo, boiler, emeri
     doc.setLineWidth(0.4);
     doc.line(0, bandTopY + boilerH, pageW, bandTopY + boilerH);
 
-    doc.setTextColor(dark[0], dark[1], dark[2]);
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(8);
-    doc.text(
-      'T H E   I N D E P E N D E N T   I N S T I T U T E   O F   E D U C A T I O N   ( I I E )',
-      pageW / 2,
-      bandTopY + boilerH / 2 + 2.5,
-      { align: 'center' }
-    );
+    if (boiler && (looksLikePng(boiler) || (!looksLikeSvg(boiler)))) {
+      try {
+        const fmt = looksLikePng(boiler) ? 'PNG' : 'JPEG';
+        const mime = fmt === 'PNG' ? 'png' : 'jpeg';
+        const dataUrl = `data:image/${mime};base64,${boiler.toString('base64')}`;
+        let ratio = 7;
+        try {
+          const props = doc.getImageProperties(dataUrl);
+          if (props && props.width && props.height) ratio = props.width / props.height;
+        } catch { /* ignore */ }
+        let imgH = boilerH - 8;
+        let imgW = imgH * ratio;
+        const maxW = 260;
+        if (imgW > maxW) { imgW = maxW; imgH = imgW / ratio; }
+        const imgX = (pageW - imgW) / 2;
+        const imgY = bandTopY + (boilerH - imgH) / 2;
+        doc.addImage(dataUrl, fmt, imgX, imgY, imgW, imgH);
+      } catch { /* ignore */ }
+    }
 
     // Emeris parent strip
     const emerisY = bandTopY + boilerH;
