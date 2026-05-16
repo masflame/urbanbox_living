@@ -349,14 +349,6 @@ function buildEmailHtml({ subject, body, recipientName }) {
           </td>
         </tr>
 
-        <!-- BOTTOM BRAND BAND: white background with full-width IIE footer (logo + legal) -->
-        <tr>
-          <td bgcolor="${BRAND.white}" align="center" style="background-color:${BRAND.white};border-top:2px solid ${BRAND.red};border-bottom:1px solid ${BRAND.border};padding:0;">
-            <img src="${FOOTER_URL}" alt="The Independent Institute of Education" width="660"
-                 style="display:block;width:100%;max-width:660px;height:auto;border:0;margin:0;" />
-          </td>
-        </tr>
-
         <!-- Emeris parent-org strip -->
         <tr>
           <td bgcolor="${BRAND.black}" valign="middle" style="background-color:${BRAND.black};padding:14px 32px;">
@@ -386,7 +378,13 @@ function buildEmailHtml({ subject, body, recipientName }) {
           </td>
         </tr>
 
-        <tr><td style="height:6px;background:${BRAND.red};line-height:6px;font-size:0;">&nbsp;</td></tr>
+        <!-- BOTTOM BRAND BAND: white background with full-width IIE footer (logo + legal) -->
+        <tr>
+          <td bgcolor="${BRAND.white}" align="center" style="background-color:${BRAND.white};border-top:2px solid ${BRAND.red};padding:0;">
+            <img src="${FOOTER_URL}" alt="The Independent Institute of Education" width="660"
+                 style="display:block;width:100%;max-width:660px;height:auto;border:0;margin:0;" />
+          </td>
+        </tr>
       </table>
 
       <div style="font-size:10.5px;color:${BRAND.grey};margin-top:14px;max-width:600px;text-align:center;line-height:1.5;font-family:Arial,Helvetica,sans-serif;">
