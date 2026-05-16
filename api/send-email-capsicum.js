@@ -234,12 +234,12 @@ function buildEmailHtml({ subject, body, recipientName }) {
              style="width:660px;max-width:96%;background:${BRAND.white};border:1px solid ${BRAND.border};
                     box-shadow:0 8px 24px rgba(0,0,0,0.10);">
 
-        <!-- TOP HERO: minimalistic red band with white logo -->
+        <!-- TOP HERO: minimalistic white band with right-aligned dark logo -->
         <tr>
-          <td bgcolor="${BRAND.red}" align="center" valign="middle"
-              style="background-color:${BRAND.red};padding:34px 32px;border-bottom:4px solid ${BRAND.dark};">
-            <img src="${WHITE_LOGO_URL}" alt="Capsicum Culinary Studio" height="58"
-                 style="display:block;height:58px;width:auto;border:0;margin:0 auto;" />
+          <td bgcolor="${BRAND.white}" align="right" valign="middle"
+              style="background-color:${BRAND.white};padding:18px 32px;border-bottom:4px solid ${BRAND.dark};">
+            <img src="${DARK_LOGO_URL}" alt="Capsicum Culinary Studio" height="46"
+                 style="display:block;height:46px;width:auto;border:0;margin:0 0 0 auto;" />
           </td>
         </tr>
 
@@ -335,16 +335,8 @@ function buildEmailHtml({ subject, body, recipientName }) {
               style="background-color:${BRAND.dark};border-top:4px solid ${BRAND.red};padding:22px 32px;">
             <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
               <td valign="middle" align="left" style="width:280px;">
-                <table role="presentation" cellpadding="0" cellspacing="0"><tr>
-                  <td valign="middle" style="padding-right:14px;">
-                    <img src="${WHITE_LOGO_URL}" alt="Capsicum" height="38"
-                         style="display:block;height:38px;width:auto;border:0;" />
-                  </td>
-                  <td valign="middle" style="padding:0 14px;border-left:1px solid rgba(255,255,255,0.25);">
-                    <img src="${EMERIS_LOGO_URL}" alt="Emeris" height="32"
-                         style="display:block;height:32px;width:auto;border:0;" />
-                  </td>
-                </tr></table>
+                <img src="${WHITE_LOGO_URL}" alt="Capsicum" height="38"
+                     style="display:block;height:38px;width:auto;border:0;" />
               </td>
               <td valign="middle" align="right" style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">
                 <div style="color:${BRAND.red};font-size:13px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;line-height:1.1;">
@@ -495,7 +487,7 @@ function htmlToPlain(input) {
     .trim();
 }
 
-function buildEmailPdfBuffer({ subject, body, recipientName, whiteLogo, emerisLogo }) {
+function buildEmailPdfBuffer({ subject, body, recipientName, darkLogo, whiteLogo, emerisLogo }) {
   const doc = new jsPDF({ unit: 'pt', format: 'a4' });
   const pageW = doc.internal.pageSize.getWidth();
   const pageH = doc.internal.pageSize.getHeight();
@@ -510,32 +502,32 @@ function buildEmailPdfBuffer({ subject, body, recipientName, whiteLogo, emerisLo
   const cream    = hexToRgb(BRAND.cream);
   const borderC  = hexToRgb(BRAND.border);
 
-  // ---- Top hero band: solid red with centered white logo ----
-  const HERO_H = 90;
-  doc.setFillColor(red[0], red[1], red[2]);
+  // ---- Top hero band: white with right-aligned dark logo ----
+  const HERO_H = 60;
+  doc.setFillColor(255, 255, 255);
   doc.rect(0, 0, pageW, HERO_H, 'F');
 
-  if (whiteLogo && (looksLikePng(whiteLogo) || (!looksLikeSvg(whiteLogo)))) {
+  if (darkLogo && (looksLikePng(darkLogo) || (!looksLikeSvg(darkLogo)))) {
     try {
-      const fmt = looksLikePng(whiteLogo) ? 'PNG' : 'JPEG';
+      const fmt = looksLikePng(darkLogo) ? 'PNG' : 'JPEG';
       const mime = fmt === 'PNG' ? 'png' : 'jpeg';
-      const dataUrl = `data:image/${mime};base64,${whiteLogo.toString('base64')}`;
+      const dataUrl = `data:image/${mime};base64,${darkLogo.toString('base64')}`;
       let ratio = 4;
       try {
         const props = doc.getImageProperties(dataUrl);
         if (props && props.width && props.height) ratio = props.width / props.height;
       } catch { /* ignore */ }
-      const logoH = 46;
+      const logoH = 34;
       const logoW = logoH * ratio;
-      const logoX = (pageW - logoW) / 2;
+      const logoX = pageW - marginX - logoW;
       const logoY = (HERO_H - logoH) / 2;
       doc.addImage(dataUrl, fmt, logoX, logoY, logoW, logoH);
     } catch { /* ignore */ }
   } else {
-    doc.setTextColor(255, 255, 255);
+    doc.setTextColor(dark[0], dark[1], dark[2]);
     doc.setFont('helvetica', 'bold');
-    doc.setFontSize(24);
-    doc.text('CAPSICUM', pageW / 2, HERO_H / 2 + 8, { align: 'center' });
+    doc.setFontSize(20);
+    doc.text('CAPSICUM', pageW - marginX, HERO_H / 2 + 6, { align: 'right' });
   }
 
   // Dark stripe under hero with tagline
@@ -753,24 +745,7 @@ function buildEmailPdfBuffer({ subject, body, recipientName, whiteLogo, emerisLo
     doc.setFontSize(10);
     doc.text('CAPSICUM', marginX, bannerY + bannerH / 2 + 3);
 
-    // Emeris parent-organisation logo, centered
-    if (emerisLogo && (looksLikePng(emerisLogo) || (!looksLikeSvg(emerisLogo)))) {
-      try {
-        const fmt = looksLikePng(emerisLogo) ? 'PNG' : 'JPEG';
-        const mime = fmt === 'PNG' ? 'png' : 'jpeg';
-        const dataUrl = `data:image/${mime};base64,${emerisLogo.toString('base64')}`;
-        let ratio = 3.2;
-        try {
-          const props = doc.getImageProperties(dataUrl);
-          if (props && props.width && props.height) ratio = props.width / props.height;
-        } catch { /* ignore */ }
-        const logoH = 16;
-        const logoW = logoH * ratio;
-        const logoX = (pageW - logoW) / 2;
-        const logoY = bannerY + (bannerH - logoH) / 2;
-        doc.addImage(dataUrl, fmt, logoX, logoY, logoW, logoH);
-      } catch { /* ignore */ }
-    }
+    // Emeris parent-organisation logo removed from bottom band per design.
 
     doc.setTextColor(255, 255, 255);
     doc.setFont('helvetica', 'normal');
@@ -857,8 +832,8 @@ export default async function handler(req, res) {
       return res.end(JSON.stringify({ error: 'Missing required fields: subject, body' }));
     }
     try {
-      const [whiteLogo, emerisLogo] = await Promise.all([loadWhiteLogo(req), loadEmerisLogo(req)]);
-      const pdfBuffer = buildEmailPdfBuffer({ subject, body, recipientName, whiteLogo, emerisLogo });
+      const [darkLogo, whiteLogo, emerisLogo] = await Promise.all([loadDarkLogo(req), loadWhiteLogo(req), loadEmerisLogo(req)]);
+      const pdfBuffer = buildEmailPdfBuffer({ subject, body, recipientName, darkLogo, whiteLogo, emerisLogo });
       res.statusCode = 200;
       res.setHeader('Content-Type', 'application/pdf');
       res.setHeader('Content-Disposition', `inline; filename="${safePdfFilename(subject)}"`);
@@ -949,7 +924,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const pdfBuffer = buildEmailPdfBuffer({ subject, body, recipientName, whiteLogo, emerisLogo });
+    const pdfBuffer = buildEmailPdfBuffer({ subject, body, recipientName, darkLogo, whiteLogo, emerisLogo });
     if (pdfBuffer && pdfBuffer.length) {
       attachments.push({
         filename: safePdfFilename(subject),
