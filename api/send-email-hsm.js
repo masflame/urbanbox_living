@@ -336,11 +336,11 @@ function buildEmailHtml({ subject, body, recipientName }) {
           </td>
         </tr>
 
-        <!-- BOTTOM BRAND BAND: white background with IIE boiler banner, thinner height -->
+        <!-- BOTTOM BRAND BAND: white background with full-width IIE boiler banner -->
         <tr>
-          <td bgcolor="${BRAND.white}" align="center" style="background-color:${BRAND.white};border-top:2px solid ${BRAND.mustard};border-bottom:1px solid ${BRAND.border};padding:8px 32px;">
-            <img src="${BOILER_URL}" alt="The Independent Institute of Education" width="360"
-                 style="display:block;width:100%;max-width:360px;height:auto;border:0;margin:0 auto;" />
+          <td bgcolor="${BRAND.white}" align="center" style="background-color:${BRAND.white};border-top:2px solid ${BRAND.mustard};border-bottom:1px solid ${BRAND.border};padding:0;">
+            <img src="${BOILER_URL}" alt="The Independent Institute of Education" width="660"
+                 style="display:block;width:100%;max-width:660px;height:auto;border:0;margin:0;" />
           </td>
         </tr>
 
@@ -757,7 +757,7 @@ function buildEmailPdfBuffer({ subject, body, recipientName, logo, boiler, emeri
     );
     doc.text(`Page ${p} of ${totalPages}`, pageW - marginX, fy + 42, { align: 'right' });
 
-    // White band with centered boiler image + thin mustard accent above + hairline below
+    // White band with full-width boiler image (height follows image aspect ratio)
     doc.setFillColor(255, 255, 255);
     doc.rect(0, bandTopY, pageW, boilerH, 'F');
     doc.setFillColor(mustard[0], mustard[1], mustard[2]);
@@ -776,11 +776,10 @@ function buildEmailPdfBuffer({ subject, body, recipientName, logo, boiler, emeri
           const props = doc.getImageProperties(dataUrl);
           if (props && props.width && props.height) ratio = props.width / props.height;
         } catch { /* ignore */ }
-        let imgH = boilerH - 8;
-        let imgW = imgH * ratio;
-        const maxW = 260;
-        if (imgW > maxW) { imgW = maxW; imgH = imgW / ratio; }
-        const imgX = (pageW - imgW) / 2;
+        const imgW = pageW;
+        let imgH = imgW / ratio;
+        if (imgH > boilerH) imgH = boilerH;
+        const imgX = 0;
         const imgY = bandTopY + (boilerH - imgH) / 2;
         doc.addImage(dataUrl, fmt, imgX, imgY, imgW, imgH);
       } catch { /* ignore */ }
