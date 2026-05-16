@@ -52,13 +52,16 @@ const CONTACT = {
 // ---------- Logo / banner (fetched once, embedded as CID) ----------
 let DARK_LOGO_BUFFER = null;
 let WHITE_LOGO_BUFFER = null;
+let EMERIS_LOGO_BUFFER = null;
 let BANNER_BUFFER = null;
-const DARK_LOGO_CID  = 'vega-dark-logo@vega';
-const WHITE_LOGO_CID = 'vega-white-logo@vega';
-const BANNER_CID     = 'vega-banner@vega';
-const DARK_LOGO_URL  = `cid:${DARK_LOGO_CID}`;
-const WHITE_LOGO_URL = `cid:${WHITE_LOGO_CID}`;
-const BANNER_URL     = `cid:${BANNER_CID}`;
+const DARK_LOGO_CID    = 'vega-dark-logo@vega';
+const WHITE_LOGO_CID   = 'vega-white-logo@vega';
+const EMERIS_LOGO_CID  = 'emeris-white-logo@vega';
+const BANNER_CID       = 'vega-banner@vega';
+const DARK_LOGO_URL    = `cid:${DARK_LOGO_CID}`;
+const WHITE_LOGO_URL   = `cid:${WHITE_LOGO_CID}`;
+const EMERIS_LOGO_URL  = `cid:${EMERIS_LOGO_CID}`;
+const BANNER_URL       = `cid:${BANNER_CID}`;
 
 async function fetchFirst(urls) {
   for (const url of urls.filter(Boolean)) {
@@ -100,6 +103,17 @@ async function loadWhiteLogo(req) {
     process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}/vega_white_footer_logo.png` : null,
   ]);
   return WHITE_LOGO_BUFFER;
+}
+
+async function loadEmerisLogo(req) {
+  if (EMERIS_LOGO_BUFFER) return EMERIS_LOGO_BUFFER;
+  const base = buildBaseUrl(req);
+  EMERIS_LOGO_BUFFER = await fetchFirst([
+    process.env.EMERIS_WHITE_LOGO_URL,
+    base ? `${base}/emeris-logo-transparent-whiet-color.png` : null,
+    process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}/emeris-logo-transparent-whiet-color.png` : null,
+  ]);
+  return EMERIS_LOGO_BUFFER;
 }
 
 async function loadBanner(req) {
@@ -336,9 +350,17 @@ function buildEmailHtml({ subject, body, recipientName }) {
                 style="background-color:${BRAND.purple};border-top:4px solid ${BRAND.yellow};padding:22px 32px;">
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
                 <tr>
-                  <td valign="middle" align="left" style="width:200px;">
-                    <img src="${WHITE_LOGO_URL}" alt="Vega School" height="44"
-                         style="display:block;height:44px;width:auto;border:0;" />
+                  <td valign="middle" align="left" style="width:260px;">
+                    <table role="presentation" cellpadding="0" cellspacing="0"><tr>
+                      <td valign="middle" style="padding-right:14px;">
+                        <img src="${WHITE_LOGO_URL}" alt="Vega School" height="44"
+                             style="display:block;height:44px;width:auto;border:0;" />
+                      </td>
+                      <td valign="middle" style="padding:0 14px;border-left:1px solid rgba(255,255,255,0.25);">
+                        <img src="${EMERIS_LOGO_URL}" alt="Emeris" height="38"
+                             style="display:block;height:38px;width:auto;border:0;" />
+                      </td>
+                    </tr></table>
                   </td>
                   <td valign="middle" align="right" style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">
                     <div style="color:${BRAND.yellow};font-size:13px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;line-height:1.1;">
@@ -493,7 +515,7 @@ function htmlToPlain(input) {
     .trim();
 }
 
-function buildEmailPdfBuffer({ subject, body, recipientName, banner }) {
+function buildEmailPdfBuffer({ subject, body, recipientName, banner, emerisLogo }) {
   const doc = new jsPDF({ unit: 'pt', format: 'a4' });
   const pageW = doc.internal.pageSize.getWidth();
   const pageH = doc.internal.pageSize.getHeight();
@@ -765,6 +787,26 @@ function buildEmailPdfBuffer({ subject, body, recipientName, banner }) {
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(10);
     doc.text('VEGA SCHOOL', marginX, bannerY + bannerH / 2 + 3);
+
+    // Emeris parent-organisation logo, centered
+    if (emerisLogo && (looksLikePng(emerisLogo) || (!looksLikeSvg(emerisLogo)))) {
+      try {
+        const fmt = looksLikePng(emerisLogo) ? 'PNG' : 'JPEG';
+        const mime = fmt === 'PNG' ? 'png' : 'jpeg';
+        const dataUrl = `data:image/${mime};base64,${emerisLogo.toString('base64')}`;
+        let ratio = 3.2;
+        try {
+          const props = doc.getImageProperties(dataUrl);
+          if (props && props.width && props.height) ratio = props.width / props.height;
+        } catch { /* ignore */ }
+        const logoH = 16;
+        const logoW = logoH * ratio;
+        const logoX = (pageW - logoW) / 2;
+        const logoY = bannerY + (bannerH - logoH) / 2;
+        doc.addImage(dataUrl, fmt, logoX, logoY, logoW, logoH);
+      } catch { /* ignore */ }
+    }
+
     doc.setTextColor(255, 255, 255);
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(9);
@@ -851,7 +893,8 @@ export default async function handler(req, res) {
     }
     try {
       const banner = await loadBanner(req);
-      const pdfBuffer = buildEmailPdfBuffer({ subject, body, recipientName, banner });
+      const emerisLogo = await loadEmerisLogo(req);
+      const pdfBuffer = buildEmailPdfBuffer({ subject, body, recipientName, banner, emerisLogo });
       res.statusCode = 200;
       res.setHeader('Content-Type', 'application/pdf');
       res.setHeader('Content-Disposition', `inline; filename="${safePdfFilename(subject)}"`);
@@ -908,8 +951,8 @@ export default async function handler(req, res) {
 
   const html = buildEmailHtml({ subject, body, recipientName });
   const text = buildPlainText({ subject, body, recipientName });
-  const [darkLogo, whiteLogo, banner] = await Promise.all([
-    loadDarkLogo(req), loadWhiteLogo(req), loadBanner(req),
+  const [darkLogo, whiteLogo, emerisLogo, banner] = await Promise.all([
+    loadDarkLogo(req), loadWhiteLogo(req), loadEmerisLogo(req), loadBanner(req),
   ]);
 
   const attachments = [];
@@ -931,6 +974,15 @@ export default async function handler(req, res) {
       contentType: isSvg ? 'image/svg+xml' : (looksLikePng(whiteLogo) ? 'image/png' : 'image/jpeg'),
     });
   }
+  if (emerisLogo) {
+    const isSvg = looksLikeSvg(emerisLogo);
+    attachments.push({
+      filename: isSvg ? 'emeris-white-logo.svg' : 'emeris-white-logo.png',
+      content: emerisLogo,
+      cid: EMERIS_LOGO_CID,
+      contentType: isSvg ? 'image/svg+xml' : (looksLikePng(emerisLogo) ? 'image/png' : 'image/jpeg'),
+    });
+  }
   if (banner) {
     const isPng = looksLikePng(banner);
     attachments.push({
@@ -942,7 +994,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const pdfBuffer = buildEmailPdfBuffer({ subject, body, recipientName, banner });
+    const pdfBuffer = buildEmailPdfBuffer({ subject, body, recipientName, banner, emerisLogo });
     if (pdfBuffer && pdfBuffer.length) {
       attachments.push({
         filename: safePdfFilename(subject),

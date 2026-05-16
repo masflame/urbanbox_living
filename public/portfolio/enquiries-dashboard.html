@@ -3644,6 +3644,7 @@
         const origin = window.location.origin || 'https://urbanboxliving.vercel.app';
         const VEG_BANNER_URL     = origin + '/vega-school-emeris-banner.jpg';
         const VEG_WHITE_LOGO_URL = origin + '/vega_white_footer_logo.png';
+        const EMERIS_WHITE_LOGO_URL = origin + '/emeris-logo-transparent-whiet-color.png';
 
         function escHtml(s) {
           return String(s == null ? '' : s)
@@ -3766,8 +3767,15 @@
   </td></tr>
   <tr><td bgcolor="${B.purple}" valign="middle" style="background-color:${B.purple};border-top:4px solid ${B.yellow};padding:22px 32px;">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
-      <td valign="middle" align="left" style="width:200px;">
-        <img src="${VEG_WHITE_LOGO_URL}" alt="Vega School" height="44" style="display:block;height:44px;width:auto;border:0;" />
+      <td valign="middle" align="left" style="width:260px;">
+        <table role="presentation" cellpadding="0" cellspacing="0"><tr>
+          <td valign="middle" style="padding-right:14px;">
+            <img src="${VEG_WHITE_LOGO_URL}" alt="Vega School" height="44" style="display:block;height:44px;width:auto;border:0;" />
+          </td>
+          <td valign="middle" style="padding:0 14px;border-left:1px solid rgba(255,255,255,0.25);">
+            <img src="${EMERIS_WHITE_LOGO_URL}" alt="Emeris" height="38" style="display:block;height:38px;width:auto;border:0;" />
+          </td>
+        </tr></table>
       </td>
       <td valign="middle" align="right" style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">
         <div style="color:${B.yellow};font-size:13px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;line-height:1.1;">Admissions Office</div>
