@@ -243,16 +243,6 @@ function buildEmailHtml({ subject, body, recipientName }) {
           </td>
         </tr>
 
-        <!-- Thin dark tagline strip under hero -->
-        <tr>
-          <td bgcolor="${BRAND.dark}" align="center"
-              style="background-color:${BRAND.dark};padding:10px 32px;font-family:Arial,Helvetica,sans-serif;">
-            <div style="color:${BRAND.white};font-size:11px;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;line-height:1.2;">
-              ${escapeHtml(CONTACT.tagline)}
-            </div>
-          </td>
-        </tr>
-
         <!-- Date + contact info bar (light grey) -->
         <tr>
           <td style="background:${BRAND.cream};padding:10px 32px;font-family:Arial,Helvetica,sans-serif;border-bottom:1px solid ${BRAND.border};">
@@ -530,18 +520,8 @@ function buildEmailPdfBuffer({ subject, body, recipientName, darkLogo, whiteLogo
     doc.text('CAPSICUM', pageW - marginX, HERO_H / 2 + 6, { align: 'right' });
   }
 
-  // Dark stripe under hero with tagline
-  const taglineH = 18;
-  const taglineY = HERO_H;
-  doc.setFillColor(dark[0], dark[1], dark[2]);
-  doc.rect(0, taglineY, pageW, taglineH, 'F');
-  doc.setTextColor(255, 255, 255);
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(8);
-  doc.text(String(CONTACT.tagline).toUpperCase(), pageW / 2, taglineY + taglineH / 2 + 3, { align: 'center' });
-
-  // Cream info strip with date + contact
-  const stripY = taglineY + taglineH;
+  // Cream info strip with date + contact (placed directly under hero)
+  const stripY = HERO_H;
   const stripH = 24;
   doc.setFillColor(cream[0], cream[1], cream[2]);
   doc.rect(0, stripY, pageW, stripH, 'F');
