@@ -259,10 +259,6 @@ function buildEmailHtml({ subject, body, recipientName }) {
                      style="display:block;height:64px;width:auto;border:0;" />
               </td>
               <td valign="middle" align="right" style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">
-                <div style="margin-bottom:6px;">
-                  <img src="${IIE_LOGO_URL}" alt="The Independent Institute of Education" height="22"
-                       style="display:inline-block;height:22px;width:auto;border:0;vertical-align:middle;" />
-                </div>
                 <div style="color:${BRAND.red};font-size:11px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;line-height:1.2;">
                   Admissions Office
                 </div>
@@ -557,25 +553,9 @@ function buildEmailPdfBuffer({ subject, body, recipientName, logo, iieLogo, foot
     doc.text('IIE MSA', marginX, HERO_H / 2 + 6);
   }
 
-  // Right column: small IIE logo + ADMISSIONS OFFICE + tagline + web
+  // Right column: ADMISSIONS OFFICE + tagline + web
   const rightX = pageW - marginX;
   let rTopY = 24;
-  if (iieLogo && (looksLikePng(iieLogo) || (!looksLikeSvg(iieLogo)))) {
-    try {
-      const fmt = looksLikePng(iieLogo) ? 'PNG' : 'JPEG';
-      const mime = fmt === 'PNG' ? 'png' : 'jpeg';
-      const dataUrl = `data:image/${mime};base64,${iieLogo.toString('base64')}`;
-      let ratio = 2.5;
-      try {
-        const props = doc.getImageProperties(dataUrl);
-        if (props && props.width && props.height) ratio = props.width / props.height;
-      } catch { /* ignore */ }
-      const iieH = 18;
-      const iieW = iieH * ratio;
-      doc.addImage(dataUrl, fmt, rightX - iieW, rTopY, iieW, iieH);
-      rTopY += iieH + 6;
-    } catch { /* ignore */ }
-  }
   doc.setTextColor(red[0], red[1], red[2]);
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(8);
@@ -1008,15 +988,6 @@ export default async function handler(req, res) {
       content: logo,
       cid: LOGO_CID,
       contentType: isSvg ? 'image/svg+xml' : (looksLikePng(logo) ? 'image/png' : 'image/jpeg'),
-    });
-  }
-  if (iieLogo) {
-    const isSvg = looksLikeSvg(iieLogo);
-    attachments.push({
-      filename: isSvg ? 'iie-logo.svg' : 'iie-logo.png',
-      content: iieLogo,
-      cid: IIE_LOGO_CID,
-      contentType: isSvg ? 'image/svg+xml' : (looksLikePng(iieLogo) ? 'image/png' : 'image/jpeg'),
     });
   }
   if (footer) {
