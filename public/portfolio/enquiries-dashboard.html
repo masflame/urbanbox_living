@@ -378,6 +378,10 @@
         <svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M4 4l8 8 8-8"/></svg>
         Email Sender 4
       </div>
+      <div class="nav-item" data-tab="email5">
+        <svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M4 4l8 8 8-8"/></svg>
+        Email Sender 5
+      </div>
     </div>
     <div class="sidebar-section" style="padding-top:8px;">
       <div class="sidebar-section-label">Settings</div>
@@ -1040,6 +1044,127 @@
         </div>
       </div>
       <!-- =================== END EMAIL SENDER 4 TAB =================== -->
+
+      <!-- ===================== EMAIL SENDER 5 (CAPSICUM CULINARY STUDIO) TAB ===================== -->
+      <div class="tab-email" id="email5TabPane">
+        <div class="email-grid">
+          <div class="email-card">
+            <div class="email-card-head">
+              <div>
+                <div class="email-card-title">Compose Capsicum Culinary correspondence</div>
+                <div class="email-card-sub">Used for Capsicum Admissions, Student Accounts &amp; campus notices. Sends with the minimalistic red Capsicum hero, dark tagline strip and Emeris parent-org footer.</div>
+              </div>
+            </div>
+            <form id="email5Form" class="email-form">
+              <div class="email-row two">
+                <label class="email-field">
+                  <span class="email-label">Recipient email <span class="email-req">*</span></span>
+                  <input type="email" id="email5To" name="email" autocomplete="email" placeholder="student@example.com" required />
+                </label>
+                <label class="email-field">
+                  <span class="email-label">Recipient name (optional)</span>
+                  <input type="text" id="email5RecipientName" name="name" autocomplete="name" placeholder="e.g. Thandi Nkosi" />
+                </label>
+              </div>
+              <div class="email-row two">
+                <label class="email-field">
+                  <span class="email-label">CC (optional)</span>
+                  <input type="text" id="email5Cc" placeholder="comma,separated@emails.com" />
+                </label>
+                <label class="email-field">
+                  <span class="email-label">BCC (optional)</span>
+                  <input type="text" id="email5Bcc" placeholder="comma,separated@emails.com" />
+                </label>
+              </div>
+              <label class="email-field">
+                <span class="email-label">Subject <span class="email-req">*</span></span>
+                <input type="text" id="email5Subject" placeholder="e.g. Your 2026 Capsicum Application Status" required />
+              </label>
+              <label class="email-field">
+                <span class="email-label">Body <span class="email-req">*</span></span>
+                <div class="email-editor-wrap">
+                  <div class="email-toolbar" id="email5Toolbar" role="toolbar" aria-label="Formatting">
+                    <button type="button" class="etb-btn" data-cmd="bold" title="Bold (Ctrl+B)"><b>B</b></button>
+                    <button type="button" class="etb-btn" data-cmd="italic" title="Italic (Ctrl+I)"><i>I</i></button>
+                    <button type="button" class="etb-btn" data-cmd="underline" title="Underline (Ctrl+U)"><u>U</u></button>
+                    <button type="button" class="etb-btn" data-cmd="strikeThrough" title="Strikethrough"><s>S</s></button>
+                    <span class="etb-sep"></span>
+                    <select class="etb-select" id="etb5Format" title="Heading / paragraph">
+                      <option value="P">Paragraph</option>
+                      <option value="H2">Heading 2</option>
+                      <option value="H3">Heading 3</option>
+                      <option value="BLOCKQUOTE">Quote</option>
+                    </select>
+                    <span class="etb-sep"></span>
+                    <button type="button" class="etb-btn" data-cmd="insertUnorderedList" title="Bullet list">&bull; List</button>
+                    <button type="button" class="etb-btn" data-cmd="insertOrderedList" title="Numbered list">1. List</button>
+                    <button type="button" class="etb-btn" data-cmd="outdent" title="Outdent (Shift+Tab)">&#8676;|</button>
+                    <button type="button" class="etb-btn" data-cmd="indent" title="Indent (Tab)">|&#8677;</button>
+                    <span class="etb-sep"></span>
+                    <button type="button" class="etb-btn" data-cmd="justifyLeft" title="Align left">&#8676;</button>
+                    <button type="button" class="etb-btn" data-cmd="justifyCenter" title="Align centre">&#8801;</button>
+                    <button type="button" class="etb-btn" data-cmd="justifyRight" title="Align right">&#8677;</button>
+                    <span class="etb-sep"></span>
+                    <button type="button" class="etb-btn" id="etb5Link" title="Insert link">&#128279; Link</button>
+                    <button type="button" class="etb-btn" id="etb5Button" title="Insert button">&#9634; Button</button>
+                    <button type="button" class="etb-btn" id="etb5Color" title="Brand red colour" style="color:#E11E2C;font-weight:700;">A</button>
+                    <span class="etb-sep"></span>
+                    <button type="button" class="etb-btn" data-cmd="removeFormat" title="Clear formatting">&#10005; Clear</button>
+                  </div>
+                  <div id="email5Body" class="email-editor" contenteditable="true" role="textbox" aria-multiline="true"
+                       data-placeholder="Write your message here. Use the toolbar above for bold, lists, links and more."></div>
+                </div>
+                <span class="email-hint">Tip: select text then click a button. Ctrl+B / Ctrl+I / Ctrl+U also work. URLs become clickable in the email.</span>
+              </label>
+              <label class="email-field email-important-field">
+                <input type="checkbox" id="email5Important" checked />
+                <span>Mark as <strong>important / high priority</strong> in the recipient's inbox</span>
+              </label>
+              <div class="email-field">
+                <span class="email-label">Attachments (optional)</span>
+                <label class="email-attach-drop" id="email5AttachDrop">
+                  <div class="email-attach-drop-inner">
+                    <svg viewBox="0 0 24 24"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+                    <span><strong>Click to add files</strong> or drag &amp; drop here &mdash; images, PDFs, docs (up to ~15&nbsp;MB total)</span>
+                  </div>
+                  <input type="file" id="email5AttachInput" multiple
+                         accept="image/*,application/pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.zip" />
+                </label>
+                <div class="email-attach-list" id="email5AttachList"></div>
+                <div class="email-attach-total" id="email5AttachTotal" style="display:none;"></div>
+              </div>
+              <div class="email-actions">
+                <button type="button" class="btn" id="email5PreviewBtn">
+                  <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  Preview
+                </button>
+                <button type="submit" class="btn email-send-btn" id="email5SendBtn">
+                  <svg viewBox="0 0 24 24"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></svg>
+                  Send email
+                </button>
+              </div>
+              <div id="email5Status" class="email-status" style="display:none;"></div>
+            </form>
+          </div>
+
+          <div class="email-card email-preview-card">
+            <div class="email-card-head">
+              <div>
+                <div class="email-card-title">Live preview</div>
+                <div class="email-card-sub">This is roughly how the recipient will see your message.</div>
+              </div>
+              <div class="preview-mode-toggle" id="email5PreviewToggle">
+                <button type="button" class="active" data-mode="email">Email</button>
+                <button type="button" data-mode="pdf">PDF</button>
+              </div>
+            </div>
+            <div class="email-preview-frame">
+              <iframe id="email5PreviewFrame" title="Email preview" sandbox></iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- =================== END EMAIL SENDER 5 TAB =================== -->
     </div>
   </div>
 
@@ -1579,6 +1704,8 @@
         if (email3TabPaneEl) email3TabPaneEl.style.display = 'none';
         const email4TabPaneEl = document.getElementById('email4TabPane');
         if (email4TabPaneEl) email4TabPaneEl.style.display = 'none';
+        const email5TabPaneEl = document.getElementById('email5TabPane');
+        if (email5TabPaneEl) email5TabPaneEl.style.display = 'none';
 
         if (tab === 'analytics') {
           analyticsTabPane.style.display = 'flex';
@@ -1611,6 +1738,13 @@
           if (email4TabPaneEl) email4TabPaneEl.style.display = 'block';
           breadcrumbCurrent.textContent = 'Email Sender 4 (Vega School)';
           if (typeof updateEmail4Preview === 'function') updateEmail4Preview();
+          return;
+        }
+
+        if (tab === 'email5') {
+          if (email5TabPaneEl) email5TabPaneEl.style.display = 'block';
+          breadcrumbCurrent.textContent = 'Email Sender 5 (Capsicum Culinary)';
+          if (typeof updateEmail5Preview === 'function') updateEmail5Preview();
           return;
         }
 
@@ -4129,6 +4263,546 @@
         });
       })();
       // ============ END EMAIL SENDER 4 ============
+
+      // ============== EMAIL SENDER 5 (CAPSICUM CULINARY STUDIO) ==============
+      (function setupCapsicumSender() {
+        const form          = document.getElementById('email5Form');
+        if (!form) return;
+        const toInput       = document.getElementById('email5To');
+        const recipientName = document.getElementById('email5RecipientName');
+        const ccInput       = document.getElementById('email5Cc');
+        const bccInput      = document.getElementById('email5Bcc');
+        const subjectInput  = document.getElementById('email5Subject');
+        const bodyInput     = document.getElementById('email5Body');
+        const previewBtn    = document.getElementById('email5PreviewBtn');
+        const sendBtn       = document.getElementById('email5SendBtn');
+        const statusEl      = document.getElementById('email5Status');
+        const previewFrame  = document.getElementById('email5PreviewFrame');
+        const importantChk  = document.getElementById('email5Important');
+        const attachInput   = document.getElementById('email5AttachInput');
+        const attachDrop    = document.getElementById('email5AttachDrop');
+        const attachListEl  = document.getElementById('email5AttachList');
+        const attachTotalEl = document.getElementById('email5AttachTotal');
+        const toolbar       = document.getElementById('email5Toolbar');
+        const formatSel     = document.getElementById('etb5Format');
+        const linkBtn       = document.getElementById('etb5Link');
+        const colorBtn      = document.getElementById('etb5Color');
+        const buttonBtn     = document.getElementById('etb5Button');
+
+        const MAX_TOTAL = 15 * 1024 * 1024;
+        let pending = [];
+
+        const CAP_BRAND = {
+          red:      '#E11E2C',
+          charcoal: '#333333',
+          dark:     '#1A1A1A',
+          grey:     '#7E7E7E',
+          neutral:  '#EEEEEE',
+          border:   '#DDDDDD',
+          white:    '#FFFFFF',
+          cream:    '#FAFAFA',
+        };
+        const CAP_CONTACT = {
+          name:     'Capsicum Culinary Studio',
+          tagline:  'South Africa\u2019s leading culinary institution.',
+          phone:    '0860 109 109',
+          whatsapp: '087 153 4452',
+          email:    'info@capsicumcooking.com',
+          enquire:  'www.capsicumcooking.com/enquire-now',
+          web:      'www.capsicumcooking.com',
+          address:  'Capsicum Culinary Studio \u2014 Cape Town, Johannesburg, Pretoria, Durban & Port Elizabeth campuses',
+          legal:    'Capsicum Culinary Studio is an educational brand operated under the Emeris group. Registered with the DHET as a private higher education institution and with the QCTO.',
+        };
+        const origin = window.location.origin || 'https://urbanboxliving.vercel.app';
+        const CAP_WHITE_LOGO_URL = origin + '/capsicum_white_logo.png';
+        const EMERIS_WHITE_LOGO_URL = origin + '/emeris-logo-transparent-whiet-color.png';
+
+        function escHtml(s) {
+          return String(s == null ? '' : s)
+            .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+            .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+        }
+        function bodyToHtml(input) {
+          const raw = String(input == null ? '' : input);
+          const isHtml = /<[a-z][\s\S]*>/i.test(raw);
+          if (isHtml) {
+            let html = raw.replace(/<a\b([^>]*)>/gi, (m, attrs) => {
+              if (/\bdata-cta\b/i.test(attrs || '')) return m;
+              let a = attrs || '';
+              let existingStyle = '';
+              a = a.replace(/\sstyle\s*=\s*"([^"]*)"/i, (mm, s) => { existingStyle = s; return ''; });
+              a = a.replace(/\sstyle\s*=\s*'([^']*)'/i, (mm, s) => { existingStyle = s; return ''; });
+              a = a.replace(/\starget\s*=\s*("[^"]*"|'[^']*'|[^\s>]+)/gi, '');
+              a = a.replace(/\srel\s*=\s*("[^"]*"|'[^']*'|[^\s>]+)/gi, '');
+              const baseStyle = `color:${CAP_BRAND.red};text-decoration:underline;font-weight:600;`;
+              const finalStyle = existingStyle
+                ? `${baseStyle}${existingStyle.replace(/;?\s*$/, ';')}`
+                : baseStyle;
+              return `<a${a} target="_blank" rel="noopener noreferrer" style="${finalStyle}">`;
+            });
+            const parts = html.split(/(<a\b[^>]*>[\s\S]*?<\/a>)/i);
+            for (let i = 0; i < parts.length; i++) {
+              if (i % 2 === 1) continue;
+              parts[i] = parts[i].replace(
+                /(^|[^"'>=])(https?:\/\/[^\s<"']+)/g,
+                (m, pre, u) => `${pre}<a href="${u}" target="_blank" rel="noopener noreferrer" style="color:${CAP_BRAND.red};text-decoration:underline;font-weight:600;">${u}</a>`
+              );
+            }
+            let joined = parts.join('');
+            joined = joined.replace(/<([a-z][a-z0-9]*)\b([^>]*?)>/gi, (m, tag, attrs) => {
+              if (/\bdata-cta\b/i.test(attrs)) return m;
+              const t = tag.toLowerCase();
+              if (t === 'a' || t === 'img') return m;
+              const newAttrs = attrs.replace(/\sstyle\s*=\s*("[^"]*"|'[^']*')/i, (sm, sv) => {
+                const quote = sv[0];
+                let css = sv.slice(1, -1);
+                css = css
+                  .replace(/(^|;)\s*background(-color|-image)?\s*:[^;]*/gi, '$1')
+                  .replace(/^\s*;+/, '')
+                  .replace(/;\s*;+/g, ';')
+                  .trim();
+                return css ? ` style=${quote}${css}${quote}` : '';
+              });
+              return `<${tag}${newAttrs}>`;
+            });
+            joined = joined
+              .replace(/<ul\b([^>]*)>/gi, (m, attrs) => {
+                const a = (attrs || '').replace(/\sstyle\s*=\s*("[^"]*"|'[^']*')/i, '');
+                return `<ul${a} style="list-style-type:disc;padding-left:24px;margin:0 0 14px 0;">`;
+              })
+              .replace(/<ol\b([^>]*)>/gi, (m, attrs) => {
+                const a = (attrs || '').replace(/\sstyle\s*=\s*("[^"]*"|'[^']*')/i, '');
+                return `<ol${a} style="list-style-type:decimal;padding-left:24px;margin:0 0 14px 0;">`;
+              })
+              .replace(/<li\b([^>]*)>/gi, (m, attrs) => {
+                const a = (attrs || '').replace(/\sstyle\s*=\s*("[^"]*"|'[^']*')/i, '');
+                return `<li${a} style="margin:4px 0;line-height:1.6;color:${CAP_BRAND.charcoal};">`;
+              });
+            return `<div style="line-height:1.65;color:${CAP_BRAND.charcoal};font-size:15px;">${joined}</div>`;
+          }
+          const escaped = escHtml(raw);
+          const linked = escaped.replace(/\b(https?:\/\/[^\s<]+)/g,
+            (u) => `<a href="${u}" target="_blank" rel="noopener noreferrer" style="color:${CAP_BRAND.red};text-decoration:underline;font-weight:600;">${u}</a>`);
+          return linked
+            .split(/\n{2,}/)
+            .map(p => `<p style="margin:0 0 14px 0;line-height:1.65;color:${CAP_BRAND.charcoal};font-size:15px;">${p.replace(/\n/g,'<br/>')}</p>`)
+            .join('');
+        }
+
+        function buildPreviewHtml({ subject, body, recipientName }) {
+          const today = new Date().toLocaleDateString('en-GB', { day:'2-digit', month:'long', year:'numeric' });
+          const greeting = recipientName ? `Dear ${escHtml(recipientName)},` : 'Dear Student,';
+          const subj = subject || 'Your subject will appear here';
+          const bodyHtml = body
+            ? bodyToHtml(body)
+            : `<p style="margin:0;color:${CAP_BRAND.grey};font-style:italic;font-size:14px;">Your message body will appear here…</p>`;
+          const B = CAP_BRAND, C = CAP_CONTACT;
+          return `<!DOCTYPE html><html><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/></head>
+<body style="margin:0;padding:0;background:${B.neutral};font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="padding:24px 0;">
+<tr><td align="center">
+<table role="presentation" width="660" cellpadding="0" cellspacing="0" style="width:660px;max-width:96%;background:${B.white};border:1px solid ${B.border};box-shadow:0 8px 24px rgba(0,0,0,0.10);">
+  <tr><td bgcolor="${B.red}" align="center" valign="middle" style="background-color:${B.red};padding:34px 32px;border-bottom:4px solid ${B.dark};">
+    <img src="${CAP_WHITE_LOGO_URL}" alt="Capsicum Culinary Studio" height="58" style="display:block;height:58px;width:auto;border:0;margin:0 auto;" />
+  </td></tr>
+  <tr><td bgcolor="${B.dark}" align="center" style="background-color:${B.dark};padding:10px 32px;font-family:Arial,Helvetica,sans-serif;">
+    <div style="color:${B.white};font-size:11px;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;line-height:1.2;">${escHtml(C.tagline)}</div>
+  </td></tr>
+  <tr><td style="background:${B.cream};padding:10px 32px;font-family:Arial,Helvetica,sans-serif;border-bottom:1px solid ${B.border};">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+      <td valign="middle" style="color:${B.charcoal};font-size:11px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;">${today}</td>
+      <td valign="middle" align="right" style="color:${B.charcoal};font-size:11px;font-weight:700;">${C.phone} &nbsp;&middot;&nbsp; ${C.email} &nbsp;&middot;&nbsp; ${C.web}</td>
+    </tr></table>
+  </td></tr>
+  <tr><td style="padding:28px 36px 8px 36px;">
+    <div style="font-size:11px;letter-spacing:0.16em;color:${B.grey};text-transform:uppercase;font-weight:700;font-family:Arial,Helvetica,sans-serif;">Subject</div>
+    <div style="font-size:21px;font-weight:700;color:${B.dark};margin-top:6px;line-height:1.3;">${escHtml(subj)}</div>
+    <div style="height:3px;width:56px;background:${B.red};margin-top:14px;"></div>
+  </td></tr>
+  <tr><td style="padding:18px 36px 8px 36px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">
+    <p style="margin:0 0 16px 0;font-size:15px;color:${B.dark};font-weight:700;">${greeting}</p>
+    ${bodyHtml}
+  </td></tr>
+  <tr><td style="padding:8px 36px 28px 36px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">
+    <p style="margin:0 0 6px 0;font-size:15px;color:${B.charcoal};">Yours sincerely,</p>
+    <p style="margin:0;font-size:15px;color:${B.dark};font-weight:700;">Capsicum Admissions &amp; Student Accounts</p>
+    <p style="margin:2px 0 0 0;font-size:12px;color:${B.grey};font-style:italic;">${escHtml(C.tagline)}</p>
+  </td></tr>
+  <tr><td style="padding:0 36px;"><div style="height:1px;background:${B.border};"></div></td></tr>
+  <tr><td style="padding:18px 36px 24px 36px;background:${B.cream};font-family:Arial,Helvetica,sans-serif;">
+    <div style="font-size:11px;color:${B.grey};line-height:1.6;">
+      <strong style="color:${B.dark};">${C.name}</strong><br/>
+      ${escHtml(C.address)}<br/>
+      Tel: ${C.phone} &middot; Whatsapp: ${C.whatsapp}<br/>
+      Email: <a href="mailto:${C.email}" style="color:${B.red};text-decoration:none;font-weight:600;">${C.email}</a>
+      &middot; Enquire: <a href="https://${C.enquire}" style="color:${B.red};text-decoration:none;font-weight:600;">${C.enquire}</a><br/>
+      Web: <a href="https://${C.web}" style="color:${B.red};text-decoration:none;font-weight:600;">${C.web}</a>
+    </div>
+  </td></tr>
+  <tr><td bgcolor="${B.dark}" valign="middle" style="background-color:${B.dark};border-top:4px solid ${B.red};padding:22px 32px;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+      <td valign="middle" align="left" style="width:280px;">
+        <table role="presentation" cellpadding="0" cellspacing="0"><tr>
+          <td valign="middle" style="padding-right:14px;">
+            <img src="${CAP_WHITE_LOGO_URL}" alt="Capsicum" height="38" style="display:block;height:38px;width:auto;border:0;" />
+          </td>
+          <td valign="middle" style="padding:0 14px;border-left:1px solid rgba(255,255,255,0.25);">
+            <img src="${EMERIS_WHITE_LOGO_URL}" alt="Emeris" height="32" style="display:block;height:32px;width:auto;border:0;" />
+          </td>
+        </tr></table>
+      </td>
+      <td valign="middle" align="right" style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">
+        <div style="color:${B.red};font-size:13px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;line-height:1.1;">Admissions Office</div>
+        <div style="color:${B.white};font-size:12px;margin-top:4px;line-height:1.3;">${escHtml(C.tagline)}</div>
+        <div style="color:#CFCFCF;font-size:11px;margin-top:2px;line-height:1.3;font-weight:600;">${C.email}</div>
+      </td>
+    </tr></table>
+  </td></tr>
+  <tr><td style="background:${B.charcoal};padding:12px 32px;font-family:Arial,Helvetica,sans-serif;">
+    <div style="color:#CFCFCF;font-size:9.5px;line-height:1.5;text-align:center;">${escHtml(C.legal)}</div>
+  </td></tr>
+  <tr><td style="height:6px;background:${B.red};line-height:6px;font-size:0;">&nbsp;</td></tr>
+</table>
+</td></tr></table></body></html>`;
+        }
+
+        function getBodyHtml() {
+          return (bodyInput.innerHTML || '').replace(/^(\s*<br\s*\/?\s*>)+/i, '').trim();
+        }
+        function getBodyText() {
+          return (bodyInput.textContent || '').trim();
+        }
+        function updatePreview() {
+          if (previewMode === 'pdf') {
+            renderPdfPreview();
+            return;
+          }
+          const html = buildPreviewHtml({
+            subject: subjectInput.value.trim(),
+            body: getBodyHtml(),
+            recipientName: recipientName.value.trim(),
+          });
+          try {
+            if (previewBlobUrl) { URL.revokeObjectURL(previewBlobUrl); previewBlobUrl = null; }
+            previewFrame.removeAttribute('src');
+            previewFrame.removeAttribute('srcdoc');
+            previewFrame.srcdoc = html;
+          }
+          catch (_) {
+            const doc = previewFrame.contentDocument || previewFrame.contentWindow.document;
+            doc.open(); doc.write(html); doc.close();
+          }
+        }
+        window.updateEmail5Preview = updatePreview;
+
+        let previewMode = 'email';
+        let previewBlobUrl = null;
+        let pdfReqSeq = 0;
+        async function renderPdfPreview() {
+          const subject = subjectInput.value.trim();
+          const body    = getBodyHtml();
+          if (!subject || !body) {
+            previewFrame.removeAttribute('src');
+            previewFrame.srcdoc = `<html><body style="font-family:system-ui;padding:24px;color:#666;background:${CAP_BRAND.neutral};">Add a subject and body to preview the PDF letter.</body></html>`;
+            return;
+          }
+          const seq = ++pdfReqSeq;
+          previewFrame.removeAttribute('src');
+          previewFrame.srcdoc = `<html><body style="font-family:system-ui;padding:24px;color:#666;background:${CAP_BRAND.neutral};">Generating PDF preview\u2026</body></html>`;
+          try {
+            const token = getAdminToken();
+            const res = await fetch('/api/send-email-capsicum', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', 'x-admin-token': token || '' },
+              body: JSON.stringify({
+                subject, body,
+                recipientName: recipientName.value.trim(),
+                previewPdf: true,
+              }),
+            });
+            if (seq !== pdfReqSeq) return;
+            if (!res.ok) {
+              let msg = res.statusText;
+              try { const j = await res.json(); msg = j.error || msg; } catch {}
+              previewFrame.srcdoc = `<html><body style="font-family:system-ui;padding:24px;color:#b91c1c;background:${CAP_BRAND.neutral};">PDF preview failed: ${msg}</body></html>`;
+              return;
+            }
+            const blob = await res.blob();
+            if (seq !== pdfReqSeq) return;
+            if (previewBlobUrl) URL.revokeObjectURL(previewBlobUrl);
+            previewBlobUrl = URL.createObjectURL(blob);
+            previewFrame.removeAttribute('srcdoc');
+            previewFrame.removeAttribute('sandbox');
+            previewFrame.src = previewBlobUrl;
+          } catch (err) {
+            if (seq !== pdfReqSeq) return;
+            previewFrame.srcdoc = `<html><body style="font-family:system-ui;padding:24px;color:#b91c1c;background:${CAP_BRAND.neutral};">PDF preview error: ${err && err.message || err}</body></html>`;
+          }
+        }
+
+        const previewToggle = document.getElementById('email5PreviewToggle');
+        if (previewToggle) {
+          previewToggle.addEventListener('click', (e) => {
+            const btn = e.target.closest('button[data-mode]');
+            if (!btn) return;
+            const mode = btn.dataset.mode;
+            if (mode === previewMode) return;
+            previewMode = mode;
+            previewToggle.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
+            if (mode === 'email') {
+              previewFrame.setAttribute('sandbox', '');
+            }
+            updatePreview();
+          });
+        }
+
+        let previewTimer;
+        function schedulePreview() {
+          clearTimeout(previewTimer);
+          previewTimer = setTimeout(updatePreview, 200);
+        }
+        [subjectInput, recipientName].forEach(el => el.addEventListener('input', schedulePreview));
+        bodyInput.addEventListener('input', schedulePreview);
+        previewBtn && previewBtn.addEventListener('click', updatePreview);
+
+        function execCmd(cmd, value) {
+          bodyInput.focus();
+          try { document.execCommand(cmd, false, value || null); } catch {}
+          schedulePreview();
+        }
+        toolbar && toolbar.addEventListener('click', (e) => {
+          const btn = e.target.closest('.etb-btn[data-cmd]');
+          if (!btn) return;
+          e.preventDefault();
+          const cmd = btn.dataset.cmd;
+          if (cmd === 'insertOrderedList' || cmd === 'insertUnorderedList') {
+            const sel = window.getSelection();
+            if (sel && sel.rangeCount && !sel.isCollapsed) {
+              const selText = sel.toString();
+              if (selText && /\n/.test(selText)
+                  && (/^\s*([-*\u2022]|\d+[.)])\s/m.test(selText) || /^[^\n]+:\s*$/m.test(selText))) {
+                const html = smartTextToHtml(selText);
+                if (html) {
+                  bodyInput.focus();
+                  document.execCommand('insertHTML', false, html);
+                  schedulePreview();
+                  return;
+                }
+              }
+            }
+          }
+          execCmd(cmd);
+        });
+        formatSel && formatSel.addEventListener('change', (e) => {
+          execCmd('formatBlock', e.target.value);
+          e.target.selectedIndex = 0;
+        });
+        linkBtn && linkBtn.addEventListener('click', () => {
+          const sel = window.getSelection && window.getSelection();
+          const savedRange = (sel && sel.rangeCount) ? sel.getRangeAt(0).cloneRange() : null;
+          const hadSelection = !!(savedRange && !savedRange.collapsed);
+          const selectedText = hadSelection ? savedRange.toString() : '';
+
+          let url = window.prompt('Enter URL (include https://):', 'https://');
+          if (!url) return;
+          url = String(url).trim();
+          if (!url || url === 'https://' || url === 'http://') return;
+          if (!/^[a-z][a-z0-9+.-]*:/i.test(url) && !url.startsWith('mailto:') && !url.startsWith('tel:')) {
+            url = 'https://' + url.replace(/^\/+/, '');
+          }
+
+          bodyInput.focus();
+          if (savedRange) {
+            const newSel = window.getSelection();
+            newSel.removeAllRanges();
+            newSel.addRange(savedRange);
+          }
+          if (hadSelection) {
+            try { document.execCommand('createLink', false, url); } catch {}
+          } else {
+            const safeUrl  = url.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+            const safeText = (selectedText || url).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+            const anchor = `<a href="${safeUrl}" style="color:${CAP_BRAND.red};text-decoration:underline;">${safeText}</a>&nbsp;`;
+            try { document.execCommand('insertHTML', false, anchor); } catch {}
+          }
+          schedulePreview();
+        });
+        colorBtn && colorBtn.addEventListener('click', () => execCmd('foreColor', CAP_BRAND.red));
+        buttonBtn && buttonBtn.addEventListener('click', async () => {
+          const sel = window.getSelection && window.getSelection();
+          const savedRange = (sel && sel.rangeCount) ? sel.getRangeAt(0).cloneRange() : null;
+          const initialLabel = (savedRange && !savedRange.collapsed) ? savedRange.toString().trim() : '';
+          const result = await openButtonInsertModal(initialLabel);
+          if (!result) return;
+          insertButtonInto(bodyInput, savedRange, result);
+          schedulePreview();
+        });
+
+        bodyInput.addEventListener('paste', (e) => {
+          e.preventDefault();
+          const text = (e.clipboardData || window.clipboardData).getData('text/plain');
+          const html = smartTextToHtml(text);
+          if (html) document.execCommand('insertHTML', false, html);
+          else document.execCommand('insertText', false, text);
+          schedulePreview();
+        });
+        bodyInput.addEventListener('keydown', (e) => {
+          if (e.key !== 'Tab') return;
+          const sel = window.getSelection && window.getSelection();
+          let inList = false;
+          if (sel && sel.rangeCount) {
+            let node = sel.getRangeAt(0).startContainer;
+            while (node && node !== bodyInput) {
+              if (node.nodeName === 'LI') { inList = true; break; }
+              node = node.parentNode;
+            }
+          }
+          if (inList) {
+            e.preventDefault();
+            execCmd(e.shiftKey ? 'outdent' : 'indent');
+          }
+        });
+
+        function renderAttach() {
+          attachListEl.innerHTML = '';
+          let total = 0;
+          pending.forEach((att, idx) => {
+            total += att.size;
+            const row = document.createElement('div');
+            row.className = 'email-attach-item';
+            row.innerHTML = `<span class="name" title="${att.filename}">${att.filename}</span>`
+              + `<span class="size">${fmtBytes(att.size)}</span>`
+              + `<button type="button" class="remove" aria-label="Remove" data-idx="${idx}">&times;</button>`;
+            row.querySelector('.remove').addEventListener('click', () => {
+              pending.splice(idx, 1);
+              renderAttach();
+            });
+            attachListEl.appendChild(row);
+          });
+          if (pending.length) {
+            attachTotalEl.style.display = 'block';
+            attachTotalEl.textContent = `${pending.length} file${pending.length === 1 ? '' : 's'} \u00B7 ${fmtBytes(total)}`;
+          } else {
+            attachTotalEl.style.display = 'none';
+          }
+        }
+        async function addFiles(fileList) {
+          const currentTotal = pending.reduce((s, a) => s + a.size, 0);
+          let newTotal = currentTotal;
+          for (const file of fileList) {
+            if (!file) continue;
+            newTotal += file.size;
+            if (newTotal > MAX_TOTAL) {
+              showStatus(`Skipped "${file.name}" \u2014 attachments would exceed ${fmtBytes(MAX_TOTAL)} total.`, 'error');
+              newTotal -= file.size;
+              continue;
+            }
+            try {
+              const content = await readFileAsBase64(file);
+              pending.push({
+                filename: file.name,
+                contentType: file.type || 'application/octet-stream',
+                size: file.size,
+                content,
+              });
+            } catch (e) {
+              showStatus(`Failed to read "${file.name}": ${e.message || e}`, 'error');
+              newTotal -= file.size;
+            }
+          }
+          renderAttach();
+        }
+        attachInput && attachInput.addEventListener('change', async (e) => {
+          await addFiles(Array.from(e.target.files || []));
+          e.target.value = '';
+        });
+        if (attachDrop) {
+          ['dragenter', 'dragover'].forEach(ev => attachDrop.addEventListener(ev, (e) => {
+            e.preventDefault(); e.stopPropagation();
+            attachDrop.classList.add('dragover');
+          }));
+          ['dragleave', 'drop'].forEach(ev => attachDrop.addEventListener(ev, (e) => {
+            e.preventDefault(); e.stopPropagation();
+            attachDrop.classList.remove('dragover');
+          }));
+          attachDrop.addEventListener('drop', async (e) => {
+            const files = e.dataTransfer && e.dataTransfer.files ? Array.from(e.dataTransfer.files) : [];
+            if (files.length) await addFiles(files);
+          });
+        }
+
+        function showStatus(msg, type) {
+          statusEl.textContent = msg;
+          statusEl.className = 'email-status' + (type ? ' ' + type : '');
+          statusEl.style.display = 'block';
+        }
+
+        form.addEventListener('submit', async (event) => {
+          event.preventDefault();
+          const to = toInput.value.trim();
+          const subject = subjectInput.value.trim();
+          const body = getBodyHtml();
+          const bodyPlain = getBodyText();
+          const rname = recipientName.value.trim();
+          const cc = ccInput.value.trim();
+          const bcc = bccInput.value.trim();
+          const important = importantChk ? importantChk.checked : true;
+
+          if (!to || !subject || !bodyPlain) {
+            showStatus('Please fill in recipient, subject and body.', 'error');
+            return;
+          }
+
+          sendBtn.disabled = true;
+          showStatus('Sending email…', '');
+
+          try {
+            const token = getAdminToken();
+            const res = await fetch('/api/send-email-capsicum', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'x-admin-token': token,
+              },
+              body: JSON.stringify({
+                to, subject, body, recipientName: rname, cc, bcc, important,
+                attachments: pending.map(a => ({
+                  filename: a.filename,
+                  contentType: a.contentType,
+                  content: a.content,
+                })),
+              }),
+            });
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok) {
+              if (res.status === 401) {
+                try { sessionStorage.removeItem('ubl_admin_token'); } catch {}
+                try { localStorage.removeItem('ubl_admin_token'); } catch {}
+                showStatus('Unauthorized: incorrect admin password. Click Send again to retry.', 'error');
+              } else {
+                showStatus(`Failed to send: ${data.error || res.statusText}${data.detail ? ' — ' + data.detail : ''}`, 'error');
+              }
+            } else {
+              const note = pending.length
+                ? ` (with ${pending.length} attachment${pending.length === 1 ? '' : 's'})` : '';
+              showStatus(`Email sent successfully to ${to}${note}.`, 'success');
+              bodyInput.innerHTML = '';
+              subjectInput.value = '';
+              recipientName.value = '';
+              ccInput.value = '';
+              bccInput.value = '';
+              pending = [];
+              renderAttach();
+              updatePreview();
+            }
+          } catch (err) {
+            showStatus(`Network error: ${err && err.message ? err.message : err}`, 'error');
+          } finally {
+            sendBtn.disabled = false;
+          }
+        });
+      })();
+      // ============ END EMAIL SENDER 5 ============
 
       switchTab('dashboard');
       loadEnquiries();
