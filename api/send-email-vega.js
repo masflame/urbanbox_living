@@ -238,11 +238,11 @@ function buildEmailHtml({ subject, body, recipientName }) {
                style="width:660px;max-width:96%;background:${BRAND.white};border:1px solid ${BRAND.border};
                       box-shadow:0 8px 32px rgba(35,11,35,0.18);">
 
-          <!-- TOP HERO BANNER (Vega + Emeris brand image) -->
+          <!-- TOP HERO BANNER (Vega + Emeris brand image) - cropped band -->
           <tr>
-            <td bgcolor="${BRAND.neutral}" style="padding:0;background:${BRAND.neutral};line-height:0;font-size:0;border-bottom:4px solid ${BRAND.purple};">
-              <img src="${BANNER_URL}" alt="Vega School — Education that evolves with the world" width="660"
-                   style="display:block;width:100%;max-width:660px;height:auto;border:0;" />
+            <td bgcolor="${BRAND.neutral}" height="150" style="padding:0;background:${BRAND.neutral};line-height:0;font-size:0;border-bottom:4px solid ${BRAND.purple};height:150px;overflow:hidden;">
+              <img src="${BANNER_URL}" alt="Vega School — Education that evolves with the world" width="660" height="150"
+                   style="display:block;width:100%;max-width:660px;height:150px;border:0;object-fit:cover;object-position:center center;" />
             </td>
           </tr>
 
@@ -508,20 +508,33 @@ function buildEmailPdfBuffer({ subject, body, recipientName, banner }) {
   const dark     = hexToRgb(BRAND.dark);
   const borderC  = hexToRgb(BRAND.border);
 
-  // ---- Header hero banner ----
-  const HEADER_H = 130;
+  // ---- Header hero banner (cropped band, no squish) ----
+  const HEADER_H = 75;
   doc.setFillColor(neutral[0], neutral[1], neutral[2]);
   doc.rect(0, 0, pageW, HEADER_H, 'F');
+  // Use clipping so the image keeps its aspect ratio but only a centered band shows.
+  const drawBannerClipped = (fmt, buf) => {
+    try {
+      const dataUrl = `data:image/${fmt === 'PNG' ? 'png' : 'jpeg'};base64,${buf.toString('base64')}`;
+      // Probe natural size via jsPDF's getImageProperties
+      let naturalRatio = 660 / 220; // safe default if probe fails
+      try {
+        const props = doc.getImageProperties(dataUrl);
+        if (props && props.width && props.height) naturalRatio = props.width / props.height;
+      } catch { /* ignore */ }
+      const drawW = pageW;
+      const drawH = drawW / naturalRatio; // preserve aspect
+      const offsetY = (HEADER_H - drawH) / 2; // center vertically (negative when drawH > HEADER_H -> crops top/bottom)
+      doc.saveGraphicsState();
+      doc.rect(0, 0, pageW, HEADER_H).clip().discardPath();
+      doc.addImage(dataUrl, fmt, 0, offsetY, drawW, drawH);
+      doc.restoreGraphicsState();
+    } catch { /* ignore */ }
+  };
   if (banner && looksLikePng(banner)) {
-    try {
-      const dataUrl = `data:image/png;base64,${banner.toString('base64')}`;
-      doc.addImage(dataUrl, 'PNG', 0, 0, pageW, HEADER_H);
-    } catch { /* ignore */ }
+    drawBannerClipped('PNG', banner);
   } else if (banner && !looksLikeSvg(banner)) {
-    try {
-      const dataUrl = `data:image/jpeg;base64,${banner.toString('base64')}`;
-      doc.addImage(dataUrl, 'JPEG', 0, 0, pageW, HEADER_H);
-    } catch { /* ignore */ }
+    drawBannerClipped('JPEG', banner);
   } else {
     // SVG fallback: draw yellow band + dark wordmark text
     doc.setFillColor(yellow[0], yellow[1], yellow[2]);
