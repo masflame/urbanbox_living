@@ -509,7 +509,7 @@ function buildEmailPdfBuffer({ subject, body, recipientName, banner }) {
   const borderC  = hexToRgb(BRAND.border);
 
   // ---- Header hero banner (cropped band, no squish) ----
-  const HEADER_H = 75;
+  const HEADER_H = 110;
   doc.setFillColor(neutral[0], neutral[1], neutral[2]);
   doc.rect(0, 0, pageW, HEADER_H, 'F');
   // Use clipping so the image keeps its aspect ratio but only a centered band shows.
@@ -549,8 +549,13 @@ function buildEmailPdfBuffer({ subject, body, recipientName, banner }) {
   doc.setFillColor(purple[0], purple[1], purple[2]);
   doc.rect(0, HEADER_H, pageW, 4, 'F');
 
+  // Neutral gap so the yellow strip doesn't crowd the banner artwork/text
+  const HEADER_GAP = 16;
+  doc.setFillColor(neutral[0], neutral[1], neutral[2]);
+  doc.rect(0, HEADER_H + 4, pageW, HEADER_GAP, 'F');
+
   // ---- Date + contact strip (yellow) ----
-  const stripY = HEADER_H + 4;
+  const stripY = HEADER_H + 4 + HEADER_GAP;
   const stripH = 26;
   doc.setFillColor(yellow[0], yellow[1], yellow[2]);
   doc.rect(0, stripY, pageW, stripH, 'F');
