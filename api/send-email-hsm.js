@@ -96,6 +96,8 @@ async function loadBoiler(req) {
   const base = buildBaseUrl(req);
   BOILER_BUFFER = await fetchFirst([
     process.env.HSM_BOILER_URL,
+    base ? `${base}/hsm_iie_boiler_dark.png` : null,
+    process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}/hsm_iie_boiler_dark.png` : null,
     base ? `${base}/hsm_iie_boiler_white.png` : null,
     process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}/hsm_iie_boiler_white.png` : null,
   ]);
