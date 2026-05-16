@@ -261,11 +261,26 @@ function buildEmailHtml({ subject, body, recipientName }) {
                style="width:660px;max-width:96%;background:${BRAND.white};border:1px solid ${BRAND.border};
                       box-shadow:0 8px 32px rgba(11,122,120,0.16);">
 
-          <!-- TOP BANNER (single full-width image) -->
+          <!-- TOP BANNER (composite: teal logo on left, students on right, white bg) -->
           <tr>
-            <td bgcolor="#FFFFFF" align="center" style="padding:0;background:${BRAND.white};line-height:0;font-size:0;border-bottom:4px solid ${BRAND.coral};">
-              <img src="${BANNER_URL}" alt="Emeris — Stay Connected" width="660"
-                   style="display:block;width:100%;max-width:660px;height:auto;border:0;margin:0;" />
+            <td bgcolor="#FFFFFF" style="padding:0;background:${BRAND.white} !important;background-color:${BRAND.white};line-height:0;font-size:0;border-bottom:4px solid ${BRAND.coral};">
+              <table role="presentation" width="660" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF" style="width:660px;max-width:660px;background:${BRAND.white} !important;background-color:${BRAND.white};">
+                <tr>
+                  <td width="230" align="center" valign="middle" bgcolor="#FFFFFF" style="width:230px;padding:12px 14px;background:${BRAND.white} !important;background-color:${BRAND.white};">
+                    <img src="${TEAL_URL}" alt="Emeris" width="200" bgcolor="#FFFFFF"
+                         style="display:block;width:200px;max-width:100%;height:auto;border:0;margin:0 auto;background:${BRAND.white} !important;background-color:${BRAND.white};" />
+                  </td>
+                  <td width="430" align="right" valign="middle" bgcolor="#EFF8F7" style="width:430px;padding:0;background-color:${BRAND.light};background-image:url('${swooshUri}'), linear-gradient(245deg, ${BRAND.tealDp} 0%, ${BRAND.tealDk} 30%, ${BRAND.teal} 55%, ${BRAND.light} 80%, #FFFFFF 100%);background-repeat:no-repeat,no-repeat;background-size:cover,cover;background-position:center,center;">
+                    <!--[if gte mso 9]>
+                    <v:rect xmlns:v="urn:schemas-microsoft-com:vml" fill="true" stroke="false" style="width:430px;height:110px;position:absolute;left:0;top:0;">
+                      <v:fill type="gradient" color="#FFFFFF" color2="${BRAND.tealDp}" angle="115" />
+                    </v:rect>
+                    <![endif]-->
+                    <img src="${BANNER_URL}" alt="Emeris — Be Your Best" width="430" height="110"
+                         style="display:block;width:430px;height:110px;max-width:430px;object-fit:cover;border:0;position:relative;" />
+                  </td>
+                </tr>
+              </table>
             </td>
           </tr>
 
@@ -595,28 +610,30 @@ function buildEmailPdfBuffer({ subject, body, recipientName, logo, banner }) {
   const grey   = hexToRgb(BRAND.grey);
   const dark   = hexToRgb(BRAND.dark);
 
-  // ---- Header banner (single full-width image: matches email top banner) ----
-  // Default height mirrors prior 115pt layout; if the image loads we recompute
-  // from its true aspect ratio so the artwork is never cropped.
-  let HEADER_H = 115;
+  // ---- Header band (matches email top banner exactly: solid #115063 band with
+  // white logo on the left and the brand hero banner image on the right) ----
+  const HEADER_H = 115; // mirrors the 115px tall HTML row
+  const headerBg = hexToRgb('#115063');
+  doc.setFillColor(headerBg[0], headerBg[1], headerBg[2]);
+  doc.rect(0, 0, pageW, HEADER_H, 'F');
+
+  // Mirror email proportions: left cell 230/660, right cell 430/660
+  const leftCellW  = pageW * (230 / 660);
+  const rightCellW = pageW - leftCellW;
+
+  // Right cell: brand hero banner (object-fit: cover ~ stretch, ratios match closely)
   if (banner) {
     try {
+      const bannerH = HEADER_H - 5; // mirror email's 110px image inside 115px row
+      const bannerY = (HEADER_H - bannerH) / 2;
       const bannerFmt = looksLikePng(banner) ? 'PNG' : 'JPEG';
       const dataUrl = `data:image/${bannerFmt === 'PNG' ? 'png' : 'jpeg'};base64,${banner.toString('base64')}`;
-      try {
-        const props = doc.getImageProperties(dataUrl);
-        if (props && props.width && props.height) {
-          HEADER_H = pageW * (props.height / props.width);
-        }
-      } catch { /* fall back to default HEADER_H */ }
-      doc.addImage(dataUrl, bannerFmt, 0, 0, pageW, HEADER_H);
+      doc.addImage(dataUrl, bannerFmt, leftCellW, bannerY, rightCellW, bannerH);
     } catch { /* ignore image errors */ }
-  } else {
-    // Fallback solid band if the image failed to load
-    const headerBg = hexToRgb('#115063');
-    doc.setFillColor(headerBg[0], headerBg[1], headerBg[2]);
-    doc.rect(0, 0, pageW, HEADER_H, 'F');
   }
+
+  // Left cell: (swoosh + logo are drawn LAST so they overlay both the header band
+  // AND the date strip below it.)
 
   // Coral accent stripe (3px in email)
   doc.setFillColor(coral[0], coral[1], coral[2]);
@@ -641,10 +658,38 @@ function buildEmailPdfBuffer({ subject, body, recipientName, logo, banner }) {
   doc.setFontSize(9);
   const stripTextY = stripY + stripH / 2 + 3;
   doc.text(String(today).toUpperCase(), marginX, stripTextY);
-  doc.text(CONTACT.phone + '  ·  ' + CONTACT.email, pageW - marginX, stripTextY, { align: 'right' });
+  // (Address moved into the top banner — see overlay below.)
+
+  // Address overlay: a slim translucent dark bar across the bottom of the header
+  // banner, with the office address in white. Reads cleanly over the hero image
+  // and matches the brand colour of the banner band.
+  const addrBarH = 18;
+  const addrBarY = HEADER_H - addrBarH;
+  doc.saveGraphicsState();
+  doc.setGState(new doc.GState({ opacity: 0.55 }));
+  doc.setFillColor(0, 0, 0);
+  doc.rect(0, addrBarY, pageW, addrBarH, 'F');
+  doc.restoreGraphicsState();
+  doc.setTextColor(255, 255, 255);
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(8);
+  doc.text(CONTACT.address, pageW - 18, addrBarY + addrBarH / 2 + 2.5, { align: 'right' });
+
+  // (Top-left swoosh moved to the bottom banner — see footer drawing below.)
+
+  if (logo) {
+    try {
+      const logoW = pageW * (190 / 660);
+      const logoH = logoW * 0.26;
+      const logoX = 22;
+      const logoY = (HEADER_H - logoH) / 2;
+      const dataUrl = `data:image/png;base64,${logo.toString('base64')}`;
+      doc.addImage(dataUrl, 'PNG', logoX, logoY, logoW, logoH);
+    } catch { /* ignore image errors */ }
+  }
 
   // ---- Subject ----
-  let cursorY = stripY + stripH + 24;
+  let cursorY = 168;
   doc.setTextColor(grey[0], grey[1], grey[2]);
   doc.setFontSize(9);
   doc.setFont('helvetica', 'bold');
