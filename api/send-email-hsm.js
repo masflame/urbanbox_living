@@ -356,15 +356,6 @@ function buildEmailHtml({ subject, body, recipientName }) {
           </td>
         </tr>
 
-        <!-- LEGAL STRIP -->
-        <tr>
-          <td style="background:${BRAND.charcoal};padding:12px 32px;font-family:Arial,Helvetica,sans-serif;">
-            <div style="color:#DCDCDC;font-size:9.5px;line-height:1.5;text-align:center;">
-              ${escapeHtml(CONTACT.legal)}
-            </div>
-          </td>
-        </tr>
-
         <!-- BOTTOM BRAND BAND: white background with full-width IIE footer (logo + legal) -->
         <tr>
           <td bgcolor="${BRAND.white}" align="center" style="background-color:${BRAND.white};border-top:2px solid ${BRAND.mustard};padding:0;">
