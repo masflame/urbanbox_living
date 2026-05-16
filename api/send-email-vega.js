@@ -512,29 +512,29 @@ function buildEmailPdfBuffer({ subject, body, recipientName, banner }) {
   const HEADER_H = 110;
   doc.setFillColor(neutral[0], neutral[1], neutral[2]);
   doc.rect(0, 0, pageW, HEADER_H, 'F');
-  // Use clipping so the image keeps its aspect ratio but only a centered band shows.
-  const drawBannerClipped = (fmt, buf) => {
+  // Draw the banner at its natural aspect ratio, vertically centered so a band shows
+  // through HEADER_H. We can't rely on jsPDF clipping, so we paint a neutral mask
+  // OVER the bleed area afterwards and then redraw the chrome (purple stripe, yellow strip).
+  let bannerBleedBottom = HEADER_H; // y where any bleed ends
+  const drawBannerBand = (fmt, buf) => {
     try {
       const dataUrl = `data:image/${fmt === 'PNG' ? 'png' : 'jpeg'};base64,${buf.toString('base64')}`;
-      // Probe natural size via jsPDF's getImageProperties
-      let naturalRatio = 660 / 220; // safe default if probe fails
+      let naturalRatio = 660 / 220;
       try {
         const props = doc.getImageProperties(dataUrl);
         if (props && props.width && props.height) naturalRatio = props.width / props.height;
       } catch { /* ignore */ }
       const drawW = pageW;
-      const drawH = drawW / naturalRatio; // preserve aspect
-      const offsetY = (HEADER_H - drawH) / 2; // center vertically (negative when drawH > HEADER_H -> crops top/bottom)
-      doc.saveGraphicsState();
-      doc.rect(0, 0, pageW, HEADER_H).clip().discardPath();
+      const drawH = drawW / naturalRatio;
+      const offsetY = (HEADER_H - drawH) / 2; // negative when image is taller than band
       doc.addImage(dataUrl, fmt, 0, offsetY, drawW, drawH);
-      doc.restoreGraphicsState();
+      bannerBleedBottom = Math.max(HEADER_H, offsetY + drawH);
     } catch { /* ignore */ }
   };
   if (banner && looksLikePng(banner)) {
-    drawBannerClipped('PNG', banner);
+    drawBannerBand('PNG', banner);
   } else if (banner && !looksLikeSvg(banner)) {
-    drawBannerClipped('JPEG', banner);
+    drawBannerBand('JPEG', banner);
   } else {
     // SVG fallback: draw yellow band + dark wordmark text
     doc.setFillColor(yellow[0], yellow[1], yellow[2]);
@@ -543,6 +543,13 @@ function buildEmailPdfBuffer({ subject, body, recipientName, banner }) {
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(28);
     doc.text('VEGA SCHOOL', marginX, HEADER_H / 2 + 8);
+  }
+
+  // Mask any banner bleed BELOW HEADER_H with a neutral rect so the image
+  // doesn't reappear underneath the yellow strip.
+  if (bannerBleedBottom > HEADER_H) {
+    doc.setFillColor(neutral[0], neutral[1], neutral[2]);
+    doc.rect(0, HEADER_H, pageW, bannerBleedBottom - HEADER_H + 2, 'F');
   }
 
   // Purple accent stripe under banner
