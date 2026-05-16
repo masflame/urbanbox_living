@@ -90,6 +90,17 @@ async function loadDarkLogo(req) {
   return DARK_LOGO_BUFFER;
 }
 
+let DARK_LOGO_FLAT_BUFFER = null;
+async function loadDarkLogoFlat(req) {
+  if (DARK_LOGO_FLAT_BUFFER) return DARK_LOGO_FLAT_BUFFER;
+  const base = buildBaseUrl(req);
+  DARK_LOGO_FLAT_BUFFER = await fetchFirst([
+    base ? `${base}/capsicum_dark_logo_flat.jpg` : null,
+    process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}/capsicum_dark_logo_flat.jpg` : null,
+  ]);
+  return DARK_LOGO_FLAT_BUFFER;
+}
+
 async function loadWhiteLogo(req) {
   if (WHITE_LOGO_BUFFER) return WHITE_LOGO_BUFFER;
   const base = buildBaseUrl(req);
@@ -202,6 +213,11 @@ function bodyToHtml(text) {
 function looksLikePng(buf) {
   return Buffer.isBuffer(buf) && buf.length > 8 &&
     buf[0] === 0x89 && buf[1] === 0x50 && buf[2] === 0x4E && buf[3] === 0x47;
+}
+
+function looksLikeJpeg(buf) {
+  return Buffer.isBuffer(buf) && buf.length > 3 &&
+    buf[0] === 0xFF && buf[1] === 0xD8 && buf[2] === 0xFF;
 }
 
 function looksLikeSvg(buf) {
@@ -497,9 +513,9 @@ function buildEmailPdfBuffer({ subject, body, recipientName, darkLogo, whiteLogo
   doc.setFillColor(255, 255, 255);
   doc.rect(0, 0, pageW, HERO_H, 'F');
 
-  if (darkLogo && (looksLikePng(darkLogo) || (!looksLikeSvg(darkLogo)))) {
+  if (darkLogo && (looksLikeJpeg(darkLogo) || looksLikePng(darkLogo) || (!looksLikeSvg(darkLogo)))) {
     try {
-      const fmt = looksLikePng(darkLogo) ? 'PNG' : 'JPEG';
+      const fmt = looksLikeJpeg(darkLogo) ? 'JPEG' : (looksLikePng(darkLogo) ? 'PNG' : 'JPEG');
       const mime = fmt === 'PNG' ? 'png' : 'jpeg';
       const dataUrl = `data:image/${mime};base64,${darkLogo.toString('base64')}`;
       let ratio = 4;
@@ -511,7 +527,7 @@ function buildEmailPdfBuffer({ subject, body, recipientName, darkLogo, whiteLogo
       const logoW = logoH * ratio;
       const logoX = pageW - marginX - logoW;
       const logoY = (HERO_H - logoH) / 2;
-      doc.addImage(dataUrl, fmt, logoX, logoY, logoW, logoH);
+      doc.addImage(dataUrl, fmt, logoX, logoY, logoW, logoH, 'capsicumDarkLogo', 'NONE');
     } catch { /* ignore */ }
   } else {
     doc.setTextColor(dark[0], dark[1], dark[2]);
@@ -812,8 +828,8 @@ export default async function handler(req, res) {
       return res.end(JSON.stringify({ error: 'Missing required fields: subject, body' }));
     }
     try {
-      const [darkLogo, whiteLogo, emerisLogo] = await Promise.all([loadDarkLogo(req), loadWhiteLogo(req), loadEmerisLogo(req)]);
-      const pdfBuffer = buildEmailPdfBuffer({ subject, body, recipientName, darkLogo, whiteLogo, emerisLogo });
+      const [darkLogo, darkLogoFlat, whiteLogo, emerisLogo] = await Promise.all([loadDarkLogo(req), loadDarkLogoFlat(req), loadWhiteLogo(req), loadEmerisLogo(req)]);
+      const pdfBuffer = buildEmailPdfBuffer({ subject, body, recipientName, darkLogo: darkLogoFlat || darkLogo, whiteLogo, emerisLogo });
       res.statusCode = 200;
       res.setHeader('Content-Type', 'application/pdf');
       res.setHeader('Content-Disposition', `inline; filename="${safePdfFilename(subject)}"`);
@@ -870,8 +886,8 @@ export default async function handler(req, res) {
 
   const html = buildEmailHtml({ subject, body, recipientName });
   const text = buildPlainText({ subject, body, recipientName });
-  const [darkLogo, whiteLogo, emerisLogo] = await Promise.all([
-    loadDarkLogo(req), loadWhiteLogo(req), loadEmerisLogo(req),
+  const [darkLogo, darkLogoFlat, whiteLogo, emerisLogo] = await Promise.all([
+    loadDarkLogo(req), loadDarkLogoFlat(req), loadWhiteLogo(req), loadEmerisLogo(req),
   ]);
 
   const attachments = [];
@@ -904,7 +920,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const pdfBuffer = buildEmailPdfBuffer({ subject, body, recipientName, darkLogo, whiteLogo, emerisLogo });
+    const pdfBuffer = buildEmailPdfBuffer({ subject, body, recipientName, darkLogo: darkLogoFlat || darkLogo, whiteLogo, emerisLogo });
     if (pdfBuffer && pdfBuffer.length) {
       attachments.push({
         filename: safePdfFilename(subject),
