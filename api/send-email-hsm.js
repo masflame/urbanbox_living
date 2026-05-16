@@ -96,10 +96,10 @@ async function loadBoiler(req) {
   const base = buildBaseUrl(req);
   BOILER_BUFFER = await fetchFirst([
     process.env.HSM_BOILER_URL,
+    base ? `${base}/hsm_footer.png` : null,
+    process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}/hsm_footer.png` : null,
     base ? `${base}/hsm_iie_boiler_dark.png` : null,
     process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}/hsm_iie_boiler_dark.png` : null,
-    base ? `${base}/hsm_iie_boiler_white.png` : null,
-    process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}/hsm_iie_boiler_white.png` : null,
   ]);
   return BOILER_BUFFER;
 }
@@ -336,11 +336,11 @@ function buildEmailHtml({ subject, body, recipientName }) {
           </td>
         </tr>
 
-        <!-- BOTTOM BRAND BAND: white background with centered IIE boiler banner, thinner height -->
+        <!-- BOTTOM BRAND BAND: white background with full-width IIE footer (logo + legal) -->
         <tr>
-          <td bgcolor="${BRAND.white}" align="center" style="background-color:${BRAND.white};border-top:2px solid ${BRAND.mustard};border-bottom:1px solid ${BRAND.border};padding:8px 32px;">
-            <img src="${BOILER_URL}" alt="The Independent Institute of Education" width="360"
-                 style="display:block;width:100%;max-width:360px;height:auto;border:0;margin:0 auto;" />
+          <td bgcolor="${BRAND.white}" align="center" style="background-color:${BRAND.white};border-top:2px solid ${BRAND.mustard};border-bottom:1px solid ${BRAND.border};padding:0;">
+            <img src="${BOILER_URL}" alt="The Independent Institute of Education" width="660"
+                 style="display:block;width:100%;max-width:660px;height:auto;border:0;margin:0;" />
           </td>
         </tr>
 
@@ -730,8 +730,8 @@ function buildEmailPdfBuffer({ subject, body, recipientName, logo, boiler, emeri
   for (let p = 1; p <= totalPages; p++) {
     doc.setPage(p);
 
-    // Boiler band: thin white strip with centered IIE boiler image
-    const boilerH = 28;
+    // Boiler band: white strip with full-width IIE footer image
+    const boilerH = 56;
     const emerisH = 26;
     const legalH  = 16;
     const accentBottomH = 4;
@@ -757,7 +757,7 @@ function buildEmailPdfBuffer({ subject, body, recipientName, logo, boiler, emeri
     );
     doc.text(`Page ${p} of ${totalPages}`, pageW - marginX, fy + 42, { align: 'right' });
 
-    // White band with centered boiler image (thinner)
+    // White band with full-width IIE footer image
     doc.setFillColor(255, 255, 255);
     doc.rect(0, bandTopY, pageW, boilerH, 'F');
     doc.setFillColor(mustard[0], mustard[1], mustard[2]);
@@ -771,16 +771,15 @@ function buildEmailPdfBuffer({ subject, body, recipientName, logo, boiler, emeri
         const fmt = looksLikePng(boiler) ? 'PNG' : 'JPEG';
         const mime = fmt === 'PNG' ? 'png' : 'jpeg';
         const dataUrl = `data:image/${mime};base64,${boiler.toString('base64')}`;
-        let ratio = 7;
+        let ratio = 12;
         try {
           const props = doc.getImageProperties(dataUrl);
           if (props && props.width && props.height) ratio = props.width / props.height;
         } catch { /* ignore */ }
-        let imgH = boilerH - 8;
-        let imgW = imgH * ratio;
-        const maxW = 260;
-        if (imgW > maxW) { imgW = maxW; imgH = imgW / ratio; }
-        const imgX = (pageW - imgW) / 2;
+        const imgW = pageW;
+        let imgH = imgW / ratio;
+        if (imgH > boilerH) imgH = boilerH;
+        const imgX = 0;
         const imgY = bandTopY + (boilerH - imgH) / 2;
         doc.addImage(dataUrl, fmt, imgX, imgY, imgW, imgH);
       } catch { /* ignore */ }
