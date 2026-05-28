@@ -254,8 +254,8 @@ function buildEmailHtml({ subject, body, recipientName }) {
                          style="display:block;width:200px;max-width:100%;height:auto;border:0;margin:0 auto;background:${BRAND.white} !important;background-color:${BRAND.white};" />
                   </td>
                   <td width="430" align="right" valign="middle" bgcolor="#F4F6FB" style="width:430px;padding:0;background-color:${BRAND.light};background-image:url('${swooshUri}'), linear-gradient(245deg, #052456 0%, #093c82 30%, #093c82 55%, ${BRAND.light} 80%, #FFFFFF 100%);background-repeat:no-repeat,no-repeat;background-size:cover,cover;background-position:center,center;">
-                    <img src="${STUDENTS_URL}" alt="RIUC Students" width="430" height="110"
-                         style="display:block;width:430px;height:110px;max-width:430px;object-fit:cover;border:0;position:relative;" />
+                    <img src="${STUDENTS_URL}" alt="RIUC Students" width="800" height="150"
+                         style="display:block;width:800px;height:150px;max-width:100%;height:auto;border:0;" />
                   </td>
                 </tr>
               </table>
