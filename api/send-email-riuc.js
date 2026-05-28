@@ -249,13 +249,13 @@ function buildEmailHtml({ subject, body, recipientName }) {
             <td bgcolor="#FFFFFF" style="padding:0;background:${BRAND.white} !important;background-color:${BRAND.white};line-height:0;font-size:0;border-bottom:4px solid ${BRAND.gold};">
               <table role="presentation" width="660" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF" style="width:660px;max-width:660px;background:${BRAND.white} !important;background-color:${BRAND.white};">
                 <tr>
-                  <td width="230" align="center" valign="middle" bgcolor="#FFFFFF" style="width:230px;padding:12px 14px;background:${BRAND.white} !important;background-color:${BRAND.white};">
-                    <img src="${GOLD_LOGO_URL}" alt="RIUC" width="200" bgcolor="#FFFFFF"
-                         style="display:block;width:200px;max-width:100%;height:auto;border:0;margin:0 auto;background:${BRAND.white} !important;background-color:${BRAND.white};" />
+                  <td width="165" align="center" valign="middle" bgcolor="#FFFFFF" style="width:165px;padding:12px 14px;background:${BRAND.white} !important;background-color:${BRAND.white};">
+                    <img src="${GOLD_LOGO_URL}" alt="RIUC" width="137" bgcolor="#FFFFFF"
+                         style="display:block;width:137px;max-width:100%;height:auto;border:0;margin:0 auto;background:${BRAND.white} !important;background-color:${BRAND.white};" />
                   </td>
-                  <td width="430" align="right" valign="middle" bgcolor="#F4F6FB" style="width:430px;padding:0;background-color:${BRAND.light};background-image:url('${swooshUri}'), linear-gradient(245deg, #052456 0%, #093c82 30%, #093c82 55%, ${BRAND.light} 80%, #FFFFFF 100%);background-repeat:no-repeat,no-repeat;background-size:cover,cover;background-position:center,center;">
-                    <img src="${STUDENTS_URL}" alt="RIUC Students" width="800" height="150"
-                         style="display:block;width:800px;height:150px;max-width:100%;height:auto;border:0;" />
+                  <td width="495" align="right" valign="middle" bgcolor="#F4F6FB" style="width:495px;padding:0;background-color:${BRAND.light};background-image:url('${swooshUri}'), linear-gradient(245deg, #052456 0%, #093c82 30%, #093c82 55%, ${BRAND.light} 80%, #FFFFFF 100%);background-repeat:no-repeat,no-repeat;background-size:cover,cover;background-position:center,center;">
+                    <img src="${STUDENTS_URL}" alt="RIUC Students" width="495" height="93"
+                         style="display:block;width:495px;height:93px;max-width:100%;border:0;" />
                   </td>
                 </tr>
               </table>
