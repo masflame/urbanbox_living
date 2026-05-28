@@ -1,5 +1,11 @@
 const USD_TO_ZAR = 18.75
 
+// Base-shell price factor for Basic-tier container listings.
+// Scraped supplier prices include fit-out / customisation costs; this factor
+// strips them so the catalog shows the shell/base-model price only.
+// Set to 1.0 to restore original prices (see src/data/prices-backup.js).
+const BASE_SHELL_PRICE_FACTOR = 0.73
+
 const jsonModules = import.meta.glob('../assets/Units/*.json', {
   eager: true,
   import: 'default',
@@ -1248,7 +1254,13 @@ function normalizeGroups() {
     const category = (categoryOverrideKey && CATEGORY_OVERRIDES[categoryOverrideKey]) || inferCategory(primary, primary.collectionKey)
     const tier = (categoryOverrideKey && TIER_OVERRIDES[categoryOverrideKey]) || inferTier(primary.collectionKey)
     const sizeInfo = parseSizeInfo(primary)
-    const priceInfo = normalizePrice(primary, category, sizeInfo)
+    let priceInfo = normalizePrice(primary, category, sizeInfo)
+    // Strip estimated fit-out costs for Basic-tier containers so the listing
+    // shows the base shell price. Premium-tier products are left unchanged.
+    if (tier === 'Basic' && priceInfo.amountZar != null && !priceInfo.estimated) {
+      const baseAmount = Math.round(priceInfo.amountZar * BASE_SHELL_PRICE_FACTOR)
+      priceInfo = { ...priceInfo, amountZar: baseAmount, display: formatCurrency(baseAmount) }
+    }
     const images = buildGallery(records, primary)
     const slug = slugify(primary.unit_slug || primary.product_group_key || originalName || primary.collectionKey)
     const nameOverride = categoryOverrideKey ? NAME_OVERRIDES[categoryOverrideKey] : null
