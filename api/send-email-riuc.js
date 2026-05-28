@@ -21,7 +21,7 @@ export const config = {
   },
 };
 
-// ---------- Brand & contact details (from https://www.riuc.edu.za) ----------
+// ---------- Brand & contact details (from https://www.rosebankcollege.co.za) ----------
 const BRAND = {
   navy:   '#1B3A77',  // primary RIUC navy
   navyDk: '#0F2350',  // header band
@@ -35,13 +35,13 @@ const BRAND = {
 };
 
 const CONTACT = {
-  name:    'Rosebank International University College',
+  name:    'Rosebank International',
   short:   'RIUC',
   tagline: 'Fast Track Your Global Career',
   phone:   '086 1259 906',
   whatsapp:'087 260 6854',
-  email:   'info@riuc.edu.za',
-  web:     'www.riuc.edu.za',
+  email:   'info@rosebankinternational.co.za',
+  web:     'www.rosebankcollege.co.za',
   address: '239 Pretorius St, Pretoria Central, Pretoria, 0126',
 };
 
@@ -384,7 +384,7 @@ function buildEmailHtml({ subject, body, recipientName }) {
         </table>
 
         <div style="font-size:10.5px;color:#6E7891;margin-top:14px;max-width:600px;text-align:center;line-height:1.5;font-family:Arial,Helvetica,sans-serif;">
-          This message was sent by Rosebank International University College.
+          This message was sent by Rosebank International.
           If you received it in error, please reply to inform us and delete the message.
         </div>
       </td>
@@ -412,7 +412,7 @@ function buildPlainText({ subject, body, recipientName }) {
         .trim()
     : body;
   return [
-    'ROSEBANK INTERNATIONAL UNIVERSITY COLLEGE',
+    'ROSEBANK INTERNATIONAL',
     CONTACT.tagline,
     '------------------------------------------------',
     `Subject: ${subject}`,
@@ -544,7 +544,7 @@ function buildEmailPdfBuffer({ subject, body, recipientName, logo }) {
   doc.setTextColor(255, 255, 255);
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(15);
-  doc.text('ROSEBANK INTERNATIONAL UNIVERSITY COLLEGE', marginX + (logo ? 72 : 0), 50);
+  doc.text('ROSEBANK INTERNATIONAL', marginX + (logo ? 72 : 0), 50);
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(10);
   doc.setTextColor(gold[0], gold[1], gold[2]);
@@ -871,7 +871,7 @@ export default async function handler(req, res) {
   const secure = String(process.env.SMTP_SECURE || 'true').toLowerCase() === 'true';
   const user   = process.env.SMTP_USER;
   const pass   = process.env.SMTP_PASS;
-  const FROM_NAME = process.env.MAIL_FROM_NAME_RIUC || 'Rosebank International University College';
+  const FROM_NAME = process.env.MAIL_FROM_NAME_RIUC || 'Rosebank International';
   const rawFrom = (process.env.MAIL_FROM_RIUC || '').trim();
   let from = '';
   if (rawFrom) {

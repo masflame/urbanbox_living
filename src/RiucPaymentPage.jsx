@@ -142,10 +142,10 @@ export default function RiucPaymentPage() {
       {/* Top utility bar */}
       <div className="riuc-topbar">
         <div className="riuc-container riuc-topbar__inner">
-          <span>Rosebank International University College · Pretoria, South Africa</span>
+          <span>Rosebank International · Pretoria, South Africa</span>
           <span className="riuc-topbar__contact">
             <span>Tel: 086 1259 906</span>
-            <span>info@riuc.edu.za</span>
+            <span>info@rosebankinternational.co.za</span>
           </span>
         </div>
       </div>
@@ -164,7 +164,7 @@ export default function RiucPaymentPage() {
           />
           <div className="riuc-masthead__text">
             <h1 className="riuc-masthead__name">
-              Rosebank International University College
+              Rosebank International
             </h1>
             <p className="riuc-masthead__sub">Office of Finance · Online Payments</p>
           </div>
@@ -300,13 +300,13 @@ export default function RiucPaymentPage() {
               <br />
               Whatsapp: 087 260 6854
               <br />
-              Email: info@riuc.edu.za
+              Email: info@rosebankinternational.co.za
             </p>
           </div>
           <div>
             <p className="riuc-footer__heading">Online</p>
             <p style={{ margin: 0 }}>
-              www.riuc.edu.za
+              www.rosebankcollege.co.za
               <br />
               Student Payment Portal
               <br />
@@ -315,8 +315,7 @@ export default function RiucPaymentPage() {
           </div>
         </div>
         <div className="riuc-container riuc-footer__copy">
-          © {new Date().getFullYear()} Rosebank International University
-          College. All rights reserved.
+          © {new Date().getFullYear()} Rosebank International. All rights reserved.
         </div>
       </footer>
     </div>
