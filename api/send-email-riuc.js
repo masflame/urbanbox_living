@@ -308,7 +308,7 @@ function buildEmailHtml({ subject, body, recipientName }) {
                 Yours sincerely,
               </p>
               <p style="margin:0;font-size:15px;color:${BRAND.navyDk};font-weight:700;">
-                RIUC Bursary &amp; Finance Office
+                Bursary &amp; Finance Office
               </p>
               <p style="margin:2px 0 0 0;font-size:12px;color:${BRAND.grey};font-style:italic;">
                 ${CONTACT.tagline}
@@ -422,7 +422,7 @@ function buildPlainText({ subject, body, recipientName }) {
     plainBody,
     '',
     'Yours sincerely,',
-    'RIUC Bursary & Finance Office',
+    'Bursary & Finance Office',
     '',
     '------------------------------------------------',
     CONTACT.name,
@@ -727,7 +727,7 @@ function buildEmailPdfBuffer({ subject, body, recipientName, logo }) {
   cursorY += 18;
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(navy[0], navy[1], navy[2]);
-  doc.text('RIUC Bursary & Finance Office', marginX, cursorY);
+  doc.text('Bursary & Finance Office', marginX, cursorY);
 
   // ---- Footer on every page ----
   const totalPages = doc.internal.getNumberOfPages();
