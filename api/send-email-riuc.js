@@ -240,22 +240,22 @@ function buildEmailHtml({ subject, body, recipientName }) {
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#EAEEF6;padding:32px 0;">
     <tr>
       <td align="center">
-        <table role="presentation" width="750" cellpadding="0" cellspacing="0"
-               style="width:750px;max-width:96%;background:${BRAND.white};border:1px solid ${BRAND.border};
+        <table role="presentation" width="900" cellpadding="0" cellspacing="0"
+               style="width:900px;max-width:96%;background:${BRAND.white};border:1px solid ${BRAND.border};
                       box-shadow:0 8px 32px rgba(15,35,80,0.12);">
 
           <!-- TOP BANNER (composite: gold logo on left, students on right, white bg) -->
           <tr>
             <td bgcolor="#FFFFFF" style="padding:0;background:${BRAND.white} !important;background-color:${BRAND.white};line-height:0;font-size:0;border-bottom:4px solid ${BRAND.gold};">
-              <table role="presentation" width="750" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF" style="width:750px;max-width:750px;background:${BRAND.white} !important;background-color:${BRAND.white};">
+              <table role="presentation" width="900" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF" style="width:900px;max-width:900px;background:${BRAND.white} !important;background-color:${BRAND.white};">
                 <tr>
                   <td width="230" align="center" valign="middle" bgcolor="#FFFFFF" style="width:230px;padding:12px 14px;background:${BRAND.white} !important;background-color:${BRAND.white};">
                     <img src="${GOLD_LOGO_URL}" alt="RIUC" width="200" bgcolor="#FFFFFF"
                          style="display:block;width:200px;max-width:100%;height:auto;border:0;margin:0 auto;background:${BRAND.white} !important;background-color:${BRAND.white};" />
                   </td>
-                  <td width="520" align="right" valign="middle" bgcolor="#F4F6FB" style="width:520px;padding:0;background-color:${BRAND.light};background-image:url('${swooshUri}'), linear-gradient(245deg, #052456 0%, #093c82 30%, #093c82 55%, ${BRAND.light} 80%, #FFFFFF 100%);background-repeat:no-repeat,no-repeat;background-size:cover,cover;background-position:center,center;">
-                    <img src="${STUDENTS_URL}" alt="RIUC Students" width="520" height="98"
-                         style="display:block;width:520px;height:98px;max-width:100%;border:0;" />
+                  <td width="670" align="right" valign="middle" bgcolor="#F4F6FB" style="width:670px;padding:0;background-color:${BRAND.light};background-image:url('${swooshUri}'), linear-gradient(245deg, #052456 0%, #093c82 30%, #093c82 55%, ${BRAND.light} 80%, #FFFFFF 100%);background-repeat:no-repeat,no-repeat;background-size:cover,cover;background-position:center,center;">
+                    <img src="${STUDENTS_URL}" alt="RIUC Students" width="670" height="126"
+                         style="display:block;width:670px;height:126px;max-width:100%;border:0;" />
                   </td>
                 </tr>
               </table>
