@@ -38,7 +38,7 @@ const CONTACT = {
   name:    'Rosebank International',
   short:   'RIUC',
   tagline: 'Fast Track Your Global Career',
-  phone:   '0000001111',
+  phone:   '086 1259 906',
   whatsapp:'087 260 6854',
   email:   'info@rosebankinternational.co.za',
   web:     'www.rosebankcollege.co.za',
