@@ -319,7 +319,7 @@ function buildEmailHtml({ subject, body, recipientName }) {
           <!-- BODY -->
           <tr>
             <td style="padding:18px 36px 8px 36px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">
-              <p style="margin:0 0 16px 0;font-size:15px;color:${BRAND.tealDp};font-weight:700;">
+              <p style="margin:0 0 16px 0;font-size:15px;color:${BRAND.tealDp};">
                 ${greeting}
               </p>
               ${bodyToHtml(body)}
