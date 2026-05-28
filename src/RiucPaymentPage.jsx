@@ -144,7 +144,6 @@ export default function RiucPaymentPage() {
         <div className="riuc-container riuc-topbar__inner">
           <span>Rosebank International · Pretoria, South Africa</span>
           <span className="riuc-topbar__contact">
-            <span>Tel: 086 1259 906</span>
             <span>info@rosebankinternational.co.za</span>
           </span>
         </div>
@@ -296,8 +295,6 @@ export default function RiucPaymentPage() {
           <div>
             <p className="riuc-footer__heading">Contact</p>
             <p style={{ margin: 0 }}>
-              Tel: 086 1259 906
-              <br />
               Whatsapp: 087 260 6854
               <br />
               Email: info@rosebankinternational.co.za
